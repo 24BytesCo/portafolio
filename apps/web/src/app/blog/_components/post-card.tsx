@@ -30,6 +30,15 @@ function PostCard({
   date,
   className,
 }: PostCardProps) {
+  const displayDate = React.useMemo(() => {
+    try {
+      if (!date) return null;
+      const d = date instanceof Date ? date : new Date(date as any);
+      return isNaN(d.getTime()) ? null : d;
+    } catch {
+      return null;
+    }
+  }, [date]);
   return (
     <Card
       className={cn(
@@ -63,7 +72,7 @@ function PostCard({
             as="p"
             className="text-sm text-gray-500 dark:text-gray-400"
           >
-            {date.toDateString()}
+            {displayDate ? displayDate.toDateString() : ""}
           </TextReveal>
           {/* <div className="mt-2 flex flex-wrap gap-2">
             {tags?.map((tag, index) => (

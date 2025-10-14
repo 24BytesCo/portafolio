@@ -18,7 +18,7 @@ import {
 
 interface ProjectCardProps extends Project {
   href: string;
-  thumbnail: string;
+  thumbnail?: string;
   className?: string;
 }
 
@@ -39,17 +39,20 @@ function ProjectCard({
     >
       <CardContent>
         <div className="grid gap-2">
-          <AspectRatio
-            ratio={16 / 9}
-            className="z-2 mb-2 inline-block overflow-hidden rounded-md"
-          >
-            <Image
-              src={thumbnail || "/placeholder.svg"}
-              alt={`Image of ${title}`}
-              fill
-              className="object-cover transition-transform duration-300 hover:scale-105"
-            />
-          </AspectRatio>
+          {thumbnail ? (
+            <AspectRatio
+              ratio={16 / 9}
+              className="z-2 mb-2 inline-block overflow-hidden rounded-md"
+            >
+              <Image
+                src={thumbnail}
+                alt={`Image of ${title}`}
+                fill
+                unoptimized
+                className="object-cover transition-transform duration-300 hover:scale-105"
+              />
+            </AspectRatio>
+          ) : null}
           <TextReveal className="text-xl font-bold" as="h1">
             {title}
           </TextReveal>

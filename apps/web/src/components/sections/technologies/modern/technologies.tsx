@@ -12,18 +12,15 @@ function Technologies() {
 
   return (
     <MotionWrap className="w-full py-24 lg:py-32" id="technologies">
-      <div className="px-4 md:px-6">
+      <div className="px-4 sm:px-8 md:px-12 lg:px-16 2xl:px-24">
         <div className="grid gap-10 lg:grid-cols-2">
           <div className="space-y-4">
-            <TextReveal
-              as="h2"
-              className="flex flex-col -space-y-4 text-4xl leading-tight font-bold tracking-tighter sm:text-5xl md:text-5xl md:leading-tight lg:text-6xl lg:leading-tight"
-            >
-              My Technologies
+            <TextReveal as="h2" className="flex flex-col -space-y-4 text-4xl leading-tight font-bold tracking-tighter sm:text-5xl md:text-5xl md:leading-tight lg:text-6xl lg:leading-tight">
+              Tecnologías
             </TextReveal>
             <div className="space-y-4">
               <p className="max-w-[700px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400">
-                Here are some of the technologies I use in my projects
+                Tecnologías con las que trabajo en el día a día.
               </p>
             </div>
           </div>

@@ -7,27 +7,22 @@ import {
 } from "@icons-pack/react-simple-icons";
 
 const contact: Contact = {
-  email: "john@example.com",
+  email: "alexis.dorado.munoz@gmail.com",
   socials: [
     {
+      name: "LinkedIn",
+      href: "https://www.linkedin.com/in/alexisdoradomunoz/",
+      Icon: SiLinkedin,
+    },
+    {
       name: "Github",
-      href: "https://github.com/",
+      href: "https://github.com/24BytesCo",
       Icon: SiGithub,
     },
     {
-      name: "Youtube",
-      href: "https://youtube.com/",
+      name: "YouTube",
+      href: "https://www.youtube.com/@24bytes",
       Icon: SiYoutube,
-    },
-    {
-      name: "X",
-      href: "https://x.com/",
-      Icon: SiX,
-    },
-    {
-      name: "Linkedin",
-      href: "https://linkedin.com/",
-      Icon: SiLinkedin,
     },
   ],
 };

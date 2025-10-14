@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import SkillCard from "@/app/about/_components/skill-card";
 import Link from "@/components/fancy/link";
 import ImageTrail from "@/components/fancy/motion-trail";
@@ -8,7 +8,7 @@ import TextReveal from "@/components/fancy/text-reveal";
 import { contact } from "@/components/sections/contact/config";
 import ContactForm from "@/components/sections/contact/cozy/contact-form";
 import { experiences } from "@/components/sections/experience/config";
-import ExperienceCard from "@/components/sections/experience/cozy/experience-card";
+import ExperienceCard from "@/components/sections/experience/modern/experience-card";
 import { skills } from "@/components/sections/skills/config";
 import { technologies } from "@/components/sections/technologies/config";
 import TechnologyCard from "@/components/sections/technologies/modern/technology-card";
@@ -25,22 +25,42 @@ export default function About() {
   const opacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
   const heroRef = useRef<HTMLDivElement>(null);
   const testimonialsRef = useRef<HTMLDivElement>(null);
+  const [logoImages, setLogoImages] = useState<string[]>([]);
+
+  useEffect(() => {
+    let active = true;
+    fetch("/api/logos")
+      .then((r) => r.json())
+      .then((data) => {
+        if (!active) return;
+        const arr = Array.isArray(data?.images) ? data.images : [];
+        if (arr.length) setLogoImages(arr);
+      })
+      .catch(() => {});
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  const trailImages = useMemo(() => {
+    return (logoImages.length ? logoImages : exampleImages).slice(0, 32);
+  }, [logoImages]);
 
   return (
     <main className="flex-1 px-4 sm:px-8 md:px-12 lg:px-16 2xl:px-24">
       <section className="relative -mx-4 flex h-[calc(100svh-(--spacing(14)))] items-center justify-center overflow-hidden pb-12 sm:-mx-8 md:-mx-12 lg:-mx-16 2xl:-mx-24">
         <div className="absolute top-0 left-0 z-0" ref={heroRef}>
-          <ImageTrail containerRef={heroRef}>
-            {exampleImages.map((image, index) => (
+          <ImageTrail containerRef={heroRef} interval={240} rotationRange={10}>
+            {trailImages.map((image, index) => (
               <div
                 key={index}
-                className="relative flex h-24 w-24 overflow-hidden"
+                className="relative flex h-40 w-40 items-center justify-center overflow-visible p-0"
               >
                 <img
                   src={image}
                   alt="image"
                   loading="lazy"
-                  className="absolute inset-0 object-cover"
+                  className="absolute inset-0 object-contain"
                 />
               </div>
             ))}
@@ -49,15 +69,15 @@ export default function About() {
         <div className="relative container mx-auto flex flex-col items-center px-4">
           <TextReveal
             as="h1"
-            className="leading-wide tracking-relaxed z-20 text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl 2xl:text-9xl"
+            className="z-20 mx-auto max-w-7xl text-center text-4xl leading-[1.15] tracking-tight text-pretty sm:text-5xl md:text-6xl lg:text-7xl xl:text-7xl 2xl:text-8xl"
           >
-            Innovator
+            Líder Técnico
           </TextReveal>
           <TextReveal
             as="h1"
-            className="leading-wide tracking-relaxed z-20 text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl 2xl:text-9xl"
+            className="z-20 mx-auto max-w-7xl text-center text-4xl leading-[1.1] tracking-tight text-pretty sm:text-5xl md:text-6xl lg:text-7xl xl:text-7xl 2xl:text-8xl"
           >
-            Designer
+            Desarrollador Full Stack
           </TextReveal>
           <motion.div
             className="mt-8"
@@ -72,38 +92,35 @@ export default function About() {
 
       <Separator />
       <section className="py-12">
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-5 md:gap-8">
-          <div className="col-span-1 md:col-span-2">
-            <h2 className="text-xl font-semibold sm:text-2xl">About</h2>
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-1 md:gap-8">
+          <div className="col-span-1 md:col-span-3">
+            <h2 className="text-xl font-semibold sm:text-4xl">Sobre mí</h2>
           </div>
           <div className="col-span-1 md:col-span-3">
             <div className="space-y-8">
               <TextReveal
                 as="h3"
-                className="font-serif text-3xl leading-tight sm:text-4xl md:text-4xl lg:text-5xl xl:text-6xl"
+                wordGap="0.2em"
+                className="font-serif text-4xl leading-[1.15] text-pretty sm:text-5xl md:text-5xl lg:text-5xl xl:text-5xl"
               >
-                I create captivating designs by blending aesthetics, motion, and
-                technology.
+                Construyo software de calidad combinando arquitectura, buenas
+                prácticas y trabajo en equipo.
               </TextReveal>
               <TextReveal
                 as="p"
                 className="text-muted-foreground text-base leading-relaxed sm:text-lg md:text-lg lg:text-xl xl:text-2xl"
               >
-                My journey into creativity began with a spark of curiosity about
-                how ideas could come to life on a screen. Fascinated by the
-                interplay of design and technology, I started exploring web
-                development, motion graphics, and interface design through
-                self-driven projects. With every experiment, my skills grew, and
-                what began as a hobby soon became a passion for crafting
-                meaningful digital experiences. As I honed my abilities, I
-                sought opportunities to apply them in real-world settings,
-                turning concepts into polished outcomes. Today, my approach
-                combines creativity, problem-solving, and technical expertise to
-                create work that is both functional and impactful.
+                Full‑Stack Developer con 6 años de experiencia y 2 como Tech
+                Lead. Experto en .NET/C#, TypeScript/Angular, Node.js y bases de
+                datos (SQL Server y MongoDB). He liderado y desarrollado
+                soluciones en arquitectura N‑capas, DDD y microservicios,
+                aplicando Clean Code, pruebas y CI/CD con Azure DevOps. Me
+                enfoco en cumplir plazos con calidad, comunicar impedimentos a
+                tiempo y mantener al equipo alineado.
               </TextReveal>
               <Button asChild variant={"outline"} className="rounded-full px-6">
                 <a href="resume.pdf" target="_blank">
-                  View Resume <Icons.arrowUpRight className="ml-2 size-5" />
+                  Ver CV <Icons.arrowUpRight className="ml-2 size-5" />
                 </a>
               </Button>
             </div>
@@ -115,7 +132,7 @@ export default function About() {
       <section className="py-12">
         <div className="grid grid-cols-1 gap-4 md:grid-cols-5 md:gap-8">
           <div className="col-span-1 md:col-span-2">
-            <h2 className="text-xl font-semibold sm:text-2xl">Skills</h2>
+            <h2 className="text-xl font-semibold sm:text-4xl">Habilidades</h2>
           </div>
           <div className="col-span-1 md:col-span-3">
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-1 md:gap-6 xl:grid-cols-2">
@@ -138,7 +155,7 @@ export default function About() {
       <section className="py-12">
         <div className="grid grid-cols-1 gap-4 md:grid-cols-5 md:gap-8">
           <div className="col-span-1 md:col-span-2">
-            <h2 className="text-xl font-semibold sm:text-2xl">Technologies</h2>
+            <h2 className="text-xl font-semibold sm:text-4xl">Tecnologías</h2>
           </div>
           <div className="col-span-1 md:col-span-3">
             <div
@@ -173,10 +190,10 @@ export default function About() {
       <section className="py-12">
         <div className="grid grid-cols-1 gap-4 md:grid-cols-5 md:gap-8">
           <div className="col-span-1 md:col-span-2">
-            <h2 className="text-xl font-semibold sm:text-2xl">Experience</h2>
+            <h2 className="text-xl font-semibold sm:text-4xl">Experiencia</h2>
           </div>
           <div className="col-span-1 md:col-span-3">
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-1 md:gap-6 xl:grid-cols-2">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-1 xl:grid-cols-2 2xl:grid-cols-2">
               {experiences.map((experience, index) => (
                 <ExperienceCard
                   key={`experience_${index}`}
@@ -184,6 +201,7 @@ export default function About() {
                   description={experience.description}
                   company={experience.company}
                   duration={experience.duration}
+                  logo={experience.logo}
                 />
               ))}
             </div>
@@ -195,7 +213,7 @@ export default function About() {
       <section className="py-12">
         <div className="grid grid-cols-1 gap-4 md:grid-cols-5 md:gap-8">
           <div className="col-span-1 md:col-span-2">
-            <h2 className="text-xl font-semibold sm:text-2xl">Contact</h2>
+            <h2 className="text-xl font-semibold sm:text-4xl">Contacto</h2>
             <div className="mt-2 flex flex-col gap-1">
               <Link
                 className={cn(

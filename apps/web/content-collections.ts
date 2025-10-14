@@ -13,6 +13,8 @@ const projects = defineCollection({
     const docSchema = createDocSchema(z);
     return {
       ...docSchema,
+      image: z.string().optional(),
+      thumbnail: z.string().optional(),
       website: z.string().optional(),
       github: z.string().optional(),
       tags: z

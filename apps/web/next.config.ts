@@ -5,10 +5,15 @@ import createJiti from "jiti";
 
 createJiti(fileURLToPath(import.meta.url))("./src/env");
 
-// todo: setup eslint CI
+// pendiente: configurar ESLint en CI
+const extraOrigins = (process.env.ALLOWED_ORIGINS || "")
+  .split(",")
+  .map((s) => s.trim())
+  .filter(Boolean);
+
 const nextConfig: NextConfig = {
   pageExtensions: ["js", "jsx", "md", "mdx", "ts", "tsx"],
-  /** Enables hot reloading for local packages without a build step */
+  /** Activa hot reloading para paquetes locales sin build previo */
   transpilePackages: [
     "@repo/api",
     "@repo/auth",
@@ -18,13 +23,20 @@ const nextConfig: NextConfig = {
     "@repo/ui",
     "@repo/validators",
   ],
-  /** We already do linting and typechecking as separate tasks in CI */
+  /** El lint y el typecheck ya corren como tareas separadas en CI */
   eslint: { ignoreDuringBuilds: true },
   typescript: { ignoreBuildErrors: true },
   experimental: {
     viewTransition: true,
     serverActions: {
-      allowedOrigins: ["localhost:3000"],
+      allowedOrigins: [
+        "localhost:3000",
+        "24bytes.pro",
+        "www.24bytes.pro",
+        "portfolio-web-2q3n3gsuaq-uc.a.run.app",
+        "portfolio-web-1040591179623.us-central1.run.app",
+        ...extraOrigins,
+      ],
     },
     reactCompiler: true,
   },

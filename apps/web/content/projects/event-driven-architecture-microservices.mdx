@@ -1,0 +1,47 @@
+---
+title: Event Driven Architecture Microservices
+description: Prototipo en .NET con separación de Command/Query (CQRS) para un dominio de ticketing.
+thumbnail: /images/projects/event-driven-architecture-microservices/cover.jpg
+date: 2025-02-16
+github: https://github.com/24BytesCo/Event-Driven-Architecture-Microservices
+tags:
+  - label: C#
+  - label: .NET
+  - label: CQRS
+---
+
+## Resumen
+- Solución de microservicios con enfoque orientado a eventos y separación de responsabilidades Command/Query.
+- Dos servicios principales: Ticketing.Command (escrituras) y Ticketing.Query (lecturas).
+- Código fuente: https://github.com/24BytesCo/Event-Driven-Architecture-Microservices
+
+## Características
+- División de responsabilidades: comandos para mutaciones y queries optimizadas para lectura.
+- Base para integrar un bus de eventos (publicación/suscripción) y materializar proyecciones.
+- OpenAPI habilitado para exploración de endpoints.
+
+## Stack Técnico
+- Lenguaje: C# (.NET 9).
+- Plantillas Web API con Microsoft.AspNetCore.OpenApi.
+- Estructura por proyectos: Common, Ticketing.Command, Ticketing.Query.
+
+## Implementación
+### Backend
+- Servicios Web API independientes (Command/Query) con configuraciones separadas.
+- Contratos y utilidades compartidas en Common.
+- Enfoque CQRS para facilitar escalado independiente de lectura/escritura.
+
+## Cómo funciona
+- Ticketing.Command expone endpoints de creación/actualización y publica eventos del dominio (extensible).
+- Ticketing.Query sirve endpoints de lectura; preparado para leer proyecciones/materialized views.
+
+## Retos
+- Definir contratos estables de eventos y versionamiento.
+- Consistencia eventual entre escritura y lectura.
+- Observabilidad y trazabilidad entre servicios.
+
+## Mejoras futuras
+- Integrar un broker de eventos (RabbitMQ/Kafka) y materializaciones.
+- Añadir autenticación/autorización y políticas.
+- Pipelines de CI/CD y pruebas de contrato entre servicios.
+

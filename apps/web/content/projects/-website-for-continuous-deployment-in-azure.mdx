@@ -1,0 +1,47 @@
+﻿---
+title: Website For Continuous Deployment In Azure
+description: Sitio ASP.NET (MVC) con pipeline de despliegue continuo a Azure.
+thumbnail: /images/projects/-website-for-continuous-deployment-in-azure/cover.jpg
+date: 2025-02-21
+github: https://github.com/24BytesCo/-website-for-continuous-deployment-in-Azure
+tags:
+  - label: ASP.NET MVC
+  - label: C#
+  - label: HTML
+  - label: CSS
+  - label: JavaScript
+---
+
+
+## Resumen
+- Sitio ASP.NET MVC con Controllers/Views y recursos estáticos en wwwroot.
+- Pipeline de despliegue continuo configurado para Azure.
+- Código fuente: https://github.com/24BytesCo/-website-for-continuous-deployment-in-Azure
+
+## Características
+- Patrón MVC: Controllers, Models y Views.
+- Configuración por entorno en `appsettings.{Environment}.json`.
+- Recursos estáticos (wwwroot) y vistas Razor.
+
+## Stack Técnico
+- ASP.NET MVC (C#).
+- Vistas Razor + recursos en wwwroot (HTML/CSS/JS).
+- Integración con Azure para despliegue.
+
+## Implementación
+- Proyecto PlatziWebSite.csproj; Program.cs configura middleware/rutas.
+- Controllers/Models/Views organizan la UI y la lógica de presentación.
+
+## Cómo funciona
+- Despliegue continuo a Azure desde la rama configurada en el pipeline.
+- Renderizado MVC; assets servidos desde wwwroot.
+
+## Retos
+- Escalabilidad y mantenibilidad del código.
+- Seguridad y manejo de datos.
+- Experiencia de usuario consistente.
+
+## Mejoras futuras
+- Métricas/observabilidad y pruebas más profundas.
+- Automatizaciones de despliegue y calidad.
+- Nuevas funcionalidades a partir del feedback.

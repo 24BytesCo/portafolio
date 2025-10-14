@@ -1,0 +1,21 @@
+# Prevent huge contexts
+node_modules
+.pnpm-store
+.turbo
+.cache
+dist
+.git
+.github
+.vscode
+.DS_Store
+*.log
+.env
+
+# Next build artifacts
+**/.next
+apps/web/.content-collections/cache
+apps/web/.content-collections/generated
+
+# Misc
+covers
+tmp

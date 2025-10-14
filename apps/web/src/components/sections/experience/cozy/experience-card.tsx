@@ -1,5 +1,6 @@
 import type { Experience } from "@/types/experience";
 import TextReveal from "@/components/fancy/text-reveal";
+import Image from "next/image";
 
 import { cn } from "@repo/ui";
 import { Card, CardContent } from "@repo/ui/card";
@@ -13,28 +14,64 @@ function ExperienceCard({
   name,
   duration,
   description,
+  highlights,
+  logo,
   className,
 }: ExperienceCardProps) {
   return (
-    <Card className={cn("border-none bg-transparent shadow-none", className)}>
-      <CardContent className="p-1">
-        <div className="flex items-baseline justify-between">
-          <TextReveal as="h3" className="text-3xl font-semibold">
-            {company}
-          </TextReveal>
-          <TextReveal as="span" className="text-sm font-medium">
+    <Card className={cn("rounded-xl border bg-background/60 shadow-sm", className)}>
+      <CardContent className="p-5">
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            {logo ? (
+              <Image
+                src={logo}
+                alt={`${company} logo`}
+                width={28}
+                height={28}
+                unoptimized
+                className="h-7 w-7 rounded-sm object-contain grayscale transition hover:grayscale-0"
+              />
+            ) : null}
+            <TextReveal as="h3" className="text-lg font-semibold tracking-tight">
+              {company}
+            </TextReveal>
+          </div>
+          <TextReveal as="span" className="text-xs font-medium text-muted-foreground">
             {duration}
           </TextReveal>
         </div>
-        <TextReveal as="h4" className="mt-2 text-xl font-medium uppercase">
+        <TextReveal as="h4" className="mt-3 text-2xl font-semibold tracking-tight">
           {name}
         </TextReveal>
-        <TextReveal
-          as="p"
-          className="mt-2 max-w-2xl text-lg font-light text-zinc-700 dark:text-zinc-400"
-        >
-          {description}
-        </TextReveal>
+        {(() => {
+          const items =
+            highlights && highlights.length
+              ? highlights
+              : description && description.includes(";")
+                ? description
+                    .split(";")
+                    .map((s) => s.trim())
+                    .filter(Boolean)
+                : undefined;
+          if (items && items.length) {
+            return (
+              <ul className="mt-4 max-w-2xl list-disc space-y-2 pl-5 text-sm leading-relaxed text-zinc-700 marker:text-zinc-400 dark:text-zinc-400">
+                {items.map((it, i) => (
+                  <li key={i}>{it}</li>
+                ))}
+              </ul>
+            );
+          }
+          return (
+            <TextReveal
+              as="p"
+              className="mt-3 max-w-2xl text-sm leading-relaxed text-zinc-700 dark:text-zinc-400"
+            >
+              {description}
+            </TextReveal>
+          );
+        })()}
         <hr className="border-border my-6 border-t" />
       </CardContent>
     </Card>

@@ -22,7 +22,7 @@ export function createMetadata(override: Metadata): Metadata {
       title: override.title ?? undefined,
       description: override.description ?? undefined,
       url: baseUrl,
-      locale: "en-US",
+      locale: "es-CO",
       images: [
         {
           alt: "banner",
@@ -32,7 +32,7 @@ export function createMetadata(override: Metadata): Metadata {
           type: "image/png",
         },
       ],
-      siteName: "Portfolio",
+      siteName: "Portafolio",
       ...override.openGraph,
     },
     twitter: {

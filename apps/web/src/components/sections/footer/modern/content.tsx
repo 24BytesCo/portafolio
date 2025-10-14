@@ -8,7 +8,7 @@ import { getYearDisplay } from "@/lib/utils";
 
 export default function Content() {
   return (
-    <div className="bg-muted/30 flex h-full w-full flex-col justify-between px-12 py-8">
+    <div className="bg-muted/30 flex h-full w-full flex-col justify-between gap-12 px-6 py-10 md:px-8 lg:px-12">
       <Nav />
       <Copyright />
     </div>
@@ -20,11 +20,17 @@ const Copyright = () => {
   const yearDisplay = getYearDisplay(startYear);
 
   return (
-    <div className="flex flex-col items-start justify-between sm:flex-row sm:items-end">
-      <h1 className="mt-10 text-[18vw] leading-[0.8] md:text-[16vw] lg:text-[18vw] xl:text-[20vw] 2xl:text-[22vw]">
-        Portfolio
+    <div
+      className="flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-end"
+      style={{ marginTop: "-50px" }}
+    >
+      <h1
+        className="text-foreground/10 mt-2 text-[8vw] leading-[0.95] select-none md:text-[10vw] lg:text-[12vw] xl:text-[14vw] 2xl:text-[13vw]"
+        style={{ width: "50%" }}
+      >
+        Portafolio
       </h1>
-      <p className="mt-4 text-xs sm:mt-0 sm:text-sm md:text-base lg:text-lg xl:text-xl 2xl:text-2xl">
+      <p className="mt-0 text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl 2xl:text-2xl">
         © {yearDisplay} {meta.author.name}
       </p>
     </div>
@@ -33,28 +39,28 @@ const Copyright = () => {
 
 const Nav = () => {
   return (
-    <div className="flex shrink-0 gap-20">
+    <div className="grid w-full grid-cols-2 gap-8 md:grid-cols-3 md:gap-12 lg:gap-16 xl:gap-24">
       <div className="flex flex-col gap-2">
         <h3 className="mb-2 text-zinc-500 uppercase dark:text-zinc-400">
-          About
+          Sobre mí
         </h3>
         {links.map((link, index) => {
           const { title, href } = link;
 
           return (
-            <Link
+            <a
               className="underline-offset-4 hover:underline"
               href={href}
               key={`ft-l_about_${index}`}
             >
-              {title}
-            </Link>
+              <p>{title}</p>
+            </a>
           );
         })}
       </div>
       <div className="flex flex-col gap-2">
         <h3 className="mb-2 text-zinc-500 uppercase dark:text-zinc-400">
-          Socials
+          Redes
         </h3>
         {contact.socials.map((link, index) => {
           const { name, href } = link;
@@ -68,24 +74,6 @@ const Nav = () => {
               external
             >
               {name}
-            </Link>
-          );
-        })}
-      </div>
-      <div className="flex flex-col gap-2">
-        <h3 className="mb-2 text-zinc-500 uppercase dark:text-zinc-400">
-          More
-        </h3>
-        {footer.map((link, index) => {
-          const { title, href } = link;
-
-          return (
-            <Link
-              className="underline-offset-4 hover:underline"
-              href={href}
-              key={`ft-l_more_${index}`}
-            >
-              {title}
             </Link>
           );
         })}

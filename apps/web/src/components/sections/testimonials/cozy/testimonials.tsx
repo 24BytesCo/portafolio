@@ -17,7 +17,7 @@ function Testimonials() {
   return (
     <MotionWrap className="w-full py-24 lg:py-32" id="testimonials">
       {/* TODO: Redesign for horizontal */}
-      <div className="px-4 md:px-6">
+      <div className="px-4 sm:px-8 md:px-12 lg:px-16 2xl:px-24">
         <div className="grid gap-10">
           <div className="flex w-full flex-col items-center justify-center text-center lg:flex-row lg:justify-between lg:text-left">
             <div className="flex flex-col items-center lg:items-start">

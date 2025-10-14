@@ -1,0 +1,158 @@
+[
+  {
+    "slug": "-website-for-continuous-deployment-in-azure",
+    "title": "",
+    "style": "terminal",
+    "prompt": "Genera una imagen 16:9 que represente el proyecto \"\". Contexto: . Estilo: escena abstracta de terminal/código, monitores con líneas de código difuminadas, estilo desarrollador moderno.  Paleta sobria, fondo sutil, enfoque profesional."
+  },
+  {
+    "slug": "api-rtf",
+    "title": "Api RTF",
+    "style": "ui-screenshot",
+    "prompt": "Genera una imagen 16:9 que represente el proyecto \"Api RTF\". Contexto: API Node.js/Express para reporte y gestión de fallas técnicas (RTF).. Tecnologías/palabras clave: Node.js, Express, MySQL, JWT, Swagger UI. Estilo: mockup realista de interfaz de aplicación web, tarjetas y paneles, estética limpia y moderna, luz suave. Incluye los logotipos o iconos representativos de estas tecnologías (por ejemplo, Node.js, Express, MySQL), dispuestos como insignias pequeñas y limpias. Paleta sobria, fondo sutil, enfoque profesional."
+  },
+  {
+    "slug": "appuestas-cliente",
+    "title": "",
+    "style": "ui-screenshot",
+    "prompt": "Genera una imagen 16:9 que represente el proyecto \"\". Contexto: . Estilo: mockup realista de interfaz de aplicación web, tarjetas y paneles, estética limpia y moderna, luz suave.  Paleta sobria, fondo sutil, enfoque profesional."
+  },
+  {
+    "slug": "appuestas-realtime-front",
+    "title": "",
+    "style": "ui-screenshot",
+    "prompt": "Genera una imagen 16:9 que represente el proyecto \"\". Contexto: . Estilo: mockup realista de interfaz de aplicación web, tarjetas y paneles, estética limpia y moderna, luz suave.  Paleta sobria, fondo sutil, enfoque profesional."
+  },
+  {
+    "slug": "bcr-backcatalogorocketfy",
+    "title": "",
+    "style": "terminal",
+    "prompt": "Genera una imagen 16:9 que represente el proyecto \"\". Contexto: . Estilo: escena abstracta de terminal/código, monitores con líneas de código difuminadas, estilo desarrollador moderno.  Paleta sobria, fondo sutil, enfoque profesional."
+  },
+  {
+    "slug": "cliente-rtf",
+    "title": "",
+    "style": "ui-screenshot",
+    "prompt": "Genera una imagen 16:9 que represente el proyecto \"\". Contexto: . Estilo: mockup realista de interfaz de aplicación web, tarjetas y paneles, estética limpia y moderna, luz suave.  Paleta sobria, fondo sutil, enfoque profesional."
+  },
+  {
+    "slug": "davivienda-fan-shop-api",
+    "title": "Davivienda Fan Shop Api",
+    "style": "diagram",
+    "prompt": "Genera una imagen 16:9 que represente el proyecto \"Davivienda Fan Shop Api\". Contexto: API en NestJS para canje de productos por puntos o dinero.. Tecnologías/palabras clave: TypeScript, NestJS, TypeORM, PostgreSQL, Firebase Storage, Swagger, Docker. Estilo: diagrama isométrico de arquitectura de software (servicios, API, base de datos, colas), líneas claras, iconos de componentes. Incluye los logotipos o iconos representativos de estas tecnologías (por ejemplo, TypeScript, NestJS, TypeORM), dispuestos como insignias pequeñas y limpias. Paleta sobria, fondo sutil, enfoque profesional."
+  },
+  {
+    "slug": "davivienda-fan-shop-front-app",
+    "title": "Davivienda Fan Shop Front App",
+    "style": "ui-screenshot",
+    "prompt": "Genera una imagen 16:9 que represente el proyecto \"Davivienda Fan Shop Front App\". Contexto: SPA en Angular para catálogo, carrito/checkout y panel de administración del Fan Shop.. Tecnologías/palabras clave: Angular, TypeScript, HTML, CSS, SweetAlert2. Estilo: mockup realista de interfaz de aplicación web, tarjetas y paneles, estética limpia y moderna, luz suave. Incluye los logotipos o iconos representativos de estas tecnologías (por ejemplo, Angular, TypeScript, HTML), dispuestos como insignias pequeñas y limpias. Paleta sobria, fondo sutil, enfoque profesional."
+  },
+  {
+    "slug": "dist-rtf",
+    "title": "",
+    "style": "terminal",
+    "prompt": "Genera una imagen 16:9 que represente el proyecto \"\". Contexto: . Estilo: escena abstracta de terminal/código, monitores con líneas de código difuminadas, estilo desarrollador moderno.  Paleta sobria, fondo sutil, enfoque profesional."
+  },
+  {
+    "slug": "event-driven-architecture-microservices",
+    "title": "Event Driven Architecture Microservices",
+    "style": "diagram",
+    "prompt": "Genera una imagen 16:9 que represente el proyecto \"Event Driven Architecture Microservices\". Contexto: Prototipo en .NET con separación de Command/Query (CQRS) para un dominio de ticketing.. Tecnologías/palabras clave: C#, .NET, CQRS. Estilo: diagrama isométrico de arquitectura de software (servicios, API, base de datos, colas), líneas claras, iconos de componentes. Incluye los logotipos o iconos representativos de estas tecnologías (por ejemplo, C#, .NET, CQRS), dispuestos como insignias pequeñas y limpias. Paleta sobria, fondo sutil, enfoque profesional."
+  },
+  {
+    "slug": "fcr-frontendcatalogorocketfy",
+    "title": "",
+    "style": "ui-screenshot",
+    "prompt": "Genera una imagen 16:9 que represente el proyecto \"\". Contexto: . Estilo: mockup realista de interfaz de aplicación web, tarjetas y paneles, estética limpia y moderna, luz suave.  Paleta sobria, fondo sutil, enfoque profesional."
+  },
+  {
+    "slug": "net-core-docker-microservices",
+    "title": "Net Core Docker Microservices",
+    "style": "diagram",
+    "prompt": "Genera una imagen 16:9 que represente el proyecto \"Net Core Docker Microservices\". Contexto: Microservicios en .NET 8 (ProductService y OrderService) con EF Core, SQL Server y Docker Compose.. Tecnologías/palabras clave: C#, .NET 8, EF Core, SQL Server, Docker, Docker Compose. Estilo: diagrama isométrico de arquitectura de software (servicios, API, base de datos, colas), líneas claras, iconos de componentes. Incluye los logotipos o iconos representativos de estas tecnologías (por ejemplo, C#, .NET 8, EF Core), dispuestos como insignias pequeñas y limpias. Paleta sobria, fondo sutil, enfoque profesional."
+  },
+  {
+    "slug": "netdeveloper_-pruebatecnica",
+    "title": "",
+    "style": "terminal",
+    "prompt": "Genera una imagen 16:9 que represente el proyecto \"\". Contexto: . Estilo: escena abstracta de terminal/código, monitores con líneas de código difuminadas, estilo desarrollador moderno.  Paleta sobria, fondo sutil, enfoque profesional."
+  },
+  {
+    "slug": "preparacion_pt_bdv",
+    "title": "",
+    "style": "terminal",
+    "prompt": "Genera una imagen 16:9 que represente el proyecto \"\". Contexto: . Estilo: escena abstracta de terminal/código, monitores con líneas de código difuminadas, estilo desarrollador moderno.  Paleta sobria, fondo sutil, enfoque profesional."
+  },
+  {
+    "slug": "proyectobibliotecapy",
+    "title": "",
+    "style": "terminal",
+    "prompt": "Genera una imagen 16:9 que represente el proyecto \"\". Contexto: . Estilo: escena abstracta de terminal/código, monitores con líneas de código difuminadas, estilo desarrollador moderno.  Paleta sobria, fondo sutil, enfoque profesional."
+  },
+  {
+    "slug": "pruebatecnica-dvp-net-font",
+    "title": "",
+    "style": "terminal",
+    "prompt": "Genera una imagen 16:9 que represente el proyecto \"\". Contexto: . Estilo: escena abstracta de terminal/código, monitores con líneas de código difuminadas, estilo desarrollador moderno.  Paleta sobria, fondo sutil, enfoque profesional."
+  },
+  {
+    "slug": "pruebatecnica-dvp-net-kubernetes",
+    "title": "",
+    "style": "diagram",
+    "prompt": "Genera una imagen 16:9 que represente el proyecto \"\". Contexto: . Estilo: diagrama isométrico de arquitectura de software (servicios, API, base de datos, colas), líneas claras, iconos de componentes.  Paleta sobria, fondo sutil, enfoque profesional."
+  },
+  {
+    "slug": "pt-front-doublevparthers",
+    "title": "",
+    "style": "ui-screenshot",
+    "prompt": "Genera una imagen 16:9 que represente el proyecto \"\". Contexto: . Estilo: mockup realista de interfaz de aplicación web, tarjetas y paneles, estética limpia y moderna, luz suave.  Paleta sobria, fondo sutil, enfoque profesional."
+  },
+  {
+    "slug": "pt_net_doublevparthers",
+    "title": "",
+    "style": "terminal",
+    "prompt": "Genera una imagen 16:9 que represente el proyecto \"\". Contexto: . Estilo: escena abstracta de terminal/código, monitores con líneas de código difuminadas, estilo desarrollador moderno.  Paleta sobria, fondo sutil, enfoque profesional."
+  },
+  {
+    "slug": "puntodeventaback",
+    "title": "",
+    "style": "terminal",
+    "prompt": "Genera una imagen 16:9 que represente el proyecto \"\". Contexto: . Estilo: escena abstracta de terminal/código, monitores con líneas de código difuminadas, estilo desarrollador moderno.  Paleta sobria, fondo sutil, enfoque profesional."
+  },
+  {
+    "slug": "realtime-server",
+    "title": "Realtime Server",
+    "style": "diagram",
+    "prompt": "Genera una imagen 16:9 que represente el proyecto \"Realtime Server\". Contexto: Repositorio base para un servidor de tiempo real (prueba técnica).. Estilo: diagrama isométrico de arquitectura de software (servicios, API, base de datos, colas), líneas claras, iconos de componentes.  Paleta sobria, fondo sutil, enfoque profesional."
+  },
+  {
+    "slug": "rentcars-back-cleanarquitecture",
+    "title": "RentCars Back CleanArquitecture",
+    "style": "ui-screenshot",
+    "prompt": "Genera una imagen 16:9 que represente el proyecto \"RentCars Back CleanArquitecture\". Contexto: Backend .NET con enfoque Clean Architecture para el dominio de alquiler de vehículos.. Tecnologías/palabras clave: C#, .NET, Clean Architecture. Estilo: mockup realista de interfaz de aplicación web, tarjetas y paneles, estética limpia y moderna, luz suave. Incluye los logotipos o iconos representativos de estas tecnologías (por ejemplo, C#, .NET, Clean Architecture), dispuestos como insignias pequeñas y limpias. Paleta sobria, fondo sutil, enfoque profesional."
+  },
+  {
+    "slug": "spotyclonapp",
+    "title": "",
+    "style": "ui-screenshot",
+    "prompt": "Genera una imagen 16:9 que represente el proyecto \"\". Contexto: . Estilo: mockup realista de interfaz de aplicación web, tarjetas y paneles, estética limpia y moderna, luz suave.  Paleta sobria, fondo sutil, enfoque profesional."
+  },
+  {
+    "slug": "tareasptsatrackfront",
+    "title": "",
+    "style": "ui-screenshot",
+    "prompt": "Genera una imagen 16:9 que represente el proyecto \"\". Contexto: . Estilo: mockup realista de interfaz de aplicación web, tarjetas y paneles, estética limpia y moderna, luz suave.  Paleta sobria, fondo sutil, enfoque profesional."
+  },
+  {
+    "slug": "taskptsatrackapi",
+    "title": "",
+    "style": "diagram",
+    "prompt": "Genera una imagen 16:9 que represente el proyecto \"\". Contexto: . Estilo: diagrama isométrico de arquitectura de software (servicios, API, base de datos, colas), líneas claras, iconos de componentes.  Paleta sobria, fondo sutil, enfoque profesional."
+  },
+  {
+    "slug": "unittestpracticesolucion",
+    "title": "",
+    "style": "terminal",
+    "prompt": "Genera una imagen 16:9 que represente el proyecto \"\". Contexto: . Estilo: escena abstracta de terminal/código, monitores con líneas de código difuminadas, estilo desarrollador moderno.  Paleta sobria, fondo sutil, enfoque profesional."
+  }
+]

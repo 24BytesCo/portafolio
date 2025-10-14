@@ -1,5 +1,6 @@
 export interface Post {
   title: string;
   description?: string;
-  date: Date;
+  // Puede venir como string desde contenido (MDX/collections)
+  date: string | Date;
 }

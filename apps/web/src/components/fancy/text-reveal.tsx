@@ -8,12 +8,16 @@ interface TextRevealProps {
   children: React.ReactNode;
   className?: string;
   as?: keyof JSX.IntrinsicElements;
+  wordGap?: string;
+  spanClassName?: string;
 }
 
 const TextReveal: React.FC<TextRevealProps> = ({
   children,
   className = "",
   as = "div",
+  wordGap,
+  spanClassName,
 }) => {
   const generatePhrases = (child: React.ReactNode): string[] => {
     if (typeof child === "string") {
@@ -40,7 +44,15 @@ const TextReveal: React.FC<TextRevealProps> = ({
 
   const phrases = generatePhrases(children);
 
-  return <Reveal phrases={phrases} className={className} as={as} />;
+  return (
+    <Reveal
+      phrases={phrases}
+      className={className}
+      as={as}
+      wordGap={wordGap}
+      spanClassName={spanClassName}
+    />
+  );
 };
 
 export default TextReveal;

@@ -1,5 +1,13 @@
 "use client";
 
+/**
+ * Formulario de contacto del sitio.
+ *
+ * - Valida con Zod y react-hook-form.
+ * - Si el formulario está habilitado, solicita verificación Turnstile y envía vía Server Actions.
+ * - Si no está habilitado, abre un enlace mailto como alternativa.
+ */
+
 import { useState } from "react";
 import { contactSubmit } from "@/app/actions";
 import { FormError } from "@/components/sections/contact/_components/form-error";
@@ -40,27 +48,32 @@ export default function ContactForm() {
   const { execute, result, status } = useAction(contactSubmit);
   const [isOpen, setIsOpen] = useState(false);
 
-  // todo: probably refactor this, setIsOpen is not clean
-  // values: ContactFormType
+  // pendiente: refactorizar manejo de `isOpen` para un flujo más claro
+  // valores: ContactFormType
   function onSubmit(values: ContactFormType) {
     if (env.NEXT_PUBLIC_CONTACT_FORM_ENABLED === "true") {
       setIsOpen(true);
     } else {
       const mailto =
         `mailto:${encodeURIComponent(contact.email)}` +
-        `?subject=${encodeURIComponent("Contact Form Submission")}` +
+        `?subject=${encodeURIComponent("Contacto desde el portafolio")}` +
         `&body=${encodeURIComponent(
-          `Name: ${values.name}\nMessage: ${values.message}`,
+          `Nombre: ${values.name}\nMensaje: ${values.message}`,
         )}`;
       window.open(mailto);
     }
   }
 
+  /**
+   * Callback invocado tras resolver el captcha de Turnstile.
+   *
+   * @param token Token devuelto por Turnstile; si es inválido, se muestra un error.
+   */
   function onVerify(token?: string) {
     setIsOpen(false);
     if (!token) {
       toast.error(
-        "Captcha validation failed. Please ensure the captcha is completed.",
+        "Validación de captcha fallida. Por favor completa el captcha.",
         {
           position: "bottom-center",
         },
@@ -79,10 +92,10 @@ export default function ContactForm() {
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Name</FormLabel>
+                <FormLabel>Nombre</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="Jane Doe"
+                    placeholder="Nombre y apellido"
                     disabled={status === "executing"}
                     {...field}
                   />
@@ -96,10 +109,10 @@ export default function ContactForm() {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email</FormLabel>
+                <FormLabel>Correo</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="jane@example.com"
+                    placeholder="correo@ejemplo.com"
                     disabled={status === "executing"}
                     {...field}
                   />
@@ -114,13 +127,11 @@ export default function ContactForm() {
             name="message"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Message</FormLabel>
+                <FormLabel>Mensaje</FormLabel>
                 <FormControl>
                   <Textarea
                     disabled={status === "executing"}
-                    placeholder={
-                      "Hello!\n\nThis is Jane Doe, from Example. Just wanted to say hi!"
-                    }
+                    placeholder={"¡Hola!\n\nSoy [tu nombre]. Me gustaría ponerme en contacto para ..."}
                     {...field}
                   />
                 </FormControl>
@@ -140,7 +151,7 @@ export default function ContactForm() {
             {status === "executing" && (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
             )}
-            Submit
+            Enviar
           </Button>
         </form>
       </Form>

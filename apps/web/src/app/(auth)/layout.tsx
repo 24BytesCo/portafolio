@@ -6,8 +6,8 @@ import { contact } from "@/components/sections/contact/config";
 import SmoothScroll from "@/components/smooth-scroll";
 import { createMetadata } from "@/lib/metadata";
 
-const title = "About";
-const description = "Learn more about me and how I do things";
+const title = "Sobre mí";
+const description = "Conoce más sobre mí y cómo trabajo";
 
 export const metadata = createMetadata({
   title,

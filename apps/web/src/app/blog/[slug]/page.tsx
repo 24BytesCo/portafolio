@@ -14,10 +14,11 @@ import { buttonVariants } from "@repo/ui/button";
 
 import { PostComments } from "./page.client";
 
-export function generateStaticParams({ params }: { params: { slug: string } }) {
-  const { slug } = params;
-  // @ts-expect-error issue with fumadocs
-  return blog.generateParams([slug]);
+export function generateStaticParams() {
+  return blog.getPages()
+    .map((p) => p.slugs?.[0])
+    .filter(Boolean)
+    .map((slug) => ({ slug }));
 }
 
 export async function generateMetadata(props: {
@@ -28,6 +29,13 @@ export async function generateMetadata(props: {
   const page = blog.getPage([slug]);
   if (!page) notFound();
 
+  const modDateRaw = (page as any).data.date as unknown as string | Date;
+  const modDate =
+    modDateRaw instanceof Date ? modDateRaw : new Date(modDateRaw as any);
+  const modifiedTime = Number.isNaN(modDate.getTime())
+    ? undefined
+    : modDate.toISOString();
+
   return createMetadata({
     title: page.data.title,
     description: page.data.description,
@@ -35,7 +43,7 @@ export async function generateMetadata(props: {
       type: "article",
       // todo: add custom dynamic og image
       authors: meta.author.name,
-      modifiedTime: page.data.date.toISOString(),
+      modifiedTime,
     },
   }) satisfies Metadata;
 }
@@ -51,6 +59,9 @@ export default async function BlogPage(props0: {
   const {
     data: { toc, body },
   } = page;
+
+  const rawDate = (page as any).data.date as unknown as string | Date;
+  const dateObj = rawDate instanceof Date ? rawDate : new Date(rawDate as any);
 
   return (
     <main className="my-24 flex-1 px-4">
@@ -89,7 +100,7 @@ export default async function BlogPage(props0: {
           </div>
           <div>
             <p className="text-muted-foreground mb-1 text-sm">At</p>
-            <p className="font-medium">{page.data.date.toDateString()}</p>
+            <p className="font-medium">{!Number.isNaN(dateObj.getTime()) ? dateObj.toDateString() : ""}</p>
           </div>
           {/*<Control url={page.url} />*/}
         </div>

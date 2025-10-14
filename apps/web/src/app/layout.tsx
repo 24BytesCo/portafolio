@@ -6,10 +6,10 @@ import Script from "next/script";
 import { metadata as meta } from "@/app/config";
 import Loader from "@/app/loader";
 import Providers from "@/app/providers";
-import { env } from "@/env";
 import { createMetadata } from "@/lib/metadata";
 
 import { Toaster } from "@repo/ui/sonner";
+import { RouteProgress } from "@/components/system/route-progress";
 
 // https://iamsteve.me/blog/the-best-ink-trap-typefaces-for-websites
 const bricolage_grotesque = Bricolage_Grotesque({ subsets: ["latin"] });
@@ -34,12 +34,13 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        {env.NODE_ENV === "development" ? (
+        {process.env.NODE_ENV === "development" ? (
           <Script src="https://unpkg.com/react-scan/dist/auto.global.js" />
         ) : null}
       </head>
       <body className={`${bricolage_grotesque.className} antialiased`}>
         <Providers>
+          <RouteProgress />
           <Loader />
           {children}
           <Toaster />

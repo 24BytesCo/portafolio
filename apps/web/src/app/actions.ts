@@ -1,5 +1,18 @@
 "use server";
 
+/**
+ * Server Actions relacionadas con el formulario de contacto.
+ *
+ * Flujo:
+ * 1) Valida el token de Cloudflare Turnstile.
+ * 2) Valida entrada con Zod (ContactActionSchema).
+ * 3) Envía correo vía Resend usando la plantilla `Contact`.
+ *
+ * Requisitos de entorno:
+ * - RESEND_API_KEY, EMAIL_FROM, EMAIL_TO
+ * - TURNSTILE_SECRET_KEY (para validar el captcha)
+ */
+
 import "server-only";
 
 import { env } from "@/env";
@@ -13,6 +26,12 @@ import { ContactActionSchema } from "@repo/validators";
 const EMAIL_FROM = env.EMAIL_FROM;
 const EMAIL_TO = env.EMAIL_TO;
 
+/**
+ * Acción del servidor que procesa el formulario de contacto.
+ *
+ * @returns Objeto con `success` si el envío fue correcto.
+ * @throws {ActionError} Si falla la validación del captcha o el envío por Resend.
+ */
 export const contactSubmit = actionClient
   .use(async ({ next, clientInput }) => {
     const data = clientInput as {
@@ -21,13 +40,13 @@ export const contactSubmit = actionClient
 
     if (!data.token)
       throw new ActionError(
-        "Captcha validation failed. Please ensure the captcha is completed.",
+        "Validación de captcha fallida. Por favor completa el captcha.",
       );
     const res = await validateTurnstileToken(data.token);
 
     if (!res.success) {
       throw new ActionError(
-        "Captcha validation failed. Please ensure the captcha is completed.",
+        "Validación de captcha fallida. Por favor completa el captcha.",
       );
     }
 
@@ -37,22 +56,28 @@ export const contactSubmit = actionClient
   .action(async ({ parsedInput: { name, email, message } }) => {
     const resend = new Resend(env.RESEND_API_KEY);
 
-    // todo: replace hook form of contact with https://github.com/next-safe-action/adapter-react-hook-form
+    // pendiente: reemplazar el formulario por https://github.com/next-safe-action/adapter-react-hook-form
     if (!EMAIL_FROM || !EMAIL_TO) {
-      throw new Error("Contact form configuration missing");
+      throw new ActionError(
+        "Configuración de correo incompleta (EMAIL_FROM/EMAIL_TO)",
+      );
     }
 
     const { data: res, error } = await resend.emails.send({
       from: EMAIL_FROM,
       to: EMAIL_TO,
-      subject: `Message from ${name} on Portfolio`,
+      replyTo: email,
+      subject: `Mensaje de ${name} desde el portafolio`,
       react: Contact({ name, email, message }),
     });
 
     if (res)
       return {
         success:
-          "Thank you for reaching out! Your message has been successfully sent.",
+          "¡Gracias por escribir! Tu mensaje fue enviado correctamente.",
       };
-    if (error) throw new Error(JSON.stringify(error));
+    if (error) {
+      // Exponer el mensaje real de Resend al cliente
+      throw new ActionError(error.message ?? "Error al enviar el correo");
+    }
   });

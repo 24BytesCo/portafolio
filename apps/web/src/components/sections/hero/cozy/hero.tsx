@@ -8,7 +8,7 @@ import { hero } from "@/components/sections/hero/config";
 function Hero() {
   return (
     <MotionWrap className="flex h-[calc(100dvh-(--spacing(14)))] w-full items-center justify-center">
-      <div className="grid items-start justify-center gap-4 px-4 md:grid-cols-2 md:px-6 lg:gap-10">
+      <div className="grid items-start justify-center gap-4 px-4 sm:px-8 md:grid-cols-2 md:px-12 lg:px-16 2xl:px-24 lg:gap-10">
         <div className="space-y-3 text-left">
           <div className="dark:bg-foreground/10 inline-block rounded-lg bg-gray-100 px-3 py-1 text-sm">
             {hero.label}

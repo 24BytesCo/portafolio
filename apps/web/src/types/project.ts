@@ -5,5 +5,6 @@ export interface Project {
   website?: string;
   github?: string;
   tags?: { label: string }[];
-  // thumbnail: string;
+  image?: string;
+  thumbnail?: string;
 }

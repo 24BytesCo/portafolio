@@ -1,10 +1,10 @@
 import type { FooterItem } from "@/types/footer";
 
 const footer: FooterItem[] = [
-  {
-    title: "Home",
-    href: "#",
-  },
+  { title: "Inicio", href: "/" },
+  { title: "Proyectos", href: "/projects" },
+  { title: "Sobre mí", href: "/about" },
+  { title: "Blog", href: "/blog" },
 ];
 
 export const copyright = {

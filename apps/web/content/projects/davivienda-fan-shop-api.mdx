@@ -1,0 +1,66 @@
+---
+title: Davivienda Fan Shop Api
+description: API en NestJS para canje de productos por puntos o dinero.
+thumbnail: /images/projects/davivienda-fan-shop-api/cover.jpg
+date: 2025-10-10
+github: https://github.com/24BytesCo/davivienda-fan-shop-api
+tags:
+  - label: TypeScript
+  - label: NestJS
+  - label: TypeORM
+  - label: PostgreSQL
+  - label: Firebase Storage
+  - label: Swagger
+  - label: Docker
+---
+
+## Resumen
+- API en NestJS para canje de productos por puntos o dinero.
+- Autenticación JWT y semilla del primer usuario (opcional).
+- Productos con imágenes (Firebase Storage, multipart/form-data).
+- Carrito con validación de stock.
+- Órdenes: pago con puntos o dinero, confirmación y limpieza de carrito.
+- PostgreSQL + TypeORM; documentación Swagger disponible en `/api`.
+- Código fuente: https://github.com/24BytesCo/davivienda-fan-shop-api
+
+## Características
+- Catálogo de productos, carrito, órdenes y gestión de usuarios/roles.
+- Conversión entre puntos ↔ dinero configurable.
+- Subida de imágenes de producto a Firebase Storage.
+- Validación de stock en el proceso de checkout.
+- Rutas protegidas por JWT; guards y decorators por módulo.
+
+## Stack Técnico
+- Lenguajes/tecnologías: TypeScript (NestJS).
+- Frameworks/bibliotecas: NestJS, TypeORM, Swagger (OpenAPI).
+- Base de datos: PostgreSQL.
+- Almacenamiento de archivos: Firebase Storage.
+- DevOps: Docker y Docker Compose para desarrollo y despliegue.
+
+## Implementación
+### Backend
+- Módulos por dominio (auth, users, products, cart, orders).
+- Services y repositories con TypeORM (entidades y relaciones).
+- DTOs con `class-validator`/`class-transformer` y Pipes para validaciones.
+- Guards/strategies para JWT; interceptores para manejo de errores/log.
+### Base de datos
+- Esquema relacional para productos, órdenes, usuarios y carrito.
+- Migraciones y seed inicial (usuario administrador).
+### Despliegue
+- Contenerización con Docker; compose para levantar API + PostgreSQL.
+
+## Cómo funciona
+- Autenticación: login JWT; seed opcional de usuario admin.
+- Flujo de compra: ver productos → agregar al carrito → checkout (puntos o dinero) → creación/confirmación de orden → limpieza de carrito.
+- Gestión de imágenes: subida a Firebase Storage desde el endpoint de productos.
+
+## Retos
+- Consistencia de stock bajo concurrencia y control de transacciones.
+- Seguridad de endpoints y manejo de tokens/roles.
+- Performance de consultas (índices/relaciones) en catálogo y órdenes.
+
+## Mejoras futuras
+- Rate limiting, caching por módulo y pruebas e2e de flujos críticos.
+- Auditoría de eventos y métricas operativas.
+- Despliegue a orquestador (Kubernetes) y pipeline CI/CD end‑to‑end.
+

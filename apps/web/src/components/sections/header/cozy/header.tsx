@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { metadata as meta } from "@/app/config";
 import MotionLink from "@/components/fancy/link";
 import { AnimatePresence, motion } from "motion/react";
@@ -11,6 +11,17 @@ import styles from "./style.module.scss";
 
 const Header = () => {
   const [isActive, setIsActive] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (isActive) {
+      document.documentElement.style.overflow = "hidden";
+    } else {
+      document.documentElement.style.overflow = "";
+    }
+    return () => {
+      document.documentElement.style.overflow = "";
+    };
+  }, [isActive]);
 
   return (
     <motion.header
@@ -34,15 +45,8 @@ const Header = () => {
         </MotionLink>
         <div onClick={() => setIsActive(!isActive)} className={styles.el}>
           <div className={styles.label}>
-            <motion.p
-              variants={opacity}
-              animate={!isActive ? "open" : "closed"}
-            >
-              Menu
-            </motion.p>
-            <motion.p variants={opacity} animate={isActive ? "open" : "closed"}>
-              Close
-            </motion.p>
+            <motion.p variants={opacity} animate={!isActive ? "open" : "closed"}>Menú</motion.p>
+            <motion.p variants={opacity} animate={isActive ? "open" : "closed"}>Cerrar</motion.p>
           </div>
           <div
             className={`${styles.burger} ${isActive ? styles.burgerActive : ""}`}

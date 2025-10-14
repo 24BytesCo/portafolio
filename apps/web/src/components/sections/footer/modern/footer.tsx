@@ -23,7 +23,7 @@ export default function Footer() {
       }}
     >
       <motion.div
-        className="fixed bottom-0 h-[400px] w-full md:h-[500px] lg:h-[600px] xl:h-[700px] 2xl:h-[800px]"
+        className="fixed bottom-0 h-[400px] w-full md:h-[500px] lg:h-[600px] xl:h-[700px] 2xl:h-[640px]"
         style={{ opacity }}
       >
         <Content />

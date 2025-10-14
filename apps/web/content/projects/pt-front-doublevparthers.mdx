@@ -1,0 +1,48 @@
+﻿---
+title: PT Front DoubleVParthers
+description: Cliente Angular con modularización, lazy loading, guards/interceptors y medidas de seguridad.
+thumbnail: /images/projects/pt-front-doublevparthers/cover.jpg
+date: 2023-11-27
+github: https://github.com/24BytesCo/PT-Front-DoubleVParthers
+tags:
+  - label: Angular
+  - label: TypeScript
+  - label: SCSS
+  - label: HTML
+  - label: CSS
+---
+
+
+## Resumen
+- SPA Angular con enfoque en rendimiento y seguridad: carga perezosa, guards de rutas e interceptores HTTP.
+- Organización modular del código para mantener escalabilidad.
+- Código fuente: https://github.com/24BytesCo/PT-Front-DoubleVParthers
+
+## Características
+- Lazy loading por módulos; reducción del tiempo de carga inicial.
+- Guards (auth) y roles para proteger navegación/funcionalidades.
+- Interceptores para anexar JWT y gestionar loaders/errores.
+- Patrones de comunicación con @Input/@Output y servicios compartidos.
+
+## Stack Técnico
+- Framework: Angular (CLI), RxJS.
+- Lenguajes/tecnologías: TypeScript, SCSS, HTML, CSS.
+
+## Implementación
+- Angular CLI para scaffolding y builds.
+- Estructura modular: core/shared/features, routing por dominio.
+- Buenas prácticas de estilos y theming con SCSS.
+
+## Cómo funciona
+- Login → navegación a vistas restringidas (guards).
+- Interceptor añade cabeceras y gestiona spinners/errores de red.
+- Módulos funcionales se cargan bajo demanda.
+
+## Retos
+- Balancear seguridad/UX sin penalizar rendimiento.
+- Estandarizar comunicación entre módulos y manejo de estado.
+
+## Mejoras futuras
+- Internacionalización (i18n) y accesibilidad (a11y).
+- Estrategias de prefetch y PWA.
+- Pruebas unitarias/e2e y pipeline CI/CD.

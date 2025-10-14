@@ -48,7 +48,7 @@ export default function ContactForm() {
     setIsOpen(false);
     if (!token) {
       toast.error(
-        "Captcha validation failed. Please ensure the captcha is completed.",
+        "Validación de captcha fallida. Por favor completa el captcha.",
         {
           position: "bottom-center",
         },
@@ -67,10 +67,10 @@ export default function ContactForm() {
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Name</FormLabel>
+                <FormLabel>Nombre</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="Jane Doe"
+                    placeholder="Nombre y apellido"
                     disabled={status === "executing"}
                     {...field}
                   />
@@ -84,10 +84,10 @@ export default function ContactForm() {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email</FormLabel>
+                <FormLabel>Correo</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="jane@example.com"
+                    placeholder="correo@ejemplo.com"
                     disabled={status === "executing"}
                     {...field}
                   />
@@ -101,13 +101,11 @@ export default function ContactForm() {
             name="message"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Message</FormLabel>
+                <FormLabel>Mensaje</FormLabel>
                 <FormControl>
                   <Textarea
                     disabled={status === "executing"}
-                    placeholder={
-                      "Hello!\n\nThis is Jane Doe, from Example. Just wanted to say hi!"
-                    }
+                    placeholder={"¡Hola!\n\nSoy [tu nombre]. Me gustaría ponerme en contacto para ..."}
                     {...field}
                   />
                 </FormControl>
@@ -127,7 +125,7 @@ export default function ContactForm() {
             {status === "executing" && (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
             )}
-            Submit
+            Enviar
           </Button>
         </form>
       </Form>

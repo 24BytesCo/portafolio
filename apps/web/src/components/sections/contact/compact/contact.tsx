@@ -12,18 +12,15 @@ import ContactForm from "./contact-form";
 function Contact() {
   return (
     <MotionWrap className="w-full py-24 lg:py-32" id="contact">
-      <div className="px-4 md:px-6">
+      <div className="px-4 sm:px-8 md:px-12 lg:px-16 2xl:px-24">
         <div className="grid gap-10 lg:grid-cols-2">
           <div className="space-y-3">
-            <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
-              Contact Me
-            </h2>
+            <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Contáctame</h2>
             <p className="text-muted-foreground max-w-[600px] md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-              Have a question or want to work together? Send me a message using
-              the form.
+              ¿Tienes una consulta o quieres trabajar conmigo? Envíame un mensaje con el formulario.
             </p>
             <p className="text-muted-foreground">
-              Email:{" "}
+              Correo:{" "}
               <a className="hover:underline" href={`mailto:${contact.email}`}>
                 {contact.email}
               </a>

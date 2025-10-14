@@ -7,9 +7,17 @@ interface RevealProps {
   phrases: string[];
   className?: string;
   as?: React.ElementType;
+  wordGap?: string; // ex: '0.3em', '8px', '0.5rem'
+  spanClassName?: string; // extra classes for word wrapper
 }
 
-export function Reveal({ phrases, className = "", as = "div" }: RevealProps) {
+export function Reveal({
+  phrases,
+  className = "",
+  as = "div",
+  wordGap,
+  spanClassName = "",
+}: RevealProps) {
   const body = useRef(null);
   const isInView = useInView(body, { once: true, margin: "0px" });
 
@@ -28,7 +36,8 @@ export function Reveal({ phrases, className = "", as = "div" }: RevealProps) {
       {phrases.map((phrase, index) => (
         <span
           key={index}
-          className="relative mr-1 inline-flex w-fit overflow-hidden"
+          className={`relative inline-flex w-fit overflow-hidden ${spanClassName}`}
+          style={{ marginRight: wordGap ?? "0.25rem" }}
         >
           <motion.span
             className="inline-block"

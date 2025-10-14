@@ -1,5 +1,15 @@
 "use server";
 
+/**
+ * Utilidad del lado del servidor para validar tokens de Cloudflare Turnstile.
+ *
+ * Detalles:
+ * - Realiza `POST` a la API oficial de Turnstile para verificar el token.
+ * - Requiere `TURNSTILE_SECRET_KEY` configurada en el entorno de servidor.
+ * - Si la variable no está presente, responde con `success: false` para evitar
+ *   falsos positivos en producción.
+ */
+
 import "server-only";
 
 import { env } from "@/env";
@@ -11,10 +21,16 @@ interface CloudflareTurnstileResponse {
   hostname: string;
 }
 
+/**
+ * Verifica un token de Cloudflare Turnstile contra la API oficial.
+ *
+ * @param token Token generado por el widget de Turnstile en el cliente.
+ * @returns Respuesta de verificación con `success` y metadatos.
+ */
 export async function validateTurnstileToken(
   token: string,
 ): Promise<CloudflareTurnstileResponse> {
-  if (!env.NEXT_PUBLIC_CONTACT_FORM_ENABLED || !env.TURNSTILE_SECRET_KEY) {
+  if (!env.TURNSTILE_SECRET_KEY) {
     return {
       success: false,
       "error-codes": ["TURNSTILE_SECRET_KEY not set"],

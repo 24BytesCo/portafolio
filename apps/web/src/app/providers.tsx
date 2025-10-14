@@ -1,6 +1,6 @@
 "use client";
 
-import { unstable_ViewTransition as ViewTransition } from "react";
+import * as React from "react";
 import { ThemeProvider } from "@/components/theme-provider";
 
 export default function Providers({ children }: { children: React.ReactNode }) {
@@ -11,7 +11,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
       enableSystem
       disableTransitionOnChange
     >
-      <ViewTransition>{children}</ViewTransition>
+      {children}
     </ThemeProvider>
   );
 }

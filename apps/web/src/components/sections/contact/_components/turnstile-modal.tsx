@@ -1,4 +1,10 @@
 import { useState } from "react";
+/**
+ * Modal que aloja el widget de Cloudflare Turnstile.
+ *
+ * Solicita verificación antes de enviar el formulario y devuelve el token
+ * al componente padre mediante el callback.
+ */
 import { env } from "@/env";
 import { Turnstile } from "@marsidev/react-turnstile";
 import { useTheme } from "next-themes";
@@ -32,7 +38,7 @@ export function TurnstileModal({ open, callback }: TurnstileModalProps) {
     !env.NEXT_PUBLIC_TURNSTILE_SITE_KEY
   ) {
     return <div className="mt-4">
-      <FormError message={"This contact form is misconfigured. Please check the form settings and try again."} />
+      <FormError message={"Este formulario de contacto está mal configurado. Revisa los ajustes y vuelve a intentarlo."} />
     </div>;
   }
 
@@ -45,10 +51,9 @@ export function TurnstileModal({ open, callback }: TurnstileModalProps) {
     >
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Verify Your Identity</DialogTitle>
+          <DialogTitle>Verifica tu identidad</DialogTitle>
           <DialogDescription>
-            Before submitting the form, we need to confirm that you&apos;re not
-            a robot.
+            Antes de enviar el formulario, confirma que no eres un robot.
           </DialogDescription>
         </DialogHeader>
         <div className="relative flex flex-col py-4 md:py-0">
@@ -83,7 +88,7 @@ export function TurnstileModal({ open, callback }: TurnstileModalProps) {
                 >
                   <Icons.spinner className="h-7 w-7 animate-spin" />
                 </div>
-                Loading
+                Cargando
               </div>
               <div>
                 <p className={"max-w-[60px] text-xs font-semibold"}>

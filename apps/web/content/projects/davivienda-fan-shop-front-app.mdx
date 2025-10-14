@@ -1,0 +1,55 @@
+---
+title: Davivienda Fan Shop Front App
+description: SPA en Angular para catálogo, carrito/checkout y panel de administración del Fan Shop.
+thumbnail: /images/projects/davivienda-fan-shop-front-app/cover.jpg
+date: 2025-10-10
+github: https://github.com/24BytesCo/davivienda-fan-shop-front-app
+tags:
+  - label: Angular
+  - label: TypeScript
+  - label: HTML
+  - label: CSS
+  - label: SweetAlert2
+---
+
+## Resumen
+- SPA en Angular para la tienda de fanáticos: sitio público, carrito/checkout y panel de administración.
+- Interceptor HTTP con JWT (Bearer) y guards de rutas.
+- Notificaciones con SweetAlert2.
+- Código fuente: https://github.com/24BytesCo/davivienda-fan-shop-front-app
+
+## Características
+- Catálogo público con detalle de producto, filtros y búsqueda.
+- Carrito persistente y checkout con validación de stock desde la API.
+- Inicio de sesión, protección de rutas y refresco de token (según configuración).
+- Panel admin: gestión de productos, configuración de tasa de conversión y administración de puntos.
+
+## Stack Técnico
+- Framework: Angular 12, RxJS 6.
+- Lenguajes/tecnologías: TypeScript, HTML, CSS.
+- Integración: REST API (Davivienda Fan Shop API) vía HttpClient.
+- UX: SweetAlert2 para feedback y confirmaciones.
+
+## Implementación
+### Frontend
+- Arquitectura modular (core/shared/features) y routing segmentado.
+- Servicios + Observables para estado y comunicación entre componentes.
+- Interceptores para adjuntar JWT y manejo uniforme de errores.
+### Despliegue
+- Builds de Angular CLI; configuración por entorno (`environment.ts` / `environment.prod.ts`).
+
+## Cómo funciona
+- Onboarding (si aplica) y navegación por catálogo.
+- Flujo de compra: agregar al carrito → checkout → confirmación.
+- Panel admin para configuración y mantenimiento de catálogo.
+
+## Retos
+- Idempotencia/consistencia del checkout con cambios de stock.
+- Experiencia unificada entre público y administración.
+- Rendimiento en listas y búsqueda (paginación, debounce).
+
+## Mejoras futuras
+- Lazy loading por módulos y prefetch selectivo.
+- PWA/Cache de recursos estáticos.
+- i18n y mejoras de accesibilidad.
+

@@ -9,7 +9,7 @@ import { contact } from "@/components/sections/contact/config";
 import { createMetadata } from "@/lib/metadata";
 
 const title = "Blog";
-const description = "My thoughts on technology.";
+const description = "Mis ideas y notas sobre tecnología.";
 
 export const metadata = createMetadata({
   title,
@@ -40,9 +40,11 @@ const jsonLd: WithContext<Blog> = {
 };
 
 export default function BlogPage(): React.ReactElement {
-  const posts = [...blog.getPages()].sort(
-    (a, b) => b.data.date.getTime() - a.data.date.getTime(),
-  );
+  const posts = [...blog.getPages()].sort((a, b) => {
+    const dateA = new Date((a as any).data.date as unknown as string | Date);
+    const dateB = new Date((b as any).data.date as unknown as string | Date);
+    return dateB.getTime() - dateA.getTime();
+  });
 
   return (
     <main className="my-14 flex-1">
