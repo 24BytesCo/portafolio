@@ -51,23 +51,43 @@ Nota: el comando `dev` usa Turbo para ver cambios en paquetes locales.
 ## Variables de entorno
 Variables principales (raíces/anidadas según paquete):
 - `DATABASE_URL`: conexión a Postgres (usado para features de comentarios/autenticación si están activas).
-- `ALLOWED_ORIGINS`: lista separada por comas con hostnames autorizados para Server Actions. Ej.: `24bytes.pro,www.24bytes.pro,portfolio-web-...run.app`.
+- `ALLOWED_ORIGINS`: lista separada por comas con hostnames autorizados para Server Actions. Ej.: `24bytes.pro,www.24bytes.pro`.
   - Importante: es leída en build (Next). Cambiarla requiere reconstruir y redeployar.
 - `NEXT_PUBLIC_CONTACT_FORM_ENABLED`: `true|false`. Si es `false`, el formulario usa `mailto:` como fallback.
 - `NEXT_PUBLIC_TURNSTILE_SITE_KEY` y `TURNSTILE_SECRET_KEY`: claves de Cloudflare Turnstile.
+- `NEXT_PUBLIC_CONTACT_CAPTCHA_PROVIDER` y `CONTACT_CAPTCHA_PROVIDER`:
+  - `turnstile` para usar captcha de Cloudflare.
+  - `none` para desactivarlo y permitir envío directo sin captcha.
 - `RESEND_API_KEY`, `EMAIL_FROM`, `EMAIL_TO`: credenciales y remitentes para Resend.
 - (Opcionales) `BETTER_AUTH_URL`, `BETTER_AUTH_SECRET`, `GOOGLE_CLIENT_ID/SECRET`, `GITHUB_CLIENT_ID/SECRET` si activas autenticación.
+ - Analítica (elige uno):
+   - `NEXT_PUBLIC_ANALYTICS_PROVIDER`: `plausible` | `cloudflare`.
+   - `NEXT_PUBLIC_PLAUSIBLE_DOMAIN`: dominio si usas Plausible.
+   - `NEXT_PUBLIC_CF_ANALYTICS_TOKEN`: token de medición si usas Cloudflare Web Analytics.
 
 Ejemplo `.env` (fragmento):
 ```
-ALLOWED_ORIGINS=24bytes.pro,www.24bytes.pro,portfolio-web-2q3n3gsuaq-uc.a.run.app,portfolio-web-1040591179623.us-central1.run.app
+ALLOWED_ORIGINS=24bytes.pro,www.24bytes.pro
 NEXT_PUBLIC_CONTACT_FORM_ENABLED=true
 NEXT_PUBLIC_TURNSTILE_SITE_KEY=...
 TURNSTILE_SECRET_KEY=...
+NEXT_PUBLIC_CONTACT_CAPTCHA_PROVIDER=none
+CONTACT_CAPTCHA_PROVIDER=none
 RESEND_API_KEY=re_...
 EMAIL_FROM=Portfolio <onboarding@resend.dev>
 EMAIL_TO=tu-correo@dominio.com
 DATABASE_URL=postgresql://...
+```
+
+Si usas analítica:
+```
+# Plausible
+NEXT_PUBLIC_ANALYTICS_PROVIDER=plausible
+NEXT_PUBLIC_PLAUSIBLE_DOMAIN=24bytes.pro
+
+# Cloudflare Web Analytics
+# NEXT_PUBLIC_ANALYTICS_PROVIDER=cloudflare
+# NEXT_PUBLIC_CF_ANALYTICS_TOKEN=<token>
 ```
 
 ## Carrusel de proyectos (autoplay + visibilidad)
@@ -99,7 +119,7 @@ DATABASE_URL=postgresql://...
 ## Configuración de dominios (Server Actions)
 - Archivos: `apps/web/next.config.mjs` (activo) y `apps/web/next.config.ts`.
 - Qué hace: configura `experimental.serverActions.allowedOrigins` combinando una lista por defecto con `ALLOWED_ORIGINS` (si está definida).
-- Dominios de ejemplo incluidos por defecto: `localhost:3000`, `24bytes.pro`, `www.24bytes.pro` y los dos `run.app` de Cloud Run.
+- Dominios de ejemplo incluidos por defecto: `localhost:3000`, `24bytes.pro`, `www.24bytes.pro`.
 - Importante: cambiar orígenes requiere reconstruir Next (es configuración de build).
 
 ## Despliegue a Cloud Run

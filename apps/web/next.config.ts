@@ -33,8 +33,6 @@ const nextConfig: NextConfig = {
         "localhost:3000",
         "24bytes.pro",
         "www.24bytes.pro",
-        "portfolio-web-2q3n3gsuaq-uc.a.run.app",
-        "portfolio-web-1040591179623.us-central1.run.app",
         ...extraOrigins,
       ],
     },
