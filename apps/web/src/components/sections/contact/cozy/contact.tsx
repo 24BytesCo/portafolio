@@ -14,6 +14,7 @@ import { cn } from "@repo/ui";
 import { buttonVariants } from "@repo/ui/button";
 
 import ContactForm from "./contact-form";
+import { trackEvent } from "@/lib/analytics";
 
 function Contact() {
   return (
@@ -36,6 +37,7 @@ function Contact() {
                   "text-md h-min w-min p-0 font-normal",
                 )}
                 href={`mailto:${contact.email}`}
+                onClick={() => trackEvent("contact_click_email")}
               >
                 {contact.email}
               </Link>
@@ -52,6 +54,9 @@ function Contact() {
                       "text-md h-min w-min gap-1 !p-0",
                     )}
                     key={`contact-social_${index}`}
+                    onClick={() =>
+                      trackEvent("social_click", { name, href })
+                    }
                   >
                     {Icon && <Icon className="h-4 w-4" />}
                     {name}

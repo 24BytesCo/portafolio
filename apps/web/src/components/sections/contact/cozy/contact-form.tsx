@@ -34,6 +34,8 @@ import { Icons } from "@repo/ui/icons";
 import { Input } from "@repo/ui/input";
 import { Textarea } from "@repo/ui/textarea";
 import { ContactFormSchema } from "@repo/validators";
+import { useEffect } from "react";
+import { trackEvent } from "@/lib/analytics";
 
 export default function ContactForm() {
   const form = useForm<ContactFormType>({
@@ -52,7 +54,17 @@ export default function ContactForm() {
   // valores: ContactFormType
   function onSubmit(values: ContactFormType) {
     if (env.NEXT_PUBLIC_CONTACT_FORM_ENABLED === "true") {
-      setIsOpen(true);
+      // Si el proveedor de captcha es Turnstile y hay site key, abrir modal.
+      if (
+        env.NEXT_PUBLIC_CONTACT_CAPTCHA_PROVIDER === "turnstile" &&
+        !!env.NEXT_PUBLIC_TURNSTILE_SITE_KEY
+      ) {
+        trackEvent("contact_open_captcha");
+        setIsOpen(true);
+        return;
+      }
+      // Si no hay captcha, enviar directamente la acción del servidor
+      execute({ ...values });
     } else {
       const mailto =
         `mailto:${encodeURIComponent(contact.email)}` +
@@ -60,6 +72,7 @@ export default function ContactForm() {
         `&body=${encodeURIComponent(
           `Nombre: ${values.name}\nMensaje: ${values.message}`,
         )}`;
+      trackEvent("contact_mailto", { subject: "Contacto desde el portafolio" });
       window.open(mailto);
     }
   }
@@ -72,6 +85,7 @@ export default function ContactForm() {
   function onVerify(token?: string) {
     setIsOpen(false);
     if (!token) {
+      trackEvent("contact_captcha_error");
       toast.error(
         "Validación de captcha fallida. Por favor completa el captcha.",
         {
@@ -80,8 +94,19 @@ export default function ContactForm() {
       );
       return;
     }
+    trackEvent("contact_captcha_success");
     execute({ ...form.getValues(), token });
   }
+
+  // Registrar resultado del envío
+  useEffect(() => {
+    if (result.status === "hasSucceeded" && result.data?.success) {
+      trackEvent("contact_submit_success");
+    }
+    if (result.serverError) {
+      trackEvent("contact_submit_error", { message: result.serverError });
+    }
+  }, [result.status, result.data, result.serverError]);
 
   return (
     <div>
@@ -155,7 +180,9 @@ export default function ContactForm() {
           </Button>
         </form>
       </Form>
-      <TurnstileModal open={isOpen} callback={onVerify} />
+      {env.NEXT_PUBLIC_CONTACT_CAPTCHA_PROVIDER === "turnstile" && (
+        <TurnstileModal open={isOpen} callback={onVerify} />
+      )}
     </div>
   );
 }

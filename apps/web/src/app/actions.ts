@@ -4,13 +4,14 @@
  * Server Actions relacionadas con el formulario de contacto.
  *
  * Flujo:
- * 1) Valida el token de Cloudflare Turnstile.
+ * 1) (Opcional) Valida captcha si está habilitado (Turnstile).
  * 2) Valida entrada con Zod (ContactActionSchema).
  * 3) Envía correo vía Resend usando la plantilla `Contact`.
  *
  * Requisitos de entorno:
  * - RESEND_API_KEY, EMAIL_FROM, EMAIL_TO
- * - TURNSTILE_SECRET_KEY (para validar el captcha)
+ * - CONTACT_CAPTCHA_PROVIDER ("turnstile" | "none")
+ * - TURNSTILE_SECRET_KEY (si CONTACT_CAPTCHA_PROVIDER = "turnstile")
  */
 
 import "server-only";
@@ -38,16 +39,18 @@ export const contactSubmit = actionClient
       token?: string;
     };
 
-    if (!data.token)
-      throw new ActionError(
-        "Validación de captcha fallida. Por favor completa el captcha.",
-      );
-    const res = await validateTurnstileToken(data.token);
-
-    if (!res.success) {
-      throw new ActionError(
-        "Validación de captcha fallida. Por favor completa el captcha.",
-      );
+    // Validar Turnstile solo si está habilitado en el entorno
+    if (env.CONTACT_CAPTCHA_PROVIDER === "turnstile") {
+      if (!data.token)
+        throw new ActionError(
+          "Validación de captcha fallida. Por favor completa el captcha.",
+        );
+      const res = await validateTurnstileToken(data.token);
+      if (!res.success) {
+        throw new ActionError(
+          "Validación de captcha fallida. Por favor completa el captcha.",
+        );
+      }
     }
 
     return next();

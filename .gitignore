@@ -26,6 +26,10 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
+# local helper scripts (do not commit credentials)
+scripts/*.local.sh
+scripts/*.local.ps1
+
 # local env files
 .env
 .env*.local

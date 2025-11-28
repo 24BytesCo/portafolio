@@ -2,6 +2,7 @@ import type { Project } from "@/types/project";
 import Image from "next/image";
 import Link from "next/link";
 import TextReveal from "@/components/fancy/text-reveal";
+import { trackEvent } from "@/lib/analytics";
 
 import { cn } from "@repo/ui";
 import { AspectRatio } from "@repo/ui/aspect-ratio";
@@ -81,7 +82,16 @@ function ProjectCard({
                 className="z-2 rounded-md border border-zinc-950/10 dark:border-zinc-50/10"
                 asChild
               >
-                <Link href={href}>
+                <Link
+                  href={href}
+                  onClick={() =>
+                    trackEvent("project_open_details", {
+                      title,
+                      href,
+                      location: "projects_section",
+                    })
+                  }
+                >
                   <Icons.info />
                 </Link>
               </Button>
@@ -92,7 +102,17 @@ function ProjectCard({
           </Tooltip>
         </TooltipProvider>
       </CardFooter>
-      <Link href={href} className="absolute inset-0 z-1 block" />
+      <Link
+        href={href}
+        className="absolute inset-0 z-1 block"
+        onClick={() =>
+          trackEvent("project_open", {
+            title,
+            href,
+            location: "projects_section",
+          })
+        }
+      />
     </Card>
   );
 }
