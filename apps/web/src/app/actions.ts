@@ -7,10 +7,10 @@
  * 1) (Opcional) Valida captcha si está habilitado (Turnstile).
  * 2) Valida entrada con Zod (ContactActionSchema).
  * 3) Descarta en silencio si el honeypot ("company") viene relleno.
- * 4) Envía correo por SMTP (Brevo) usando la plantilla `Contact`.
+ * 4) Envía correo por la API de Resend usando la plantilla `Contact`.
  *
  * Requisitos de entorno:
- * - SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, EMAIL_FROM, EMAIL_TO
+ * - RESEND_API_KEY, EMAIL_FROM, EMAIL_TO
  * - CONTACT_CAPTCHA_PROVIDER ("turnstile" | "none")
  * - TURNSTILE_SECRET_KEY (si CONTACT_CAPTCHA_PROVIDER = "turnstile")
  */
@@ -20,9 +20,8 @@ import "server-only";
 import { env } from "@/env";
 import { actionClient, ActionError } from "@/lib/safe-action";
 import { validateTurnstileToken } from "@/lib/turnstile";
-import { createTransport } from "nodemailer";
 
-import { renderContactEmail } from "@repo/emails";
+import { enviarConResend, renderContactEmail } from "@repo/emails";
 import { ContactActionSchema } from "@repo/validators";
 
 const EMAIL_FROM = env.EMAIL_FROM;
@@ -73,33 +72,26 @@ export const contactSubmit = actionClient
         "Configuración de correo incompleta (EMAIL_FROM/EMAIL_TO)",
       );
     }
-    if (!env.SMTP_HOST || !env.SMTP_USER || !env.SMTP_PASS) {
-      throw new ActionError("Configuración SMTP incompleta");
+    if (!env.RESEND_API_KEY) {
+      throw new ActionError("Configuración de Resend incompleta");
     }
-
-    const transporter = createTransport({
-      host: env.SMTP_HOST,
-      port: env.SMTP_PORT ?? 587,
-      // 465 = SMTPS implícito; el resto (587/25) negocia STARTTLS.
-      secure: (env.SMTP_PORT ?? 587) === 465,
-      auth: { user: env.SMTP_USER, pass: env.SMTP_PASS },
-    });
 
     const { html, text } = await renderContactEmail({ name, email, message });
 
-    try {
-      await transporter.sendMail({
+    const resultado = await enviarConResend(
+      {
         from: EMAIL_FROM,
         to: EMAIL_TO,
         replyTo: email,
         subject: `Mensaje de ${name} desde el portafolio`,
         html,
         text,
-      });
-    } catch (e) {
-      throw new ActionError(
-        e instanceof Error ? e.message : "Error al enviar el correo",
-      );
+      },
+      env.RESEND_API_KEY,
+    );
+
+    if (!resultado.ok) {
+      throw new ActionError(resultado.error ?? "Error al enviar el correo");
     }
 
     return { success: SUCCESS_MESSAGE };

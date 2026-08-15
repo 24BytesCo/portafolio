@@ -5,13 +5,11 @@ export const env = createEnv({
   server: {
     EMAIL_FROM: z.string().min(1).optional(),
     EMAIL_TO: z.string().min(1).optional(),
-    // Brevo (antes Sendinblue) por SMTP: misma cuenta/dominio verificado
-    // (SPF+DKIM) que ya usa SECOP-Monitor. Reemplaza a Resend, que nunca
-    // llegó a tener RESEND_API_KEY configurada en este despliegue.
-    SMTP_HOST: z.string().min(1).optional(),
-    SMTP_PORT: z.coerce.number().int().positive().optional(),
-    SMTP_USER: z.string().min(1).optional(),
-    SMTP_PASS: z.string().min(1).optional(),
+    // Resend, vía su API HTTP (no SMTP). Antes SMTP de Brevo, con la misma
+    // cuenta/dominio que usa SECOP-Monitor: Brevo exige IP autorizada y este
+    // servidor tiene IP dinámica, así que un reinicio de router cortaba el
+    // correo en silencio. Migrado el 2026-08-15.
+    RESEND_API_KEY: z.string().min(1).startsWith('re_').optional(),
     NODE_ENV: z.enum(["development", "production"]).optional(),
   },
   client: {},
