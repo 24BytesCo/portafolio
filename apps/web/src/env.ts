@@ -30,7 +30,11 @@ export const env = createEnv({
   client: {
     // NEXT_PUBLIC_CLIENTVAR: z.string(),
     NEXT_PUBLIC_CONTACT_FORM_ENABLED: z.string().min(1).optional(),
-    NEXT_PUBLIC_TURNSTILE_SITE_KEY: z.string().min(1).optional(),
+    // `.min(1)` reventaba el build: el Dockerfile siempre escribe esta clave
+    // en el .env de build (vacía si no hay Turnstile configurado), y dotenv
+    // la deja como "" en vez de "undefined" — "" no pasa `.min(1)` pero sí
+    // hace felíz a `.optional()` a secas.
+    NEXT_PUBLIC_TURNSTILE_SITE_KEY: z.string().optional(),
     NEXT_PUBLIC_ANALYTICS_PROVIDER: z.string().optional(),
     NEXT_PUBLIC_PLAUSIBLE_DOMAIN: z.string().optional(),
     NEXT_PUBLIC_CF_ANALYTICS_TOKEN: z.string().optional(),

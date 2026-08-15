@@ -32,6 +32,7 @@
   "prettier": "@repo/prettier-config",
   "dependencies": {
     "@react-email/components": "^0.0.33",
+    "@react-email/render": "^1.0.5",
     "react": "catalog:react19",
     "react-dom": "catalog:react19",
     "react-email": "3.0.7"

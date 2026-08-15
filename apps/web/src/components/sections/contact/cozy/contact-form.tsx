@@ -44,6 +44,7 @@ export default function ContactForm() {
       name: "",
       email: "",
       message: "",
+      company: "",
     },
   });
 
@@ -112,6 +113,22 @@ export default function ContactForm() {
     <div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          {/* Honeypot anti-spam: invisible para personas, los bots de
+              formularios lo rellenan igual porque leen el HTML crudo. Ver
+              validación en app/actions.ts. */}
+          <div
+            aria-hidden="true"
+            className="absolute -left-[9999px] h-0 w-0 overflow-hidden"
+          >
+            <label htmlFor="company">No completar este campo</label>
+            <input
+              id="company"
+              type="text"
+              tabIndex={-1}
+              autoComplete="off"
+              {...form.register("company")}
+            />
+          </div>
           <FormField
             control={form.control}
             name="name"
