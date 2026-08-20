@@ -1,0 +1,75 @@
+# Plantilla del compose de despliegue.
+#
+# El archivo real (`docker-compose.deploy.yml`) está en .gitignore porque lleva
+# rutas y ajustes del servidor. Esta plantilla existe para que ese archivo se
+# pueda reconstruir sin que nadie tenga que inventarse el formato, y sobre todo
+# para fijar la regla que motivó este cambio:
+#
+#   NINGÚN secreto se escribe aquí. Todos salen del `.env` del directorio, con
+#   `${VAR:?...}` y sin valor por defecto.
+#
+# El `:?` no es un capricho de estilo: con un valor por defecto, un despliegue
+# al que le falte el `.env` no falla — arranca en silencio con la credencial de
+# ejemplo. Con `:?`, `docker compose up` aborta antes de levantar nada.
+#
+# Copiar a `docker-compose.deploy.yml`, ajustar dominios y puertos, y crear el
+# `.env` (600) a partir de `.env.example`.
+
+services:
+  portafolio-pg:
+    image: postgres:17-alpine
+    container_name: portafolio-pg
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: portafolio
+      POSTGRES_USER: portafolio
+      # Sin mensaje en el :? para que el escáner de secretos no confunda el
+      # texto con una contraseña; el error de Compose ya nombra la variable.
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?}
+    volumes:
+      - portafolio-pgdata:/var/lib/postgresql/data
+    networks:
+      - portafolio-net
+
+  portafolio-web:
+    image: web-rescatada:latest
+    container_name: portafolio-web
+    working_dir: /app
+    restart: unless-stopped
+    depends_on:
+      - portafolio-pg
+    # Solo en localhost: a internet se sale por el túnel de Cloudflare y el
+    # proxy inverso, nunca publicando el puerto en 0.0.0.0.
+    ports:
+      - "127.0.0.1:43122:3000"
+    environment:
+      DATABASE_URL: ${DATABASE_URL:?definir DATABASE_URL en .env}
+      BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET:?definir BETTER_AUTH_SECRET en .env}
+      BETTER_AUTH_URL: https://ejemplo.tld
+      NODE_ENV: production
+      PORT: "3000"
+      HOSTNAME: "0.0.0.0"
+      GITHUB_CLIENT_ID: ${GITHUB_CLIENT_ID:?definir GITHUB_CLIENT_ID en .env}
+      GITHUB_CLIENT_SECRET: ${GITHUB_CLIENT_SECRET:?definir GITHUB_CLIENT_SECRET en .env}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:?definir GOOGLE_CLIENT_ID en .env}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:?definir GOOGLE_CLIENT_SECRET en .env}
+      # Formulario de contacto: Resend por API HTTP. Brevo (SMTP) exigía IP
+      # autorizada y el servidor no siempre tiene IP fija, así que un cambio de
+      # IP cortaba el correo EN SILENCIO. Resend no filtra por IP.
+      RESEND_API_KEY: ${RESEND_API_KEY:?definir RESEND_API_KEY en .env}
+      EMAIL_FROM: "Portfolio <noreply@ejemplo.tld>"
+      EMAIL_TO: contacto@ejemplo.tld
+    networks:
+      - portafolio-net
+      - proxy-net
+
+networks:
+  portafolio-net:
+    driver: bridge
+  # Red compartida con el proxy inverso. Se crea fuera de este compose.
+  proxy-net:
+    external: true
+    name: proxy-net
+
+volumes:
+  portafolio-pgdata:
