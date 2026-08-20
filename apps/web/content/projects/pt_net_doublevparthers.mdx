@@ -11,40 +11,47 @@ tags:
   - label: SQL Server
 ---
 
-
 ## Resumen
+
 - API en .NET con autenticación basada en Identity y CRUD para usuarios/personas.
 - Arquitectura por capas/proyectos: 1.Api, 2.Infraestructure, 3.Application, 4.Domain.
 - Video funcional de la solución disponible en el README.
 - Código fuente: https://github.com/24BytesCo/PT_NET_DoubleVParthers
 
 ## Características
+
 - Inicio de sesión y protección de endpoints con ASP.NET Core Identity.
 - CRUD de entidades (usuarios/personas) con validaciones.
 - Separación clara de responsabilidades por capa.
 - Configuración sensible vía variables de entorno/appsettings.
 
 ## Stack Técnico
+
 - Lenguaje/plataforma: C# y .NET (ASP.NET Core).
 - Persistencia: SQL Server (EF Core/migraciones).
 - Arquitectura: Clean Architecture (Domain, Application, Infrastructure, API).
 
 ## Implementación
+
 ### Capas/proyectos
+
 - 4.Domain: entidades del dominio y reglas de negocio.
 - 3.Application: casos de uso, DTOs y contratos.
 - 2.Infraestructure: EF Core, repositorios y acceso a datos.
 - 1.Api: controladores, validaciones y pipeline de middleware.
 
 ## Cómo funciona
+
 - Autenticación con Identity → emisión/validación de credenciales.
 - Endpoints CRUD para usuarios/personas → reglas del dominio en Application/Domain.
 
 ## Retos
+
 - Mantener límites entre capas evitando filtraciones de infraestructura al dominio.
 - Diseñar políticas y perfiles de acceso sin acoplarlos a detalles técnicos.
 
 ## Mejoras futuras
+
 - Pruebas unitarias y de integración en capas Application/Infra.
 - Endpoints adicionales y paginación/filtro avanzado.
 - Pipeline CI/CD y despliegue contenedorizado.

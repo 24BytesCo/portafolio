@@ -42,7 +42,7 @@ function ExperienceCard({
                 width={130}
                 height={130}
                 unoptimized
-                className="w-[130px] h-auto rounded-md object-contain grayscale transition hover:grayscale-0"
+                className="h-auto w-[130px] rounded-md object-contain grayscale transition hover:grayscale-0"
               />
             ) : null}
             <div className="flex min-w-0 flex-col">
@@ -77,16 +77,15 @@ function ExperienceCard({
           {name}
         </TextReveal>
         {(() => {
-          const items =
-            highlights && highlights.length
-              ? highlights
-              : description && description.includes(";")
-                ? description
-                    .split(";")
-                    .map((s) => s.trim())
-                    .filter(Boolean)
-                : undefined;
-          if (items && items.length) {
+          const items = highlights?.length
+            ? highlights
+            : description?.includes(";")
+              ? description
+                  .split(";")
+                  .map((s) => s.trim())
+                  .filter(Boolean)
+              : undefined;
+          if (items?.length) {
             return (
               <ul className="mt-4 max-w-3xl list-disc space-y-2 pl-5 text-[15px] leading-relaxed text-zinc-800 marker:text-zinc-400 dark:text-zinc-300">
                 {items.map((it, i) => (

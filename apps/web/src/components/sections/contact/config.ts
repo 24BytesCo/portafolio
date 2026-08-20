@@ -2,7 +2,6 @@ import type { Contact } from "@/types/contact";
 import {
   SiGithub,
   SiLinkedin,
-  SiX,
   SiYoutube,
 } from "@icons-pack/react-simple-icons";
 

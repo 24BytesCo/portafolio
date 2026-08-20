@@ -30,13 +30,15 @@ export default function About() {
   useEffect(() => {
     let active = true;
     fetch("/api/logos")
-      .then((r) => r.json())
+      .then((r) => r.json() as Promise<{ images?: unknown }>)
       .then((data) => {
         if (!active) return;
-        const arr = Array.isArray(data?.images) ? data.images : [];
+        const arr = Array.isArray(data.images)
+          ? data.images.filter((x): x is string => typeof x === "string")
+          : [];
         if (arr.length) setLogoImages(arr);
       })
-      .catch(() => {});
+      .catch(() => undefined);
     return () => {
       active = false;
     };

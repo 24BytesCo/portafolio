@@ -11,36 +11,45 @@ tags:
 ---
 
 ## Resumen
+
 - Proyecto backend con Clean Architecture, separando capas y reglas del dominio.
 - Módulos de dominio: Usuarios, Vehículos y Alquileres; abstracciones en una capa común.
 - Código fuente: https://github.com/24BytesCo/RentCars-Back-CleanArquitecture
 
 ## Características
+
 - Entidades y contratos del dominio modelados de forma explícita.
 - Abstracciones para aislar reglas de negocio de frameworks/infraestructura.
 - Base para agregar casos de uso, servicios de aplicación e infraestructura persistente.
 
 ## Stack Técnico
+
 - Lenguaje: C# (.NET).
 - Organización: Domain (Users, Vehículos, Alquileres, Abstractions).
 - Preparado para añadir Application e Infrastructure (repositorios, DB, IO externo).
 
 ## Implementación
+
 ### Dominio
+
 - Entidades y value objects; contratos en `Abstractions`.
 - Reglas de negocio centradas en alquiler y disponibilidad de vehículos.
+
 ### Extensión natural
+
 - Agregar capa Application (casos de uso) y Infrastructure (ORM/repositorios).
 
 ## Cómo funciona
+
 - El dominio define los comportamientos; la infraestructura puede acoplarse sin romper las reglas.
 - Facilita pruebas unitarias del dominio sin dependencias externas.
 
 ## Retos
+
 - Mantener límites claros entre capas cuando crece el proyecto.
 - Versionamiento del modelo y migraciones.
 
 ## Mejoras futuras
+
 - Añadir repositorios (EF Core u otro), casos de uso y endpoints Web API.
 - Validaciones, logging y pruebas automatizadas.
-

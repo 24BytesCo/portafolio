@@ -1,8 +1,8 @@
-import { NextResponse } from "next/server";
 import fs from "node:fs";
 import path from "node:path";
+import { NextResponse } from "next/server";
 
-export async function GET() {
+export function GET() {
   try {
     const cwd = process.cwd();
     const logosDir = path.join(cwd, "public", "images", "logos");
@@ -20,9 +20,8 @@ export async function GET() {
     return NextResponse.json({ images });
   } catch (e) {
     return NextResponse.json(
-      { images: [], error: (e as Error)?.message ?? "unknown" },
+      { images: [], error: e instanceof Error ? e.message : "unknown" },
       { status: 200 },
     );
   }
 }
-

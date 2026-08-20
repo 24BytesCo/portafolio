@@ -3,27 +3,32 @@
 /**
  * Sección de contacto que agrupa información de correo/redes y el formulario.
  */
-
 import React from "react";
 import Link from "@/components/fancy/link";
 import TextReveal from "@/components/fancy/text-reveal";
 import MotionWrap from "@/components/motion-wrap";
 import { contact } from "@/components/sections/contact/config";
+import { trackEvent } from "@/lib/analytics";
 
 import { cn } from "@repo/ui";
 import { buttonVariants } from "@repo/ui/button";
 
 import ContactForm from "./contact-form";
-import { trackEvent } from "@/lib/analytics";
 
 function Contact() {
   return (
     <MotionWrap className="w-full py-24 lg:py-32" id="contact">
       <div className="px-4 sm:px-8 md:px-12 lg:px-16 2xl:px-24">
         <div className="py-3">
-          <TextReveal as="h2" className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Contáctame</TextReveal>
+          <TextReveal
+            as="h2"
+            className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl"
+          >
+            Contáctame
+          </TextReveal>
           <TextReveal as="p" className="text-muted-foreground max-w-[600px]">
-            ¿Tienes una consulta o quieres trabajar conmigo? Envíame un mensaje con el formulario.
+            ¿Tienes una consulta o quieres trabajar conmigo? Envíame un mensaje
+            con el formulario.
           </TextReveal>
         </div>
         <div className="flex flex-wrap">
@@ -54,9 +59,7 @@ function Contact() {
                       "text-md h-min w-min gap-1 !p-0",
                     )}
                     key={`contact-social_${index}`}
-                    onClick={() =>
-                      trackEvent("social_click", { name, href })
-                    }
+                    onClick={() => trackEvent("social_click", { name, href })}
                   >
                     {Icon && <Icon className="h-4 w-4" />}
                     {name}

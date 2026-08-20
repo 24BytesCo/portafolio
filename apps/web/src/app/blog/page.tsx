@@ -41,9 +41,10 @@ const jsonLd: WithContext<Blog> = {
 
 export default function BlogPage(): React.ReactElement {
   const posts = [...blog.getPages()].sort((a, b) => {
-    const dateA = new Date((a as any).data.date as unknown as string | Date);
-    const dateB = new Date((b as any).data.date as unknown as string | Date);
-    return dateB.getTime() - dateA.getTime();
+    // El schema declara Date, pero al serializarse el contenido llega string.
+    const tA = new Date(a.data.date as unknown as string | Date).getTime();
+    const tB = new Date(b.data.date as unknown as string | Date).getTime();
+    return (Number.isNaN(tB) ? 0 : tB) - (Number.isNaN(tA) ? 0 : tA);
   });
 
   return (

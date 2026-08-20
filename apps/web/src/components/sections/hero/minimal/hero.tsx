@@ -5,7 +5,7 @@ import { hero } from "@/components/sections/hero/config";
 function Hero() {
   return (
     <MotionWrap className="flex h-[calc(100dvh-(--spacing(14)))] w-full items-center justify-center">
-      <div className="flex w-full items-center justify-center gap-4 px-4 sm:px-8 md:grid-cols-2 md:px-12 lg:px-16 2xl:px-24 lg:gap-10">
+      <div className="flex w-full items-center justify-center gap-4 px-4 sm:px-8 md:grid-cols-2 md:px-12 lg:gap-10 lg:px-16 2xl:px-24">
         <div className="flex w-full items-center justify-center space-y-3 text-left">
           <div className="flex w-full max-w-(--breakpoint-xl) flex-col items-center justify-center">
             <div className="dark:bg-foreground/10 mb-6 inline-block w-fit rounded-lg bg-gray-100 px-3 py-1 text-sm">

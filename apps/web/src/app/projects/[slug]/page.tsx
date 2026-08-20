@@ -1,7 +1,7 @@
-import type { Metadata } from "next";
-import Image from "next/image";
 import fs from "node:fs";
 import path from "node:path";
+import type { Metadata } from "next";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { metadata as meta } from "@/app/config";
 import { project } from "@/app/source";
@@ -16,7 +16,7 @@ import Header from "./header";
 export function generateStaticParams() {
   return project
     .getPages()
-    .map((p) => p.slugs?.[0])
+    .map((p) => p.slugs[0])
     .filter(Boolean)
     .map((slug) => ({ slug }));
 }
@@ -33,13 +33,17 @@ export async function generateMetadata(props: {
   const clean = slug.replace(/^[-_]+|[-_]+$/g, "");
   const hyphen = clean.replace(/_/g, "-").replace(/-{2,}/g, "-");
   const underscore = clean.replace(/-/g, "_").replace(/_{2,}/g, "_");
-  const candidates = Array.from(new Set([slug, clean, hyphen, underscore])).flatMap((s) => [
+  const candidates = Array.from(
+    new Set([slug, clean, hyphen, underscore]),
+  ).flatMap((s) => [
     `/images/projects/${s}/cover.jpg`,
     `/images/projects/${s}/cover.png`,
     `/images/projects/${s}/cover.jpeg`,
     `/images/projects/${s}/cover.webp`,
   ]);
-  const cover = candidates.find((rel) => fs.existsSync(path.join(process.cwd(), "public", rel)));
+  const cover = candidates.find((rel) =>
+    fs.existsSync(path.join(process.cwd(), "public", rel)),
+  );
 
   return createMetadata({
     title: page.data.title,
@@ -91,13 +95,17 @@ export default async function ProjectPage(props0: {
   const clean2 = slug.replace(/^[-_]+|[-_]+$/g, "");
   const hyphen2 = clean2.replace(/_/g, "-").replace(/-{2,}/g, "-");
   const underscore2 = clean2.replace(/-/g, "_").replace(/_{2,}/g, "_");
-  const candidates2 = Array.from(new Set([slug, clean2, hyphen2, underscore2])).flatMap((s) => [
+  const candidates2 = Array.from(
+    new Set([slug, clean2, hyphen2, underscore2]),
+  ).flatMap((s) => [
     `/images/projects/${s}/cover.jpg`,
     `/images/projects/${s}/cover.png`,
     `/images/projects/${s}/cover.jpeg`,
     `/images/projects/${s}/cover.webp`,
   ]);
-  const cover2 = candidates2.find((rel) => fs.existsSync(path.join(process.cwd(), "public", rel)));
+  const cover2 = candidates2.find((rel) =>
+    fs.existsSync(path.join(process.cwd(), "public", rel)),
+  );
 
   return (
     <main className="my-14 flex-1">

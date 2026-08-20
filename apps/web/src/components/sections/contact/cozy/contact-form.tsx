@@ -7,14 +7,14 @@
  * - Si el formulario está habilitado, solicita verificación Turnstile y envía vía Server Actions.
  * - Si no está habilitado, abre un enlace mailto como alternativa.
  */
-
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { contactSubmit } from "@/app/actions";
 import { FormError } from "@/components/sections/contact/_components/form-error";
 import { FormSuccess } from "@/components/sections/contact/_components/form-success";
 import { TurnstileModal } from "@/components/sections/contact/_components/turnstile-modal";
 import { contact } from "@/components/sections/contact/config";
 import { env } from "@/env";
+import { trackEvent } from "@/lib/analytics";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAction } from "next-safe-action/hooks";
 import { useForm } from "react-hook-form";
@@ -34,8 +34,6 @@ import { Icons } from "@repo/ui/icons";
 import { Input } from "@repo/ui/input";
 import { Textarea } from "@repo/ui/textarea";
 import { ContactFormSchema } from "@repo/validators";
-import { useEffect } from "react";
-import { trackEvent } from "@/lib/analytics";
 
 export default function ContactForm() {
   const form = useForm<ContactFormType>({
@@ -101,13 +99,13 @@ export default function ContactForm() {
 
   // Registrar resultado del envío
   useEffect(() => {
-    if (result.status === "hasSucceeded" && result.data?.success) {
+    if (status === "hasSucceeded" && result.data?.success) {
       trackEvent("contact_submit_success");
     }
     if (result.serverError) {
       trackEvent("contact_submit_error", { message: result.serverError });
     }
-  }, [result.status, result.data, result.serverError]);
+  }, [status, result.data, result.serverError]);
 
   return (
     <div>
@@ -173,7 +171,9 @@ export default function ContactForm() {
                 <FormControl>
                   <Textarea
                     disabled={status === "executing"}
-                    placeholder={"¡Hola!\n\nSoy [tu nombre]. Me gustaría ponerme en contacto para ..."}
+                    placeholder={
+                      "¡Hola!\n\nSoy [tu nombre]. Me gustaría ponerme en contacto para ..."
+                    }
                     {...field}
                   />
                 </FormControl>

@@ -105,7 +105,9 @@ export default function ContactForm() {
                 <FormControl>
                   <Textarea
                     disabled={status === "executing"}
-                    placeholder={"¡Hola!\n\nSoy [tu nombre]. Me gustaría ponerme en contacto para ..."}
+                    placeholder={
+                      "¡Hola!\n\nSoy [tu nombre]. Me gustaría ponerme en contacto para ..."
+                    }
                     {...field}
                   />
                 </FormControl>

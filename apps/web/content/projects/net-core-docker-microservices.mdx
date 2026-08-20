@@ -14,42 +14,51 @@ tags:
 ---
 
 ## Resumen
+
 - Dos microservicios independientes: ProductService y OrderService.
 - APIs REST en .NET 8 con Entity Framework Core y SQL Server.
 - Contenerización con Docker y orquestación vía docker-compose.
 - Código fuente: https://github.com/24BytesCo/net-core-docker-microservices
 
 ## Características
+
 - CRUD básico de productos y pedidos.
 - Migraciones de EF Core aplicadas al inicio.
 - Configuración de base de datos y localización por servicio.
 - Rutas descriptivas y separación de puertos para aislamiento.
 
 ## Stack Técnico
+
 - Lenguaje/plataforma: C# y .NET 8.
 - Persistencia: EF Core + SQL Server.
 - DevOps: Docker/Docker Compose (multi‑servicio).
 
 ## Implementación
+
 ### ProductService
+
 - Endpoints para gestión de productos.
 - Capa de acceso a datos con EF Core.
+
 ### OrderService
+
 - Endpoints para gestión de pedidos.
 - Aplicación de migraciones al arrancar; configuración independiente.
 
 ## Cómo funciona
+
 - Cada servicio expone su propia API y puerto.
 - Los contenedores se levantan con docker‑compose para entorno local.
 - La comunicación entre servicios es vía HTTP (extensible a mensajería).
 
 ## Retos
+
 - Versionamiento de contratos y compatibilidad entre servicios.
 - Coordinación de transacciones y consistencia entre pedidos y stock.
 - Observabilidad y diagnósticos por servicio.
 
 ## Mejoras futuras
+
 - Health checks, retry/circuit breaker y tracing distribuido.
 - Autenticación/autorización centralizada (API Gateway o Identity Provider).
 - Pruebas de contrato y pipeline CI/CD.
-

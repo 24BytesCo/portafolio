@@ -17,7 +17,9 @@ function ExperienceCard({
   className,
 }: ExperienceCardProps) {
   return (
-    <Card className={cn("rounded-xl border bg-background/60 shadow-sm", className)}>
+    <Card
+      className={cn("bg-background/60 rounded-xl border shadow-sm", className)}
+    >
       <CardContent className="p-5">
         <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-3">
@@ -33,7 +35,9 @@ function ExperienceCard({
             ) : null}
             <h3 className="text-lg font-semibold tracking-tight">{company}</h3>
           </div>
-          <span className="text-xs font-medium text-muted-foreground">{duration}</span>
+          <span className="text-muted-foreground text-xs font-medium">
+            {duration}
+          </span>
         </div>
         <h4 className="mt-3 text-2xl font-semibold tracking-tight">{name}</h4>
         <p className="mt-3 text-sm leading-relaxed">{description}</p>

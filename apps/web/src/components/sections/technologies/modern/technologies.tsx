@@ -15,7 +15,10 @@ function Technologies() {
       <div className="px-4 sm:px-8 md:px-12 lg:px-16 2xl:px-24">
         <div className="grid gap-10 lg:grid-cols-2">
           <div className="space-y-4">
-            <TextReveal as="h2" className="flex flex-col -space-y-4 text-4xl leading-tight font-bold tracking-tighter sm:text-5xl md:text-5xl md:leading-tight lg:text-6xl lg:leading-tight">
+            <TextReveal
+              as="h2"
+              className="flex flex-col -space-y-4 text-4xl leading-tight font-bold tracking-tighter sm:text-5xl md:text-5xl md:leading-tight lg:text-6xl lg:leading-tight"
+            >
               Tecnologías
             </TextReveal>
             <div className="space-y-4">

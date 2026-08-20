@@ -19,7 +19,10 @@ function Testimonials() {
       <div className="grid gap-10">
         <div className="flex w-full flex-col items-center justify-center px-4 text-center md:px-6 lg:flex-row lg:justify-between lg:text-left">
           <div className="flex flex-col items-center lg:items-start">
-            <TextReveal as="h2" className="flex flex-col -space-y-4 text-4xl leading-tight font-bold tracking-tighter sm:text-5xl md:text-5xl md:leading-tight lg:text-6xl lg:leading-tight">
+            <TextReveal
+              as="h2"
+              className="flex flex-col -space-y-4 text-4xl leading-tight font-bold tracking-tighter sm:text-5xl md:text-5xl md:leading-tight lg:text-6xl lg:leading-tight"
+            >
               Testimonios
             </TextReveal>
           </div>

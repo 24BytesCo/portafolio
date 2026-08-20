@@ -15,9 +15,12 @@ function Contact() {
       <div className="px-4 sm:px-8 md:px-12 lg:px-16 2xl:px-24">
         <div className="grid gap-10 lg:grid-cols-2">
           <div className="space-y-3">
-            <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Contáctame</h2>
+            <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
+              Contáctame
+            </h2>
             <p className="text-muted-foreground max-w-[600px] md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-              ¿Tienes una consulta o quieres trabajar conmigo? Envíame un mensaje con el formulario.
+              ¿Tienes una consulta o quieres trabajar conmigo? Envíame un
+              mensaje con el formulario.
             </p>
             <p className="text-muted-foreground">
               Correo:{" "}
