@@ -37,9 +37,15 @@ export function TurnstileModal({ open, callback }: TurnstileModalProps) {
     !env.NEXT_PUBLIC_CONTACT_FORM_ENABLED ||
     !env.NEXT_PUBLIC_TURNSTILE_SITE_KEY
   ) {
-    return <div className="mt-4">
-      <FormError message={"Este formulario de contacto está mal configurado. Revisa los ajustes y vuelve a intentarlo."} />
-    </div>;
+    return (
+      <div className="mt-4">
+        <FormError
+          message={
+            "Este formulario de contacto está mal configurado. Revisa los ajustes y vuelve a intentarlo."
+          }
+        />
+      </div>
+    );
   }
 
   return (

@@ -45,8 +45,15 @@ const Header = () => {
         </MotionLink>
         <div onClick={() => setIsActive(!isActive)} className={styles.el}>
           <div className={styles.label}>
-            <motion.p variants={opacity} animate={!isActive ? "open" : "closed"}>Menú</motion.p>
-            <motion.p variants={opacity} animate={isActive ? "open" : "closed"}>Cerrar</motion.p>
+            <motion.p
+              variants={opacity}
+              animate={!isActive ? "open" : "closed"}
+            >
+              Menú
+            </motion.p>
+            <motion.p variants={opacity} animate={isActive ? "open" : "closed"}>
+              Cerrar
+            </motion.p>
           </div>
           <div
             className={`${styles.burger} ${isActive ? styles.burgerActive : ""}`}

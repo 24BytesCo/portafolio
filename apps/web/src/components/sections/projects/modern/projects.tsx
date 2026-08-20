@@ -1,6 +1,6 @@
-import React from "react";
 import fs from "node:fs";
 import path from "node:path";
+import React from "react";
 import { project } from "@/app/source";
 import TextReveal from "@/components/fancy/text-reveal";
 import MotionWrap from "@/components/motion-wrap";
@@ -16,10 +16,9 @@ import ProjectsCarousel from "./projects-carousel";
  */
 function Projects() {
   const projects = [...project.getPages()].sort((a, b) => {
-    const dateA = new Date((a as any).data.date as unknown as string | Date);
-    const dateB = new Date((b as any).data.date as unknown as string | Date);
-    const tA = dateA.getTime();
-    const tB = dateB.getTime();
+    // El schema declara Date, pero al serializarse el contenido llega string.
+    const tA = new Date(a.data.date as unknown as string | Date).getTime();
+    const tB = new Date(b.data.date as unknown as string | Date).getTime();
     return (isNaN(tB) ? 0 : tB) - (isNaN(tA) ? 0 : tA);
   });
 
@@ -28,7 +27,9 @@ function Projects() {
     const clean = slug.replace(/^[-_]+|[-_]+$/g, "");
     const hyphen = clean.replace(/_/g, "-").replace(/-{2,}/g, "-");
     const underscore = clean.replace(/-/g, "_").replace(/_{2,}/g, "_");
-    const candidates = Array.from(new Set([slug, clean, hyphen, underscore])).flatMap((s) => [
+    const candidates = Array.from(
+      new Set([slug, clean, hyphen, underscore]),
+    ).flatMap((s) => [
       `/images/projects/${s}/cover.jpg`,
       `/images/projects/${s}/cover.png`,
       `/images/projects/${s}/cover.jpeg`,
@@ -54,7 +55,8 @@ function Projects() {
               </TextReveal>
             </div>
             <p className="mt-4 hidden text-gray-500 lg:mt-0 lg:block lg:w-[35%] dark:text-gray-400">
-              Algunos de mis proyectos donde convierto ideas en soluciones funcionales.
+              Algunos de mis proyectos donde convierto ideas en soluciones
+              funcionales.
             </p>
           </div>
 
@@ -65,7 +67,7 @@ function Projects() {
                 href: p.url,
                 description: p.data.description,
                 tags: p.data.tags,
-                thumbnail: coverPath(p.slugs?.[0] ?? ""),
+                thumbnail: coverPath(p.slugs[0] ?? ""),
               }))}
             />
           </div>

@@ -4,9 +4,14 @@ import { env } from "@/env";
 
 declare global {
   interface Window {
-    plausible?: (event: string, opts?: { props?: Record<string, unknown> }) => void;
+    plausible?: (
+      event: string,
+      opts?: { props?: Record<string, unknown> },
+    ) => void;
     gtag?: (...args: unknown[]) => void;
-    umami?: { track: (event: string, data?: Record<string, unknown>) => void } | ((event: string) => void);
+    umami?:
+      | { track: (event: string, data?: Record<string, unknown>) => void }
+      | ((event: string) => void);
   }
 }
 
@@ -26,7 +31,11 @@ export function trackEvent(event: string, props?: Record<string, unknown>) {
     }
     // Umami (dos posibles firmas según versión)
     if (provider === "umami" && window.umami) {
-      const u = window.umami as any;
+      const u = window.umami as
+        | ((eventName: string) => void)
+        | {
+            track?: (eventName: string, data?: Record<string, unknown>) => void;
+          };
       if (typeof u === "function") u(event);
       else if (typeof u.track === "function") u.track(event, props);
       return;
@@ -41,4 +50,3 @@ export function trackEvent(event: string, props?: Record<string, unknown>) {
     // Silenciar errores de analítica para no afectar UX
   }
 }
-

@@ -6,11 +6,11 @@ import Script from "next/script";
 import { metadata as meta } from "@/app/config";
 import Loader from "@/app/loader";
 import Providers from "@/app/providers";
-import { createMetadata } from "@/lib/metadata";
+import { RouteProgress } from "@/components/system/route-progress";
 import { env } from "@/env";
+import { createMetadata } from "@/lib/metadata";
 
 import { Toaster } from "@repo/ui/sonner";
-import { RouteProgress } from "@/components/system/route-progress";
 
 // https://iamsteve.me/blog/the-best-ink-trap-typefaces-for-websites
 const bricolage_grotesque = Bricolage_Grotesque({ subsets: ["latin"] });
@@ -35,7 +35,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        {process.env.NODE_ENV === "development" ? (
+        {env.NODE_ENV === "development" ? (
           <Script src="https://unpkg.com/react-scan/dist/auto.global.js" />
         ) : null}
         {env.NEXT_PUBLIC_ANALYTICS_PROVIDER === "plausible" &&
@@ -55,7 +55,8 @@ export default function RootLayout({
           />
         ) : null}
         {env.NEXT_PUBLIC_ANALYTICS_PROVIDER === "umami" &&
-        env.NEXT_PUBLIC_UMAMI_SRC && env.NEXT_PUBLIC_UMAMI_WEBSITE_ID ? (
+        env.NEXT_PUBLIC_UMAMI_SRC &&
+        env.NEXT_PUBLIC_UMAMI_WEBSITE_ID ? (
           <Script
             src={env.NEXT_PUBLIC_UMAMI_SRC}
             strategy="afterInteractive"

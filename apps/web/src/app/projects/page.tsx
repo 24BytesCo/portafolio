@@ -1,9 +1,9 @@
+import fs from "node:fs";
+import path from "node:path";
 import type { CollectionPage, WithContext } from "schema-dts";
 import React from "react";
 import { metadata as meta } from "@/app/config";
 import ProjectCard from "@/app/projects/_components/project-card";
-import fs from "node:fs";
-import path from "node:path";
 import { project } from "@/app/source";
 import Line from "@/components/fancy/line";
 import TextReveal from "@/components/fancy/text-reveal";
@@ -48,9 +48,10 @@ const jsonLd: WithContext<CollectionPage> = {
 
 export default function ProjectsPage(): React.ReactElement {
   const projects = [...project.getPages()].sort((a, b) => {
-    const dateA = new Date((a as any).data.date as unknown as string | Date);
-    const dateB = new Date((b as any).data.date as unknown as string | Date);
-    return dateB.getTime() - dateA.getTime();
+    // El schema declara Date, pero al serializarse el contenido llega string.
+    const tA = new Date(a.data.date as unknown as string | Date).getTime();
+    const tB = new Date(b.data.date as unknown as string | Date).getTime();
+    return (Number.isNaN(tB) ? 0 : tB) - (Number.isNaN(tA) ? 0 : tA);
   });
 
   // Resolución robusta de portada en carpeta del proyecto
@@ -59,7 +60,9 @@ export default function ProjectsPage(): React.ReactElement {
     const clean = slug.replace(/^[-_]+|[-_]+$/g, "");
     const hyphen = clean.replace(/_/g, "-").replace(/-{2,}/g, "-");
     const underscore = clean.replace(/-/g, "_").replace(/_{2,}/g, "_");
-    const candidates = Array.from(new Set([slug, clean, hyphen, underscore])).flatMap((s) => [
+    const candidates = Array.from(
+      new Set([slug, clean, hyphen, underscore]),
+    ).flatMap((s) => [
       `/images/projects/${s}/cover.jpg`,
       `/images/projects/${s}/cover.png`,
       `/images/projects/${s}/cover.jpeg`,
@@ -83,7 +86,10 @@ export default function ProjectsPage(): React.ReactElement {
       >
         <div className="flex flex-col items-center md:max-w-7xl">
           {/* todo: re-add delay of 0.2seconds */}
-          <TextReveal as="h1" className="leading-wide tracking-relaxed text-5xl sm:text-6xl md:text-6xl lg:text-7xl xl:text-8xl 2xl:text-9xl">
+          <TextReveal
+            as="h1"
+            className="leading-wide tracking-relaxed text-5xl sm:text-6xl md:text-6xl lg:text-7xl xl:text-8xl 2xl:text-9xl"
+          >
             Mis Proyectos
           </TextReveal>
 
@@ -98,7 +104,7 @@ export default function ProjectsPage(): React.ReactElement {
             description={project.data.description}
             key={`project_${index}`}
             tags={project.data.tags}
-            thumbnail={coverPath(project.slugs[0]!)}
+            thumbnail={coverPath(project.slugs[0] ?? "")}
           />
         ))}
       </section>

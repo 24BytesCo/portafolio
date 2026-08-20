@@ -11,26 +11,26 @@
  * Props
  * - `items`: Lista de proyectos a renderizar.
  */
-
 import React from "react";
+
+import type { CarouselApi } from "@repo/ui/carousel";
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-  type CarouselApi,
 } from "@repo/ui/carousel";
 
 import ProjectCard from "./project-card";
 
-type ProjectItem = {
+interface ProjectItem {
   title: string;
   href: string;
   description?: string;
-  tags?: string[];
+  tags?: { label: string }[];
   thumbnail?: string;
-};
+}
 
 interface ProjectsCarouselProps {
   items: ProjectItem[];
@@ -54,7 +54,7 @@ export default function ProjectsCarousel({ items }: ProjectsCarouselProps) {
     clear();
     if (!api || paused || !inView || document.hidden) return;
     intervalRef.current = setInterval(() => {
-      api?.scrollNext();
+      api.scrollNext();
     }, 2000);
   }, [api, paused, inView, clear]);
 
@@ -90,7 +90,7 @@ export default function ProjectsCarousel({ items }: ProjectsCarouselProps) {
     if (!node) return;
     const observer = new IntersectionObserver(
       ([entry]) => {
-        setInView(entry.isIntersecting);
+        if (entry) setInView(entry.isIntersecting);
       },
       { threshold: 0.1 },
     );
@@ -128,7 +128,11 @@ export default function ProjectsCarousel({ items }: ProjectsCarouselProps) {
         start();
       }}
     >
-      <Carousel opts={{ align: "start", loop: true }} setApi={setApi} className="w-full">
+      <Carousel
+        opts={{ align: "start", loop: true }}
+        setApi={setApi}
+        className="w-full"
+      >
         <CarouselContent>
           {items.map((project, index) => (
             <CarouselItem

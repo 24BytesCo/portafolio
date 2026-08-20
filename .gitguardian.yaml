@@ -1,0 +1,8 @@
+# Archivos de ejemplo: nunca llevan secretos reales, solo marcadores de
+# posición (CAMBIAME, changeme…) que el escáner confunde con credenciales.
+# Los secretos reales viven en el .env del servidor (600), fuera del repo.
+version: 2
+secret:
+  ignored_paths:
+    - ".env.example"
+    - "docker-compose.deploy.example.yml"

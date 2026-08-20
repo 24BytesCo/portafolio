@@ -2,7 +2,7 @@ import React from "react";
 import { metadata as meta } from "@/app/config";
 import Link from "@/components/fancy/link";
 import { contact } from "@/components/sections/contact/config";
-import { copyright, footer } from "@/components/sections/footer/config";
+import { copyright } from "@/components/sections/footer/config";
 import { links } from "@/components/sections/header/config";
 import { getYearDisplay } from "@/lib/utils";
 

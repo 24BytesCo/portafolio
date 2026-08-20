@@ -19,8 +19,7 @@ export const env = createEnv({
   server: {
     DATABASE_URL: z.string().url(),
     TURNSTILE_SECRET_KEY: z.string().min(1).optional(),
-    CONTACT_CAPTCHA_PROVIDER: z
-      .enum(["turnstile", "none"]).optional(),
+    CONTACT_CAPTCHA_PROVIDER: z.enum(["turnstile", "none"]).optional(),
   },
 
   /**
@@ -41,7 +40,8 @@ export const env = createEnv({
     NEXT_PUBLIC_UMAMI_SRC: z.string().optional(),
     NEXT_PUBLIC_UMAMI_WEBSITE_ID: z.string().optional(),
     NEXT_PUBLIC_CONTACT_CAPTCHA_PROVIDER: z
-      .enum(["turnstile", "none"]).optional(),
+      .enum(["turnstile", "none"])
+      .optional(),
   },
   /**
    * Destructure all variables from `process.env` to make sure they aren't tree-shaken away.
@@ -51,11 +51,9 @@ export const env = createEnv({
     NEXT_PUBLIC_CONTACT_FORM_ENABLED:
       process.env.NEXT_PUBLIC_CONTACT_FORM_ENABLED,
     NEXT_PUBLIC_TURNSTILE_SITE_KEY: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY,
-    NEXT_PUBLIC_ANALYTICS_PROVIDER:
-      process.env.NEXT_PUBLIC_ANALYTICS_PROVIDER,
+    NEXT_PUBLIC_ANALYTICS_PROVIDER: process.env.NEXT_PUBLIC_ANALYTICS_PROVIDER,
     NEXT_PUBLIC_PLAUSIBLE_DOMAIN: process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN,
-    NEXT_PUBLIC_CF_ANALYTICS_TOKEN:
-      process.env.NEXT_PUBLIC_CF_ANALYTICS_TOKEN,
+    NEXT_PUBLIC_CF_ANALYTICS_TOKEN: process.env.NEXT_PUBLIC_CF_ANALYTICS_TOKEN,
     NEXT_PUBLIC_UMAMI_SRC: process.env.NEXT_PUBLIC_UMAMI_SRC,
     NEXT_PUBLIC_UMAMI_WEBSITE_ID: process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID,
     NEXT_PUBLIC_CONTACT_CAPTCHA_PROVIDER:

@@ -13,36 +13,45 @@ tags:
 ---
 
 ## Resumen
+
 - Backend para “Report Technical Failures”: reporte y gestión integral de incidentes sobre uno o varios equipos.
 - Seguridad con JWT, cifrado de contraseñas y documentación interactiva con Swagger UI.
 - Código fuente: https://github.com/24BytesCo/api-rtf
 
 ## Características
+
 - Autenticación y autorización con JWT.
 - Endpoints REST para casos de uso de reporte/seguimiento de fallas.
 - Documentación de API con Swagger UI.
 
 ## Stack Técnico
+
 - Node.js + Express.
 - Base de datos: MySQL.
 - Dependencias clave: bcrypt, jsonwebtoken, dotenv, swagger-ui-express.
 
 ## Implementación
+
 ### Estructura
+
 - `api/` controladores y rutas; `network/` capa de transporte; `store/` acceso a datos; `seguridad/` utilidades de auth; `utils/` helpers.
+
 ### Seguridad
+
 - Cifrado de credenciales con bcrypt.
 - Tokens JWT para sesiones.
 
 ## Cómo funciona
+
 - Reporte de falla → registro/actualización → consulta y seguimiento.
 - Autorización por token en rutas protegidas.
 
 ## Retos
+
 - Integridad de datos y trazabilidad de cambios.
 - Diseño de permisos y roles.
 
 ## Mejoras futuras
+
 - Validaciones robustas y pruebas automatizadas.
 - Observabilidad (logs/metricas) y rate limiting.
-

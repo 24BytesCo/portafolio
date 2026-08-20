@@ -52,11 +52,11 @@ export async function enviarConResend(
         reply_to: correo.replyTo,
       }),
     })
-    const data: { id?: string; message?: string } = await res.json().catch(() => ({}))
+    const data = (await res.json().catch(() => ({}))) as { id?: string; message?: string }
     if (!res.ok) {
-      return { ok: false, error: data?.message ?? `HTTP ${res.status}` }
+      return { ok: false, error: data.message ?? `HTTP ${res.status}` }
     }
-    return { ok: true, id: data?.id }
+    return { ok: true, id: data.id }
   } catch (e) {
     return { ok: false, error: e instanceof Error ? e.message : String(e) }
   }

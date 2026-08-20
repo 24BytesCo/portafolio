@@ -9,7 +9,6 @@
  * - Si la variable no está presente, responde con `success: false` para evitar
  *   falsos positivos en producción.
  */
-
 import "server-only";
 
 import { env } from "@/env";

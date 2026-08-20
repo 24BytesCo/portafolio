@@ -6,7 +6,6 @@
  * Renderiza un título principal acompañado de una imagen con efecto parallax.
  * Se ejecuta del lado del cliente para poder usar referencias del DOM.
  */
-
 import { useRef } from "react";
 import ParallaxImage from "@/components/fancy/parallax-image";
 

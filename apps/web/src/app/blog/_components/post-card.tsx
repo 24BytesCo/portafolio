@@ -33,7 +33,7 @@ function PostCard({
   const displayDate = React.useMemo(() => {
     try {
       if (!date) return null;
-      const d = date instanceof Date ? date : new Date(date as any);
+      const d = date instanceof Date ? date : new Date(date);
       return isNaN(d.getTime()) ? null : d;
     } catch {
       return null;

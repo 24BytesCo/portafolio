@@ -11,7 +11,10 @@ function Experiences() {
       <div className="px-4 sm:px-8 md:px-12 lg:px-16 2xl:px-24">
         <div className="flex flex-col gap-10">
           <div className="space-y-4">
-            <TextReveal as="h2" className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl/none">
+            <TextReveal
+              as="h2"
+              className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl/none"
+            >
               Experiencia
             </TextReveal>
             <TextReveal as="p" className="text-gray-500 dark:text-gray-400">
