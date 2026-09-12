@@ -62,3 +62,4 @@ core
 
 # Compose de despliegue: lleva rutas y ajustes del servidor, no va al repo.
 docker-compose.deploy.yml
+.gbrain-source
