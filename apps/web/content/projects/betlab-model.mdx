@@ -1,0 +1,37 @@
+---
+title: BetLab Model
+description: Sistema de análisis deportivo con IA que produce pronósticos diarios, los liquida solo contra los resultados reales y genera contenido multimedia automático para YouTube y Telegram.
+thumbnail: /images/projects/betlab-model/cover.jpg
+date: 2026-07-18
+website: https://www.youtube.com/@BetLabModel
+tags:
+  - label: Producto en producción
+  - label: NestJS
+  - label: Angular
+  - label: Python
+  - label: LLM (Gemini, OpenAI, Claude)
+  - label: Remotion
+  - label: Playwright
+  - label: YouTube
+---
+
+## Qué hace
+
+Cada tarde el sistema importa los partidos del día siguiente, los enriquece con estadísticas y se los pasa a un modelo de lenguaje que produce un análisis prepartido. Un segundo modelo, el validador, revisa cada pronóstico y le asigna una probabilidad; el código, no el modelo, decide qué se publica según cuota, mercado y probabilidad mínima. Después del partido, la liquidación se recalcula sola contra el marcador real.
+
+## Lo que hay dentro
+
+- **Pipeline prematch → publicación → postpartido**, con auditoría de cada llamada a los LLM (estado HTTP, cuerpo y request-id).
+- **Panel para inversores** con rendimiento en unidades y trazabilidad de cada decisión.
+- **Contenido automático**: texto, locución con TTS, video con Remotion y con Python/PIL, miniaturas, y publicación en YouTube y Telegram.
+- **Videos de previa por partido** seleccionados por liga y región, con un Short por cada video largo.
+- **Subida a YouTube sin cuota de API**: un navegador real pilotado con Playwright contra YouTube Studio, con verificación de que el video quedó publicado de verdad.
+
+## Arquitectura
+
+API NestJS con Prisma sobre PostgreSQL, panel Angular, tres workers Python por rol (prematch, postpartido, media) y un renderizador Node. Todo en contenedores detrás de Cloudflare Tunnel. El canal público del proyecto es [@BetLabModel](https://www.youtube.com/@BetLabModel).
+
+## Lo difícil
+
+- Que un LLM no tenga la última palabra sobre dinero: los umbrales, la banda de cuotas y la lista blanca de mercados viven en código y en base de datos, no en el prompt.
+- Producir varios videos al día con costo cero de API y verificar cada publicación desde fuera.

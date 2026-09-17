@@ -1,0 +1,36 @@
+---
+title: Legado Público (GeoObrasApp)
+description: Plataforma de rendición de cuentas territorial: una alcaldía muestra sobre el mapa de sus veredas qué obra hizo, dónde y con cuánto dinero. En producción para un municipio de Antioquia.
+thumbnail: /images/projects/legado-publico/cover.jpg
+date: 2026-08-20
+website: https://goapp.24bytes.pro
+tags:
+  - label: Producto en producción
+  - label: Angular 20
+  - label: Supabase (self-hosted)
+  - label: PostgreSQL
+  - label: Docker Compose
+  - label: SVG / cartografía
+---
+
+## Qué resuelve
+
+Las entidades territoriales tienen que rendir cuentas, y casi siempre lo hacen con un PDF que nadie abre. Legado Público pone las obras sobre el mapa del propio municipio, a nivel de vereda, con fotos, valores y sector de inversión: la comunidad ve qué se hizo en su territorio y el alcalde lo puede proyectar en una reunión.
+
+El cliente en producción es la Alcaldía de San Roque (Antioquia), con más de mil doscientos proyectos y casi siete mil fotografías. La demo pública usa un municipio ficticio para no exponer datos de nadie.
+
+## Lo que hay dentro
+
+- **Mapa interactivo** en SVG por vereda, con etiquetas posicionadas automáticamente.
+- **Panel administrativo** multi-empresa con roles, carga de proyectos y fotos.
+- **Vista pública** de solo lectura, sin sesión, pensada para compartir.
+- **Migración completa** de Firebase (Firestore + Storage) a Supabase autoalojado: Postgres, PostgREST, Auth, Storage y funciones edge en Deno.
+- **Cartografía oficial**: uso de la malla de veredas del DANE bajo licencia CC BY 4.0, con autorización escrita para uso comercial de la plataforma.
+
+## Arquitectura
+
+Frontend Angular 20 standalone con signals; backend Supabase self-hosted sobre Docker Compose, con una capa propia de SQL, políticas de seguridad a nivel de fila y scripts de rotación de claves. Despliegue verificado con una huella lógica del bundle que detecta desfases entre el repositorio y producción y avisa por correo.
+
+## Siguiente paso
+
+Generar los mapas de cualquier municipio de Colombia desde el shapefile del DANE, para que una nueva entidad quede lista en horas y no en semanas.

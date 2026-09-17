@@ -1,0 +1,41 @@
+---
+title: SECOP Monitor
+description: SaaS en producción que vigila la contratación pública colombiana (SECOP I y II) y avisa por correo y WhatsApp el mismo día en que aparece un proceso que encaja con lo que hace tu empresa.
+thumbnail: /images/projects/secop-monitor/cover.jpg
+date: 2026-08-01
+website: https://secop.24bytes.pro
+tags:
+  - label: Producto en producción
+  - label: Angular 20 (SSR)
+  - label: NestJS
+  - label: Prisma
+  - label: PostgreSQL 17
+  - label: Firebase Auth
+  - label: WhatsApp Cloud API
+  - label: ePayco
+  - label: Cloudflare
+---
+
+## Qué resuelve
+
+Un proveedor del Estado revisa el portal de SECOP a mano todos los días para no perderse una licitación. SECOP Monitor hace ese trabajo: ingiere los datos abiertos de SECOP I y II cada hora, los cruza con las alertas que cada usuario define (palabras clave, entidades, municipios, modalidades, rangos de valor) y manda un resumen diario por correo y WhatsApp con lo que sí vale la pena mirar.
+
+## Lo que hay dentro
+
+- **Ingesta horaria** desde datos.gov.co (Socrata), con detección de cambios en procesos ya vistos.
+- **Matcher** con búsqueda de texto completo en PostgreSQL y puntuación por relevancia.
+- **Seguimiento de procesos**: pipeline personal, aviso cuando cambian los pliegos o la fecha de cierre, calendario `.ics`.
+- **Fichas públicas** por entidad, municipio, categoría y cruce categoría × departamento, renderizadas en servidor para que Google las lea sin JavaScript.
+- **Academia y guías** sobre cómo venderle al Estado, con certificados verificables por QR.
+- **Cobro real** con ePayco (webhook firmado, idempotente) y planes por nivel.
+- **Sonda de disponibilidad** de SECOP cada cinco minutos, publicada en `/estado-secop`.
+
+## Arquitectura
+
+Monorepo con `secop-api` (NestJS 11 + Prisma) y `secop-web` (Angular 20, SSR híbrido con prerender). Todo corre en contenedores detrás de Cloudflare Tunnel y Nginx Proxy Manager, sin un solo puerto expuesto a internet. El flujo de despliegue es rama → `qa` → `master`, con runners propios que despliegan solos y aplican migraciones en QA; en producción las migraciones se revisan a mano antes de entrar.
+
+## Lo difícil
+
+- SEO programático de cerca de dos mil fichas: umbrales de indexación, sitemap dinámico con `lastmod` real y contenido que varía con los datos de cada ficha, no solo con el nombre.
+- Coste cero de infraestructura de datos: el matcher y los agregados se calculan en PostgreSQL sin servicios adicionales.
+- Correo y WhatsApp transaccionales con plantillas aprobadas por Meta y entregabilidad medida.
