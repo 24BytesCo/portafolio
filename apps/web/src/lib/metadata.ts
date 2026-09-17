@@ -6,6 +6,10 @@ export const baseUrl = meta.site.url;
 export function createMetadata(override: Metadata): Metadata {
   return {
     ...override,
+    // Canonical relativo: Next lo resuelve contra metadataBase y la ruta
+    // actual, así cada página se declara a sí misma en lugar de heredar la
+    // portada. Hasta 2026-09-16 no había canonical y og:url decía example.com.
+    alternates: { canonical: "./", ...override.alternates },
     robots: {
       index: true,
       follow: true,

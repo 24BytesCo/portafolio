@@ -10,7 +10,7 @@ const metadata: Metadata = {
     title: "Alexis Dorado Muñoz",
     description:
       "Portafolio de Alexis Dorado Muñoz — Desarrollador Full Stack (.NET, Angular, Node.js, SQL Server, MongoDB).",
-    url: "https://www.example.com",
+    url: "https://24bytes.pro",
     keywords: [
       "portafolio",
       "desarrollador full stack",
