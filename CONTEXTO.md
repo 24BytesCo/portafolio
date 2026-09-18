@@ -43,6 +43,11 @@ secop.24bytes.pro** y a los demás subdominios.
   SECOP), cabeceras de seguridad, textos y fechas en español, blog vacío con
   noindex. El informe de QA y sus capturas están en `.gstack/qa-reports/` (no
   versionado).
+- **18/09 tarde (sesión General)**: primera entrada del blog,
+  `secop-monitor-alertas-de-contratacion-publica` (commit `bd59842`), desplegada
+  con el procedimiento de §3 y verificada desde fuera: 200, canonical propio,
+  tres enlaces a secop.24bytes.pro, `/blog` vuelve a index y al sitemap.
+  Respaldo de imagen `web-rescatada:respaldo-20260918b`.
 - **16/09**: `site.url` real, `sitemap.ts`, `robots.ts`, canonical relativo y
   las cuatro fichas de producto. Sitemap enviado en Search Console
   (`sc-domain:24bytes.pro`).
