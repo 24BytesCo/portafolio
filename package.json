@@ -34,9 +34,7 @@
     "@types/node": "^22.13.10",
     "cz-git": "^1.11.1",
     "dotenv-cli": "^8.0.0",
-    "eslint": "catalog:",
     "knip": "^5.46.0",
-    "prettier": "catalog:",
     "sharp": "^0.33.5",
     "turbo": "^2.3.4",
     "typescript": "catalog:"
@@ -45,12 +43,6 @@
     "commitizen": {
       "path": "@commitlint/cz-commitlint"
     }
-  },
-  "lint-staged": {
-    "*.{cjs,mjs,js,jsx,cts,mts,ts,tsx,json}": "eslint --fix",
-    "**/*": [
-      "prettier --write --ignore-unknown"
-    ]
   },
   "prettier": "@repo/prettier-config"
 }
