@@ -7,6 +7,10 @@ interface Umami {
 }
 
 const HITOS = [25, 50, 75, 100] as const;
+// Tiempo ACTIVO acumulado. Se manda mientras se lee y no al salir, porque el
+// navegador cancela las peticiones normales cuando la página se cierra (y en
+// móvil casi nunca llegan): así el dato no depende de la despedida.
+const TIEMPOS_S = [30, 60, 120, 180, 300] as const;
 // Sin actividad durante este tiempo se deja de contar: una pestaña abierta
 // de fondo no es alguien leyendo.
 const INACTIVIDAD_MS = 30_000;
@@ -14,6 +18,42 @@ const INACTIVIDAD_MS = 30_000;
 function enviar(evento: string, datos: Record<string, unknown>) {
   const umami = (window as unknown as { umami?: Umami }).umami;
   umami?.track(evento, datos);
+}
+
+/**
+ * Envío de despedida con sendBeacon, que es lo único que el navegador garantiza
+ * entregar durante el cierre de la página. Se arma el mismo cuerpo que manda el
+ * script de Umami, leyendo el id del sitio y la ruta de su propia etiqueta.
+ */
+function enviarAlSalir(evento: string, datos: Record<string, unknown>) {
+  const etiqueta = document.querySelector<HTMLScriptElement>(
+    "script[data-website-id]",
+  );
+  const sitio = etiqueta?.dataset.websiteId;
+  if (!etiqueta || !sitio) return;
+  const destino = etiqueta.src.replace(/\/script\.js.*$/, "/api/send");
+  const cuerpo = {
+    type: "event",
+    payload: {
+      website: sitio,
+      hostname: location.hostname,
+      screen: `${screen.width}x${screen.height}`,
+      language: navigator.language,
+      title: document.title,
+      url: location.pathname + location.search,
+      referrer: document.referrer,
+      name: evento,
+      data: datos,
+    },
+  };
+  navigator.sendBeacon(
+    destino,
+    new Blob([JSON.stringify(cuerpo)], { type: "application/json" }),
+  );
+}
+
+function etiquetaTiempo(segundos: number): string {
+  return segundos < 60 ? `${segundos} s` : `${segundos / 60} min`;
 }
 
 /** Tramo de tiempo legible en el panel, en vez de un número suelto por visita. */
@@ -43,6 +83,7 @@ export function MedidorLectura({
     if (!articulo) return;
 
     const enviados = new Set<number>();
+    const tiemposEnviados = new Set<number>();
     let maximo = 0;
     let activoMs = 0;
     let ultimaActividad = Date.now();
@@ -77,6 +118,16 @@ export function MedidorLectura({
         activoMs += ahora - ultimoTic;
       }
       ultimoTic = ahora;
+      const activoS = activoMs / 1000;
+      for (const t of TIEMPOS_S) {
+        if (activoS >= t && !tiemposEnviados.has(t)) {
+          tiemposEnviados.add(t);
+          enviar("lectura-tiempo", {
+            articulo: slug,
+            activo: etiquetaTiempo(t),
+          });
+        }
+      }
     }, 1000);
 
     const despedir = () => {
@@ -84,7 +135,7 @@ export function MedidorLectura({
       const segundos = Math.round(activoMs / 1000);
       if (segundos < 3) return;
       despedido = true;
-      enviar("lectura-fin", {
+      enviarAlSalir("lectura-fin", {
         articulo: slug,
         tiempo: tramo(segundos),
         segundos,
