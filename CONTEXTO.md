@@ -48,6 +48,14 @@ secop.24bytes.pro** y a los demás subdominios.
   con el procedimiento de §3 y verificada desde fuera: 200, canonical propio,
   tres enlaces a secop.24bytes.pro, `/blog` vuelve a index y al sitemap.
   Respaldo de imagen `web-rescatada:respaldo-20260918b`.
+- **18/09 noche (sesión General)**: plantilla editorial del blog (commit
+  `4342748`), desplegada y verificada. Una entrada nueva es un `.mdx` en
+  `content/blog/` con `portada:` (src, alt, ancho, alto) y `cta:` (titulo,
+  texto, href, etiqueta) opcionales en el frontmatter, imágenes en
+  `public/images/blog/<slug>/` (`cover.jpg` 1200×630 para índice y og:image) y
+  los componentes `<Figura src alt pie ancho alto marco />` y
+  `<Nota titulo>…</Nota>` dentro del texto. Estilos en `globals.css` bajo
+  «Entrada del blog». Respaldo de imagen `web-rescatada:respaldo-20260918c`.
 - **16/09**: `site.url` real, `sitemap.ts`, `robots.ts`, canonical relativo y
   las cuatro fichas de producto. Sitemap enviado en Search Console
   (`sc-domain:24bytes.pro`).
