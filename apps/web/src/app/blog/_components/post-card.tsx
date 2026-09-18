@@ -55,7 +55,7 @@ function PostCard({
           >
             <Image
               src={thumbnail || "/placeholder.svg"}
-              alt={`Image of ${title}`}
+              alt={`Portada de ${title}`}
               fill
               className="object-cover transition-transform duration-300 hover:scale-105"
             />
@@ -91,7 +91,7 @@ function PostCard({
                 className="z-2 rounded-md border border-zinc-950/10 dark:border-zinc-50/10"
                 asChild
               >
-                <Link href={href}>
+                <Link href={href} aria-label={`Leer entrada: ${title}`}>
                   <Icons.info />
                 </Link>
               </Button>
@@ -102,7 +102,12 @@ function PostCard({
           </Tooltip>
         </TooltipProvider>
       </CardFooter>
-      <Link href={href} className="absolute inset-0 z-1 block" />
+      <Link
+        href={href}
+        aria-hidden="true"
+        tabIndex={-1}
+        className="absolute inset-0 z-1 block"
+      />
     </Card>
   );
 }
