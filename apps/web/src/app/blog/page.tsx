@@ -1,5 +1,6 @@
 import type { Blog, WithContext } from "schema-dts";
 import React from "react";
+import Link from "next/link";
 import PostCard from "@/app/blog/_components/post-card";
 import { metadata as meta } from "@/app/config";
 import { blog } from "@/app/source";
@@ -8,22 +9,52 @@ import TextReveal from "@/components/fancy/text-reveal";
 import { contact } from "@/components/sections/contact/config";
 import { createMetadata } from "@/lib/metadata";
 
+import { Button } from "@repo/ui/button";
+
 const title = "Blog";
 const description = "Mis ideas y notas sobre tecnología.";
 
-export const metadata = createMetadata({
-  title,
-  description,
-  openGraph: {
-    url: "/blog",
-    title,
-    description,
-  },
-  twitter: {
-    title,
-    description,
-  },
+const posts = [...blog.getPages()].sort((a, b) => {
+  // El schema declara Date, pero al serializarse el contenido llega string.
+  const tA = new Date(a.data.date as unknown as string | Date).getTime();
+  const tB = new Date(b.data.date as unknown as string | Date).getTime();
+  return (Number.isNaN(tB) ? 0 : tB) - (Number.isNaN(tA) ? 0 : tA);
 });
+const hasPosts = posts.length > 0;
+
+export const metadata = {
+  ...createMetadata({
+    title,
+    description,
+    openGraph: {
+      url: "/blog",
+      title,
+      description,
+    },
+    twitter: {
+      title,
+      description,
+    },
+  }),
+  // Sin entradas todavía: fuera de índice hasta que exista la primera (ya
+  // está fuera del sitemap). createMetadata siempre fuerza robots a
+  // index/follow, así que se pisa acá encima del resultado.
+  ...(hasPosts
+    ? {}
+    : {
+        robots: {
+          index: false,
+          follow: true,
+          googleBot: {
+            index: false,
+            follow: true,
+            "max-video-preview": -1,
+            "max-image-preview": "large",
+            "max-snippet": -1,
+          },
+        },
+      }),
+};
 
 const jsonLd: WithContext<Blog> = {
   "@context": "https://schema.org",
@@ -40,13 +71,6 @@ const jsonLd: WithContext<Blog> = {
 };
 
 export default function BlogPage(): React.ReactElement {
-  const posts = [...blog.getPages()].sort((a, b) => {
-    // El schema declara Date, pero al serializarse el contenido llega string.
-    const tA = new Date(a.data.date as unknown as string | Date).getTime();
-    const tB = new Date(b.data.date as unknown as string | Date).getTime();
-    return (Number.isNaN(tB) ? 0 : tB) - (Number.isNaN(tA) ? 0 : tA);
-  });
-
   return (
     <main className="my-14 flex-1">
       <script
@@ -68,18 +92,29 @@ export default function BlogPage(): React.ReactElement {
           <Line className={"mt-16"} />
         </div>
       </section>
-      <section className="grid w-full grid-cols-1 gap-4 p-4 md:grid-cols-2 2xl:grid-cols-3">
-        {posts.map((post, index) => (
-          <PostCard
-            title={post.data.title}
-            href={post.url}
-            description={post.data.description}
-            key={`post_${index}`}
-            date={post.data.date}
-            thumbnail={`/images/blog/${post.slugs[0]}/cover.jpg`}
-          />
-        ))}
-      </section>
+      {hasPosts ? (
+        <section className="grid w-full grid-cols-1 gap-4 p-4 md:grid-cols-2 2xl:grid-cols-3">
+          {posts.map((post, index) => (
+            <PostCard
+              title={post.data.title}
+              href={post.url}
+              description={post.data.description}
+              key={`post_${index}`}
+              date={post.data.date}
+              thumbnail={`/images/blog/${post.slugs[0]}/cover.jpg`}
+            />
+          ))}
+        </section>
+      ) : (
+        <section className="flex w-full flex-col items-center justify-center gap-4 p-4 text-center">
+          <p className="text-gray-500 dark:text-gray-400">
+            Todavía no hay entradas publicadas.
+          </p>
+          <Button asChild variant="secondary">
+            <Link href="/projects">Ver proyectos</Link>
+          </Button>
+        </section>
+      )}
     </main>
   );
 }

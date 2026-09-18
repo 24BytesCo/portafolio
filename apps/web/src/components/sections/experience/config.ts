@@ -31,7 +31,7 @@ const experiences: Experience[] = [
     company: "S&P Solutions — Popayán, Colombia",
     logo: "/images/logos-experiencia/sp-solutions.png",
     description:
-      "Arquitectura orientada al dominio (DDD), N‑capas y microservicios; Clean Code y SOLID; SQL Server y .NET Core; MSetodologías ágiles (Scrum).",
+      "Arquitectura orientada al dominio (DDD), N‑capas y microservicios; Clean Code y SOLID; SQL Server y .NET Core; Metodologías ágiles (Scrum).",
   },
   {
     name: "Desarrollador Full Stack Semi Sr",
@@ -47,7 +47,7 @@ const experiences: Experience[] = [
     company: "NNT Data — Popayán, Colombia",
     logo: "/images/logos-experiencia/nnt-data.png",
     description:
-      "Apoyo en artefactos de análisis y documentación; Desarrollo según diseños establecidos. Add‑ins de SharePoint Online (C#, jQuery), Airones MVC 5.0 y Office 365 con CSOM/PowerShell; Desarrollo ágil (Scrum) y manejo de TFS.",
+      "Apoyo en artefactos de análisis y documentación; Desarrollo según diseños establecidos. Add‑ins de SharePoint Online (C#, jQuery), ASP.NET MVC 5.0 y Office 365 con CSOM/PowerShell; Desarrollo ágil (Scrum) y manejo de TFS.",
   },
 ];
 

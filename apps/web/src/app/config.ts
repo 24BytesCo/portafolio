@@ -7,9 +7,9 @@ const metadata: Metadata = {
     label: "Desarrollador Full Stack Sr",
   },
   site: {
-    title: "Alexis Dorado Muñoz",
+    title: "Alexis Dorado Muñoz · 24Bytes",
     description:
-      "Portafolio de Alexis Dorado Muñoz — Desarrollador Full Stack (.NET, Angular, Node.js, SQL Server, MongoDB).",
+      "Portafolio de Alexis Dorado Muñoz, fundador de 24Bytes: productos propios en producción como SECOP Monitor, Legado Público y BetLab.",
     url: "https://24bytes.pro",
     keywords: [
       "portafolio",
