@@ -63,6 +63,23 @@ services:
       - portafolio-net
       - proxy-net
 
+  # Analítica propia (Umami compilado con BASE_PATH=/stats; ver CONTEXTO.md).
+  # SIN puertos y SIN proxy-net: solo lo alcanza portafolio-web por la red
+  # interna, que lo sirve bajo /stats con un rewrite de Next.
+  portafolio-umami:
+    image: umami-24bytes:3.4.0
+    container_name: portafolio-umami
+    restart: unless-stopped
+    depends_on:
+      - portafolio-pg
+    environment:
+      DATABASE_URL: postgresql://umami:${UMAMI_DB_PASSWORD:?definir UMAMI_DB_PASSWORD en .env}@portafolio-pg:5432/umami
+      APP_SECRET: ${UMAMI_APP_SECRET:?definir UMAMI_APP_SECRET en .env}
+      DISABLE_TELEMETRY: "1"
+      DISABLE_UPDATES: "1"
+    networks:
+      - portafolio-net
+
 networks:
   portafolio-net:
     driver: bridge

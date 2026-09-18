@@ -8,6 +8,7 @@ import { metadata as meta } from "@/app/config";
 import { blog } from "@/app/source";
 import { Figura } from "@/components/blog/figura";
 import { Indice } from "@/components/blog/indice";
+import { MedidorLectura } from "@/components/blog/medidor-lectura";
 import { Nota } from "@/components/blog/nota";
 import { MDXLink } from "@/lib/mdx/default-components";
 import { createMetadata } from "@/lib/metadata";
@@ -118,6 +119,8 @@ export default async function BlogPage(props0: {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
+
+      <MedidorLectura slug={slug} />
 
       <header className="entrada-cabecera container">
         <Link href="/blog" className="entrada-volver">

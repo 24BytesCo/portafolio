@@ -78,6 +78,20 @@ const nextConfig = {
       },
     ];
   },
+  async rewrites() {
+    // Analítica propia (Umami) servida bajo /stats del mismo dominio: sin
+    // subdominio nuevo, sin puerto publicado y sin que un bloqueador la corte
+    // por venir de otro origen. Umami se compila con BASE_PATH=/stats, así que
+    // la ruta se reenvía tal cual. Si UMAMI_INTERNAL_URL no está definida
+    // (desarrollo, CI) no se añade nada. OJO: se evalúa en el BUILD, no al
+    // arrancar: la variable tiene que estar en el .env con el que se compila.
+    const umami = process.env.UMAMI_INTERNAL_URL;
+    if (!umami) return [];
+    return [
+      { source: "/stats", destination: `${umami}/stats` },
+      { source: "/stats/:path*", destination: `${umami}/stats/:path*` },
+    ];
+  },
   async redirects() {
     return [
       {
