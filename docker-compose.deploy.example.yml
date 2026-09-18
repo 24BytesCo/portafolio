@@ -16,6 +16,22 @@
 # `.env` (600) a partir de `.env.example`.
 
 services:
+  # Base de datos de Umami (la web ya no usa base de datos desde el 18/09).
+  portafolio-pg:
+    image: postgres:17-alpine
+    container_name: portafolio-pg
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: portafolio
+      POSTGRES_USER: portafolio
+      # Sin mensaje en el :? para que el escáner de secretos no confunda el
+      # texto con una contraseña; el error de Compose ya nombra la variable.
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?}
+    volumes:
+      - portafolio-pgdata:/var/lib/postgresql/data
+    networks:
+      - portafolio-net
+
   portafolio-web:
     image: web-rescatada:latest
     container_name: portafolio-web
@@ -36,6 +52,8 @@ services:
       EMAIL_FROM: "Portfolio <noreply@ejemplo.tld>"
       EMAIL_TO: contacto@ejemplo.tld
     networks:
+      # portafolio-net para alcanzar a portafolio-umami (rewrite de /stats)
+      - portafolio-net
       - proxy-net
 
   # Analítica propia (Umami compilado con BASE_PATH=/stats; ver CONTEXTO.md).
@@ -56,7 +74,12 @@ services:
       - portafolio-net
 
 networks:
+  portafolio-net:
+    driver: bridge
   # Red compartida con el proxy inverso. Se crea fuera de este compose.
   proxy-net:
     external: true
     name: proxy-net
+
+volumes:
+  portafolio-pgdata:
