@@ -2,11 +2,10 @@ import { createEnv } from "@t3-oss/env-nextjs";
 import { vercel } from "@t3-oss/env-nextjs/presets-zod";
 import { z } from "zod";
 
-import { env as authEnv } from "@repo/auth/env";
 import { env as emailsEnv } from "@repo/emails/env";
 
 export const env = createEnv({
-  extends: [emailsEnv, authEnv, vercel()],
+  extends: [emailsEnv, vercel()],
   shared: {
     NODE_ENV: z
       .enum(["development", "production", "test"])
@@ -17,7 +16,6 @@ export const env = createEnv({
    * This way you can ensure the app isn't built with invalid env vars.
    */
   server: {
-    DATABASE_URL: z.string().url(),
     TURNSTILE_SECRET_KEY: z.string().min(1).optional(),
     CONTACT_CAPTCHA_PROVIDER: z.enum(["turnstile", "none"]).optional(),
   },

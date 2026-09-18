@@ -53,28 +53,12 @@
         "//#clean": {
             "cache": false
         },
-        "push": {
-            "cache": false,
-            "interactive": true
-        },
-        "studio": {
-            "cache": false,
-            "persistent": true
-        },
         "ui-add": {
             "cache": false,
             "interactive": true
         }
     },
     "globalEnv": [
-        "DATABASE_URL",
-        "GOOGLE_CLIENT_ID",
-        "GOOGLE_CLIENT_SECRET",
-        "GITHUB_CLIENT_ID",
-        "GITHUB_CLIENT_SECRET",
-        "AUTH_REDIRECT_PROXY_URL",
-        "BETTER_AUTH_SECRET",
-        "BETTER_AUTH_URL",
         "RESEND_API_KEY",
         "PORT"
     ],

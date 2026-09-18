@@ -50,7 +50,6 @@ Nota: el comando `dev` usa Turbo para ver cambios en paquetes locales.
 
 ## Variables de entorno
 Variables principales (raíces/anidadas según paquete):
-- `DATABASE_URL`: conexión a Postgres (usado para features de comentarios/autenticación si están activas).
 - `ALLOWED_ORIGINS`: lista separada por comas con hostnames autorizados para Server Actions. Ej.: `24bytes.pro,www.24bytes.pro`.
   - Importante: es leída en build (Next). Cambiarla requiere reconstruir y redeployar.
 - `NEXT_PUBLIC_CONTACT_FORM_ENABLED`: `true|false`. Si es `false`, el formulario usa `mailto:` como fallback.
@@ -59,7 +58,6 @@ Variables principales (raíces/anidadas según paquete):
   - `turnstile` para usar captcha de Cloudflare.
   - `none` para desactivarlo y permitir envío directo sin captcha.
 - `RESEND_API_KEY`, `EMAIL_FROM`, `EMAIL_TO`: credenciales y remitentes para Resend.
-- (Opcionales) `BETTER_AUTH_URL`, `BETTER_AUTH_SECRET`, `GOOGLE_CLIENT_ID/SECRET`, `GITHUB_CLIENT_ID/SECRET` si activas autenticación.
  - Analítica (elige uno):
    - `NEXT_PUBLIC_ANALYTICS_PROVIDER`: `plausible` | `cloudflare`.
    - `NEXT_PUBLIC_PLAUSIBLE_DOMAIN`: dominio si usas Plausible.
@@ -76,7 +74,6 @@ CONTACT_CAPTCHA_PROVIDER=none
 RESEND_API_KEY=re_...
 EMAIL_FROM=Portfolio <onboarding@resend.dev>
 EMAIL_TO=tu-correo@dominio.com
-DATABASE_URL=postgresql://...
 ```
 
 Si usas analítica:
