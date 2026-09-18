@@ -3,6 +3,7 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import TextReveal from "@/components/fancy/text-reveal";
+import { formatearFecha } from "@/lib/utils";
 
 import { cn } from "@repo/ui";
 import { AspectRatio } from "@repo/ui/aspect-ratio";
@@ -72,7 +73,7 @@ function PostCard({
             as="p"
             className="text-sm text-gray-500 dark:text-gray-400"
           >
-            {displayDate ? displayDate.toDateString() : ""}
+            {displayDate ? formatearFecha(displayDate) : ""}
           </TextReveal>
           {/* <div className="mt-2 flex flex-wrap gap-2">
             {tags?.map((tag, index) => (
@@ -96,7 +97,7 @@ function PostCard({
               </Button>
             </TooltipTrigger>
             <TooltipContent>
-              <p>More Details</p>
+              <p>Más detalles</p>
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>

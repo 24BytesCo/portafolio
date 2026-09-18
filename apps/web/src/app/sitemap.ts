@@ -11,8 +11,14 @@ import { blog, project } from "@/app/source";
 const base = meta.site.url;
 
 function fecha(valor: unknown): Date | undefined {
-  if (!valor) return undefined;
-  const d = valor instanceof Date ? valor : new Date(String(valor));
+  if (
+    typeof valor !== "string" &&
+    typeof valor !== "number" &&
+    !(valor instanceof Date)
+  ) {
+    return undefined;
+  }
+  const d = new Date(valor);
   return Number.isNaN(d.getTime()) ? undefined : d;
 }
 
@@ -21,7 +27,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${base}/`, changeFrequency: "monthly", priority: 1 },
     { url: `${base}/about`, changeFrequency: "monthly", priority: 0.8 },
     { url: `${base}/projects`, changeFrequency: "weekly", priority: 0.8 },
-    { url: `${base}/blog`, changeFrequency: "weekly", priority: 0.7 },
   ];
   const proyectos: MetadataRoute.Sitemap = [...project.getPages()].map((p) => ({
     url: `${base}${p.url}`,
@@ -35,5 +40,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     changeFrequency: "monthly",
     priority: 0.6,
   }));
+  // Un /blog vacío es contenido pobre para Google: entra con la primera entrada.
+  if (entradas.length > 0) {
+    fijas.push({
+      url: `${base}/blog`,
+      changeFrequency: "weekly",
+      priority: 0.7,
+    });
+  }
   return [...fijas, ...proyectos, ...entradas];
 }

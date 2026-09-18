@@ -6,13 +6,18 @@ import { metadata as meta } from "@/app/config";
 import { blog } from "@/app/source";
 import { MDXLink } from "@/lib/mdx/default-components";
 import { createMetadata } from "@/lib/metadata";
+import { formatearFecha } from "@/lib/utils";
 import { MDXContent } from "@content-collections/mdx/react";
 import { InlineTOC } from "fumadocs-ui/components/inline-toc";
 import defaultMdxComponents from "fumadocs-ui/mdx";
 
 import { buttonVariants } from "@repo/ui/button";
 
-import { PostComments } from "./page.client";
+// 404 real: sin esto, una ruta que no está en generateStaticParams sigue
+// resolviendo dinámicamente y notFound() llega tarde (loading.tsx ya empezó
+// a transmitir la respuesta con 200). Con generateStaticParams en [] (sin
+// entradas de blog) esto hace que todo /blog/* responda 404.
+export const dynamicParams = false;
 
 export function generateStaticParams() {
   return blog
@@ -42,6 +47,7 @@ export async function generateMetadata(props: {
     description: page.data.description,
     openGraph: {
       type: "article",
+      url: `/blog/${slug}`,
       // todo: add custom dynamic og image
       authors: meta.author.name,
       modifiedTime,
@@ -62,7 +68,6 @@ export default async function BlogPage(props0: {
   } = page;
 
   const rawDate = page.data.date as unknown as string | Date;
-  const dateObj = rawDate instanceof Date ? rawDate : new Date(rawDate);
 
   return (
     <main className="my-24 flex-1 px-4">
@@ -73,7 +78,7 @@ export default async function BlogPage(props0: {
           href="/blog"
           className={buttonVariants({ size: "sm", variant: "secondary" })}
         >
-          Back
+          Volver
         </Link>
       </div>
       <article className="container grid grid-cols-1 px-0 py-8 lg:grid-cols-[2fr_1fr]">
@@ -92,18 +97,15 @@ export default async function BlogPage(props0: {
               }}
             />
           </div>
-          <PostComments slug={slug} />
         </div>
         <div className="flex flex-col gap-4 border-l p-4 text-sm">
           <div>
-            <p className="text-muted-foreground mb-1">Written by</p>
+            <p className="text-muted-foreground mb-1">Escrito por</p>
             <p className="font-medium">{page.data.author}</p>
           </div>
           <div>
-            <p className="text-muted-foreground mb-1 text-sm">At</p>
-            <p className="font-medium">
-              {!Number.isNaN(dateObj.getTime()) ? dateObj.toDateString() : ""}
-            </p>
+            <p className="text-muted-foreground mb-1 text-sm">Fecha</p>
+            <p className="font-medium">{formatearFecha(rawDate)}</p>
           </div>
           {/*<Control url={page.url} />*/}
         </div>

@@ -2,6 +2,7 @@
 
 import type { Project } from "@/types/project";
 import React from "react";
+import { formatearFecha } from "@/lib/utils";
 import { motion } from "motion/react";
 
 import { cn } from "@repo/ui";
@@ -37,11 +38,9 @@ const Header = (props: HeaderProps) => {
         animate={animation.show}
       >
         <div className="flex flex-col gap-3">
-          <div className="text-3xl font-bold">{title}</div>
+          <h1 className="text-3xl font-bold">{title}</h1>
           <div>{description}</div>
-          {date && (
-            <p className="font-medium">{new Date(date).toDateString()}</p>
-          )}
+          {date && <p className="font-medium">{formatearFecha(date)}</p>}
         </div>
       </motion.div>
       <motion.div
@@ -56,7 +55,7 @@ const Header = (props: HeaderProps) => {
             className={cn(buttonVariants(), "group")}
             target="_blank"
           >
-            Visit Website
+            Visitar sitio web
             <Icons.arrowUpRight className="ml-2 size-5" />
           </a>
         )}

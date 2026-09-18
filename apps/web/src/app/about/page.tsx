@@ -58,9 +58,11 @@ export default function About() {
                 key={index}
                 className="relative flex h-40 w-40 items-center justify-center overflow-visible p-0"
               >
+                {/* Decorativa: logos pequeños animados por ImageTrail (uno es SVG) */}
+                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={image}
-                  alt="image"
+                  alt=""
                   loading="lazy"
                   className="absolute inset-0 object-contain"
                 />
@@ -69,14 +71,15 @@ export default function About() {
           </ImageTrail>
         </div>
         <div className="relative container mx-auto flex flex-col items-center px-4">
+          <h1 className="sr-only">Sobre mí</h1>
           <TextReveal
-            as="h1"
+            as="h2"
             className="z-20 mx-auto max-w-7xl text-center text-4xl leading-[1.15] tracking-tight text-pretty sm:text-5xl md:text-6xl lg:text-7xl xl:text-7xl 2xl:text-8xl"
           >
             Líder Técnico
           </TextReveal>
           <TextReveal
-            as="h1"
+            as="h3"
             className="z-20 mx-auto max-w-7xl text-center text-4xl leading-[1.1] tracking-tight text-pretty sm:text-5xl md:text-6xl lg:text-7xl xl:text-7xl 2xl:text-8xl"
           >
             Desarrollador Full Stack

@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import type { Metadata } from "next";
+import type { CreativeWork, WithContext } from "schema-dts";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { metadata as meta } from "@/app/config";
@@ -11,6 +12,11 @@ import { MDXContent } from "@content-collections/mdx/react";
 import defaultMdxComponents from "fumadocs-ui/mdx";
 
 import Header from "./header";
+
+// 404 real: sin esto, una ruta que no está en generateStaticParams sigue
+// resolviendo dinámicamente y notFound() llega tarde (loading.tsx ya empezó
+// a transmitir la respuesta con 200).
+export const dynamicParams = false;
 
 // Pre-generate static params for all project pages at build time
 export function generateStaticParams() {
@@ -50,6 +56,7 @@ export async function generateMetadata(props: {
     description: page.data.description,
     openGraph: {
       type: "article",
+      url: `/projects/${slug}`,
       images: cover
         ? [
             {
@@ -107,9 +114,29 @@ export default async function ProjectPage(props0: {
     fs.existsSync(path.join(process.cwd(), "public", rel)),
   );
 
+  // No usar SoftwareApplication: Google exige offers/valoraciones y Search
+  // Console lo marca inválido sin ellas.
+  const jsonLd: WithContext<CreativeWork> = {
+    "@context": "https://schema.org",
+    "@type": "CreativeWork",
+    name: page.data.title,
+    description: page.data.description,
+    url: `${meta.site.url}/projects/${slug}`,
+    image: cover2 ? `${meta.site.url}${cover2}` : undefined,
+    author: {
+      "@type": "Person",
+      name: meta.author.name,
+      url: meta.site.url,
+    },
+  };
+
   return (
     <main className="my-14 flex-1">
       <div className="container mx-auto">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
         <Header metadata={page.data} />
         {cover2 ? (
           <Image

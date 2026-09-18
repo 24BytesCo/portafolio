@@ -17,7 +17,7 @@ const NotFoundPage: React.FC = () => {
       ref={containerRef}
     >
       <div className="z-30 flex flex-col items-center justify-center gap-4">
-        <h1 className="text-3xl md:text-6xl">page not found</h1>
+        <h1 className="text-3xl md:text-6xl">Página no encontrada</h1>
         <div className="w-full rounded-full bg-[#efefef]">
           <Link
             href="/"
@@ -26,7 +26,7 @@ const NotFoundPage: React.FC = () => {
               "w-full self-center rounded-full px-8 py-2 md:self-start",
             )}
           >
-            Home
+            Inicio
           </Link>
         </div>
       </div>
@@ -39,11 +39,9 @@ const NotFoundPage: React.FC = () => {
           containerRef={containerRef}
         >
           <div className="h-20 w-20 overflow-hidden md:h-48 md:w-48">
-            <img
-              src={image}
-              alt={`Example ${index + 1}`}
-              className="h-full w-full object-cover"
-            />
+            {/* Decorativa; Unsplash ya la sirve recortada (w=400 en example-images) */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={image} alt="" className="h-full w-full object-cover" />
           </div>
         </Screensaver>
       ))}

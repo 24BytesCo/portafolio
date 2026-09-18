@@ -4,7 +4,6 @@ import "@/styles/globals.css";
 
 import Script from "next/script";
 import { metadata as meta } from "@/app/config";
-import Loader from "@/app/loader";
 import Providers from "@/app/providers";
 import { RouteProgress } from "@/components/system/route-progress";
 import { env } from "@/env";
@@ -33,7 +32,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="es" suppressHydrationWarning>
       <head>
         {env.NODE_ENV === "development" ? (
           <Script src="https://unpkg.com/react-scan/dist/auto.global.js" />
@@ -67,7 +66,6 @@ export default function RootLayout({
       <body className={`${bricolage_grotesque.className} antialiased`}>
         <Providers>
           <RouteProgress />
-          <Loader />
           {children}
           <Toaster />
         </Providers>
