@@ -14,11 +14,21 @@ secop.24bytes.pro** y a los demás subdominios.
 ## 2. Estado al 2026-09-18
 
 - **En producción en Contabo** (`80.190.77.63`), contenedor `portafolio-web`
-  (imagen `web-rescatada:latest`) detrás de Cloudflare Tunnel → NPM. Sirve
-  `24bytes.pro` y `www.24bytes.pro`. Respaldos: imagen
-  `web-rescatada:respaldo-20260918` (la de antes del 18/09) y
+  (imagen `web-rescatada:latest`, **Next 15.5.25, usuario `node`**) detrás de
+  Cloudflare Tunnel → NPM. Sirve `24bytes.pro` y `www.24bytes.pro`. Respaldos:
+  `web-rescatada:respaldo-20260918` (la de antes del 18/09, Next 15.2.2),
+  `respaldo-20260918-2` (primer despliegue del 18/09, aún 15.2.2) y
   `respaldo-20260816`; árbol previo en
   `~/respaldos-portafolio/Portafolio-20260918-antes-correcciones.tgz`.
+- **Seguridad, 18/09 (`/cso`)**: el sitio corría Next 15.2.2, vulnerable a
+  CVE-2025-55182 (ejecución de código sin autenticación en Server Components,
+  pública desde el 03/12/2025). Los logs de NPM (proxy host 3) muestran sondas
+  de LeakIX y Assetnote con `POST /` → 500 de ~110 bytes (firma de vulnerable)
+  que el WAF de Cloudflare no frenó. Sin rastros de compromiso en el
+  contenedor ni en el anfitrión (los contenedores anteriores ya no existían
+  para revisarlos). Corregido y desplegado en `166c3a3`: Next 15.5.25,
+  React 19.0.8, contenedor sin root, acciones de CI fijadas por SHA. Informe
+  en `.gstack/security-reports/` (no versionado).
 - **El servidor NO es un checkout de git**, pero desde el 18/09 su árbol es
   igual al repo salvo `.env`, `docker-compose.deploy.yml` y `node_modules`: se
   despliega con `rsync --delete` del árbol entero (§3). La diferencia de
@@ -94,15 +104,25 @@ navegador con `CI=1 corepack pnpm exec next start -p 3100` desde `apps/web`.
 - Portadas: `public/images/projects/<slug>/cover.jpg` (1200×630 o 1280×720).
 - Las fechas del frontmatter van sin hora: formatearlas en UTC
   (`formatearFecha` en `src/lib/utils.ts`) o salen con un día menos en UTC-5.
+- Next 15.5 registra `Error: Internal: NoFallbackError` en cada 404 de las
+  rutas con `dynamicParams = false`: es ruido, la respuesta es un 404 correcto.
+- Hay Docker en el portátil (WSL): antes de desplegar un cambio del
+  `Dockerfile`, construir y arrancar la imagen aquí
+  (`docker run -p 127.0.0.1:3200:3000 -e PORT=3000 -e CI=1 …`).
+- En cada revisión, mirar la versión de `next` contra los avisos
+  (`corepack pnpm audit --prod`): el RCE de diciembre estuvo nueve meses
+  abierto sin que nadie lo viera.
 
 ## 5. Pendientes
 
 1. Push de `develop` cuando Alexis lo pida.
 2. Limpieza de Knip en rama aparte: 37 archivos y 29 dependencias sin usar
    (variantes compact/minimal, testimonios, precargador, auth, comentarios, db).
-   Los 21 avisos de lint que quedan están todos en ese código muerto. Con
-   build y QA de control.
-3. `/cso` y `/design-review` sobre el sitio ya corregido (fase 4 del plan).
+   Los 21 avisos de lint que quedan están todos en ese código muerto, y quitar
+   `better-auth` elimina los 2 avisos críticos que quedan en `pnpm audit
+   --prod` (sin rutas que lo usen desde el 18/09). Con build y QA de control.
+   Si sale `packages/db`, el contenedor `portafolio-pg` (vacío) sobra.
+3. `/design-review` sobre el sitio ya corregido (fase 4 del plan).
 4. Reenviar el sitemap en Search Console. Opcional: ya estaba enviado el
    17/09. Por API no se puede, porque el acceso es `webmasters.readonly`.
    Desde el navegador:
@@ -129,3 +149,6 @@ navegador con `CI=1 corepack pnpm exec next start -p 3100` desde `apps/web`.
   su analítica atribuya la visita a 24bytes.pro.
 - «ASP.NET MVC 5.0» en la experiencia de NTT Data, confirmado por Alexis
   (antes decía «Airones MVC 5.0»).
+- Tras el `/cso`, Alexis eligió arreglarlo todo de inmediato: Next 15.5.25 y
+  React 19.0.8 (misma rama 19.0), imagen con el usuario `node` y acciones de
+  CI fijadas por SHA. `react-email` pasa a `devDependencies`.
