@@ -52,6 +52,19 @@ RUN if [ -f build.env ]; then \
         "$BETTER_AUTH_SECRET" "$BETTER_AUTH_URL" "$AUTH_REDIRECT_PROXY_URL" \
         "$NEXT_PUBLIC_ANALYTICS_PROVIDER" "$NEXT_PUBLIC_CF_ANALYTICS_TOKEN" "$NEXT_PUBLIC_PLAUSIBLE_DOMAIN" > .env; \
     fi
+# Analítica (Umami bajo /stats). No son secretos: el id del sitio y la ruta del
+# script van en el HTML. Se pasan como ARG porque `.env` está en .dockerignore y
+# tanto NEXT_PUBLIC_* como los rewrites de next.config se resuelven en el BUILD.
+# Como variables de entorno ganan a lo que diga el .env generado arriba.
+ARG NEXT_PUBLIC_ANALYTICS_PROVIDER
+ARG NEXT_PUBLIC_UMAMI_SRC
+ARG NEXT_PUBLIC_UMAMI_WEBSITE_ID
+ARG UMAMI_INTERNAL_URL
+ENV NEXT_PUBLIC_ANALYTICS_PROVIDER=${NEXT_PUBLIC_ANALYTICS_PROVIDER}
+ENV NEXT_PUBLIC_UMAMI_SRC=${NEXT_PUBLIC_UMAMI_SRC}
+ENV NEXT_PUBLIC_UMAMI_WEBSITE_ID=${NEXT_PUBLIC_UMAMI_WEBSITE_ID}
+ENV UMAMI_INTERNAL_URL=${UMAMI_INTERNAL_URL}
+
 RUN pnpm -F @repo/web build
 
 # --- Etapa de ejecución (runner) ---
