@@ -117,7 +117,7 @@ NEXT_PUBLIC_PLAUSIBLE_DOMAIN=24bytes.pro
   - Si necesitas desactivar temporalmente el formulario, pon `NEXT_PUBLIC_CONTACT_FORM_ENABLED=false` (usa `mailto:`).
 
 ## Configuración de dominios (Server Actions)
-- Archivos: `apps/web/next.config.mjs` (activo) y `apps/web/next.config.ts`.
+- Archivo: `apps/web/next.config.mjs` (el único; el `.ts` que había nunca se cargaba porque Next da prioridad al `.mjs`).
 - Qué hace: configura `experimental.serverActions.allowedOrigins` combinando una lista por defecto con `ALLOWED_ORIGINS` (si está definida).
 - Dominios de ejemplo incluidos por defecto: `localhost:3000`, `24bytes.pro`, `www.24bytes.pro`.
 - Importante: cambiar orígenes requiere reconstruir Next (es configuración de build).
