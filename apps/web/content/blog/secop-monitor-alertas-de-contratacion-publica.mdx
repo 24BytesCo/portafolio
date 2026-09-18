@@ -3,6 +3,16 @@ title: "SECOP Monitor: dejar de revisar el SECOP a mano todos los días"
 description: "Qué le resuelve SECOP Monitor a un proveedor del Estado colombiano y cómo está construido por dentro, desde la ingesta horaria de datos abiertos hasta el aviso por correo y WhatsApp."
 date: 2026-09-18
 author: Alexis Dorado Muñoz
+portada:
+  src: /images/blog/secop-monitor-alertas-de-contratacion-publica/portada.jpg
+  alt: "Portada de SECOP Monitor con un ejemplo del tablero de coincidencias"
+  ancho: 1600
+  alto: 790
+cta:
+  titulo: "Deja que el SECOP te avise a ti"
+  texto: "Crea tu primera alerta en dos minutos. Es gratis y no pide tarjeta."
+  href: "https://secop.24bytes.pro"
+  etiqueta: "Crear mi alerta gratis"
 ---
 
 Quien le vende al Estado colombiano conoce la rutina. Abrir el SECOP, escribir las mismas palabras de ayer, filtrar por departamento, revisar página por página y anotar en una hoja de cálculo lo que parece interesante. Todos los días, porque el proceso que sirve puede publicarse hoy y cerrar en una semana.
@@ -25,17 +35,50 @@ Las empresas grandes lo resuelven con una persona dedicada a revisar. Una constr
 
 **Contexto para decidir si vale la pena presentarse.** Cada entidad, municipio y categoría tiene una ficha pública que muestra cuánto contrata, con qué modalidades y a qué ritmo. Antes de invertir días en una propuesta, se puede ver si esa alcaldía contrata sobre todo por mínima cuantía o si casi todo lo adjudica de forma directa.
 
+<Figura
+  src="/images/blog/secop-monitor-alertas-de-contratacion-publica/ficha-entidad.jpg"
+  alt="Ficha pública de la Alcaldía de Floridablanca en SECOP Monitor"
+  pie="La ficha de una entidad resume cuánto contrata, con qué modalidades y qué tiene abierto. Se lee en un minuto y dice si vale la pena preparar una oferta."
+  ancho={1600}
+  alto={1000}
+/>
+
 **Guías para quien está empezando.** El [registro en SECOP II](https://secop.24bytes.pro/guias/registro-en-secop-ii), el RUP, los requisitos habilitantes y los errores que hacen rechazar una oferta, explicados sin jerga, con cursos gratuitos y certificado verificable.
+
+<Figura
+  src="/images/blog/secop-monitor-alertas-de-contratacion-publica/guias.jpg"
+  alt="Listado de guías para proveedores del Estado en SECOP Monitor"
+  pie="Las guías acompañan a quien todavía no le ha vendido al Estado."
+  ancho={1600}
+  alto={1000}
+/>
 
 Se puede empezar gratis con una alerta, sin tarjeta.
 
 ## Cómo está construido
+
+<Figura
+  src="/images/blog/secop-monitor-alertas-de-contratacion-publica/arquitectura.svg"
+  alt="Diagrama: datos.gov.co, ingesta horaria, PostgreSQL, matcher, resumen diario por correo y WhatsApp; de la base salen también el seguimiento y las fichas públicas"
+  pie="Todo gira alrededor de una sola base de datos. No hay motor de búsqueda aparte ni colas externas."
+  ancho={1600}
+  alto={450}
+  marco={false}
+/>
 
 ### Ingesta: datos abiertos, cada hora
 
 Un proceso programado consulta la API de datos abiertos (Socrata) de SECOP I y SECOP II cada hora y guarda lo nuevo en PostgreSQL. Solo se reprocesa un registro cuando sus metadatos cambiaron, de modo que la ingesta es barata aunque la base tenga cientos de miles de procesos.
 
 Como todo depende de una fuente externa, hay una sonda que cada cinco minutos comprueba si el SECOP responde y publica el resultado en una [página de estado](https://secop.24bytes.pro/estado-secop). Cuando el portal oficial se cae, los usuarios lo saben sin tener que adivinarlo.
+
+<Figura
+  src="/images/blog/secop-monitor-alertas-de-contratacion-publica/estado-secop.jpg"
+  alt="Página de estado que muestra si SECOP II, Colombia Compra Eficiente y datos.gov.co están operativos"
+  pie="La página de estado es pública. Se comprueba cada cinco minutos desde un servidor en Colombia."
+  ancho={1600}
+  alto={911}
+/>
 
 ### El matcher: búsqueda de texto completo en PostgreSQL
 
@@ -55,7 +98,13 @@ A ese puntaje se le suman reglas propias de la alerta, como modalidad, municipio
 
 Hace poco un usuario creó una alerta y no recibió nada. Tenía la demanda, porque había decenas de procesos que le servían, pero en el campo de departamentos había escrito el nombre de un municipio junto al del departamento. El matcher comparaba por igualdad exacta y esa alerta no podía coincidir con nada. No había error, no había aviso, solo silencio.
 
-El arreglo tuvo tres capas. El asistente ahora solo acepta departamentos de un catálogo y, si alguien escribe un municipio con su departamento, los separa solo. La API rechaza lo que no reconoce con un mensaje claro. Y el matcher compara sin distinguir mayúsculas ni tildes. La lección vale para cualquier producto: un filtro que puede dejar un resultado vacío sin explicación es un error esperando a ocurrir.
+El arreglo tuvo tres capas. El asistente ahora solo acepta departamentos de un catálogo y, si alguien escribe un municipio con su departamento, los separa solo. La API rechaza lo que no reconoce con un mensaje claro. Y el matcher compara sin distinguir mayúsculas ni tildes.
+
+<Nota titulo="La lección">
+
+Un filtro que puede dejar un resultado vacío sin explicar por qué es un error esperando a ocurrir. Vale para cualquier producto, no solo para este.
+
+</Nota>
 
 ### Frontend que Google puede leer
 

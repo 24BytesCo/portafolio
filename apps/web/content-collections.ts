@@ -60,6 +60,25 @@ const blog = defineCollection({
     return {
       ...docSchema,
       author: z.string(),
+      // Imagen grande que abre el artículo. Si falta, se usa la portada del
+      // índice (`/images/blog/<slug>/cover.jpg`).
+      portada: z
+        .object({
+          src: z.string(),
+          alt: z.string(),
+          ancho: z.number().optional(),
+          alto: z.number().optional(),
+        })
+        .optional(),
+      // Cierre del artículo: a dónde mandar a quien llegó hasta el final.
+      cta: z
+        .object({
+          titulo: z.string(),
+          texto: z.string(),
+          href: z.string(),
+          etiqueta: z.string(),
+        })
+        .optional(),
       date: z
         .string()
         .or(z.date())
