@@ -24,12 +24,13 @@ const Copyright = () => {
       className="flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-end"
       style={{ marginTop: "-50px" }}
     >
-      <h1
+      <p
+        aria-hidden="true"
         className="text-foreground/10 mt-2 text-[8vw] leading-[0.95] select-none md:text-[10vw] lg:text-[12vw] xl:text-[14vw] 2xl:text-[13vw]"
         style={{ width: "50%" }}
       >
         Portafolio
-      </h1>
+      </p>
       <p className="mt-0 text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl 2xl:text-2xl">
         © {yearDisplay} {meta.author.name}
       </p>

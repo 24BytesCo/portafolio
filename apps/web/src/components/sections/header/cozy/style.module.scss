@@ -55,6 +55,22 @@
       justify-content: center;
       gap: 12px;
       cursor: pointer;
+      // reset de <button> nativo para conservar el aspecto anterior (era un div)
+      border: none;
+      background: none;
+      padding: 0;
+      margin: 0;
+      font: inherit;
+      color: inherit;
+      // el preflight de Tailwind pone text-transform: none en <button>
+      text-transform: inherit;
+      text-align: inherit;
+
+      &:focus-visible {
+        outline: 2px solid hsl(var(--foreground));
+        outline-offset: 4px;
+        border-radius: 4px;
+      }
 
       .label {
         position: relative;

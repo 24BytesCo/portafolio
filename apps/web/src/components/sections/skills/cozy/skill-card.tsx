@@ -40,6 +40,7 @@ export default function SkillCard({
       }}
     >
       <DialogTrigger
+        aria-label={`Ver detalle: ${name}`}
         style={{
           borderRadius: "12px",
         }}
@@ -54,13 +55,13 @@ export default function SkillCard({
           className="h-48 w-full object-cover"
         /> */}
         <div className="flex grow flex-col items-end justify-between gap-4 p-6">
-          <button
-            type="button"
+          {/* decorativo: el propio DialogTrigger ya es el botón que abre el diálogo */}
+          <span
+            aria-hidden="true"
             className="relative ml-1 flex h-10 w-10 shrink-0 scale-100 appearance-none items-center justify-center rounded-full border border-zinc-950/10 text-zinc-500 transition-colors select-none hover:bg-zinc-100 hover:text-zinc-800 focus-visible:ring-2 active:scale-[0.98] dark:border-zinc-50/10 dark:bg-zinc-900 dark:text-zinc-500 dark:hover:bg-zinc-800 dark:hover:text-zinc-50 dark:focus-visible:ring-zinc-500"
-            aria-label="Open dialog"
           >
             <Icons.add size={18} />
-          </button>
+          </span>
           <div className="flex w-full flex-col gap-2">
             <DialogImage
               src={thumbnail ?? "/placeholder.svg"}

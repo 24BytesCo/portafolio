@@ -24,6 +24,7 @@ export const AnimatedWord: React.FC<AnimatedWordProps> = ({
       initial="rest"
       animate={isHovered ? "hover" : "rest"}
       className="relative whitespace-nowrap"
+      aria-hidden="true"
     >
       {title
         .split("")

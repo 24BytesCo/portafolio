@@ -31,6 +31,8 @@ export default function AnimatedLink({
     if (typeof child === "string") {
       return child.split(" ").map((word, index, array) => (
         <React.Fragment key={`word-${index}`}>
+          {/* nombre accesible real: las letras animadas de abajo son aria-hidden */}
+          <span className="sr-only">{word}</span>
           <motion.div
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}

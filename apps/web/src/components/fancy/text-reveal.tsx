@@ -16,7 +16,10 @@ const TextReveal: React.FC<TextRevealProps> = ({
   children,
   className = "",
   as = "div",
-  wordGap,
+  // "0.25rem" fijo en <Reveal> se ve bien en texto pequeño pero deja los
+  // titulares grandes con las palabras casi pegadas; en "em" escala con
+  // el tamaño de fuente de cada sección.
+  wordGap = "0.25em",
   spanClassName,
 }) => {
   const generatePhrases = (child: React.ReactNode): string[] => {

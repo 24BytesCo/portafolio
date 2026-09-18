@@ -53,7 +53,7 @@ function ProjectCard({
               />
             </AspectRatio>
           ) : null}
-          <TextReveal className="text-xl font-bold" as="h1">
+          <TextReveal className="text-xl font-bold" as="h2">
             {title}
           </TextReveal>
           <TextReveal
@@ -78,18 +78,23 @@ function ProjectCard({
                 className="z-2 rounded-md border border-zinc-950/10 dark:border-zinc-50/10"
                 asChild
               >
-                <Link href={href}>
+                <Link href={href} aria-label={`Ver proyecto: ${title}`}>
                   <Icons.info />
                 </Link>
               </Button>
             </TooltipTrigger>
             <TooltipContent>
-              <p>More Details</p>
+              <p>Más detalles</p>
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
       </CardFooter>
-      <Link href={href} className="absolute inset-0 z-1 block" />
+      <Link
+        href={href}
+        aria-hidden="true"
+        tabIndex={-1}
+        className="absolute inset-0 z-1 block"
+      />
     </Card>
   );
 }

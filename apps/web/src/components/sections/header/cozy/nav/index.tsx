@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { UserButton } from "@/components/auth/user-button";
 import ModeToggle from "@/components/mode-toggle";
 import { links } from "@/components/sections/header/config";
 import { motion } from "motion/react";
@@ -26,6 +25,7 @@ const Index: React.FC<IndexProps> = ({ setIsActive }) => {
 
   return (
     <motion.div
+      id="cozy-nav-menu"
       variants={height}
       initial="initial"
       animate="enter"
@@ -47,7 +47,6 @@ const Index: React.FC<IndexProps> = ({ setIsActive }) => {
           isActive={selectedLink.isActive}
         />
         <div className="absolute right-0 bottom-0 mb-auto flex items-center gap-2">
-          <UserButton />
           <ModeToggle />
         </div>
       </div>

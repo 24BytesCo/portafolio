@@ -84,6 +84,7 @@ function ProjectCard({
               >
                 <Link
                   href={href}
+                  aria-label={`Ver proyecto: ${title}`}
                   onClick={() =>
                     trackEvent("project_open_details", {
                       title,
@@ -97,13 +98,15 @@ function ProjectCard({
               </Button>
             </TooltipTrigger>
             <TooltipContent>
-              <p>More Details</p>
+              <p>Más detalles</p>
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
       </CardFooter>
       <Link
         href={href}
+        aria-hidden="true"
+        tabIndex={-1}
         className="absolute inset-0 z-1 block"
         onClick={() =>
           trackEvent("project_open", {

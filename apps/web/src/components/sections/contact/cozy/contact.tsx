@@ -61,7 +61,7 @@ function Contact() {
                     key={`contact-social_${index}`}
                     onClick={() => trackEvent("social_click", { name, href })}
                   >
-                    {Icon && <Icon className="h-4 w-4" />}
+                    {Icon && <Icon className="h-4 w-4" aria-hidden="true" />}
                     {name}
                   </Link>
                 ))}

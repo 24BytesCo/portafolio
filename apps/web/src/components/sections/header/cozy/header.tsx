@@ -23,6 +23,20 @@ const Header = () => {
     };
   }, [isActive]);
 
+  // Escape cierra el menú sin importar dónde esté el foco
+  useEffect(() => {
+    if (!isActive) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setIsActive(false);
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [isActive]);
+
   return (
     <motion.header
       className={styles.header}
@@ -43,8 +57,15 @@ const Header = () => {
         >
           {meta.author.name}
         </MotionLink>
-        <div onClick={() => setIsActive(!isActive)} className={styles.el}>
-          <div className={styles.label}>
+        <button
+          type="button"
+          onClick={() => setIsActive(!isActive)}
+          className={styles.el}
+          aria-expanded={isActive}
+          aria-controls="cozy-nav-menu"
+          aria-label={isActive ? "Cerrar menú" : "Abrir menú"}
+        >
+          <div className={styles.label} aria-hidden="true">
             <motion.p
               variants={opacity}
               animate={!isActive ? "open" : "closed"}
@@ -58,7 +79,7 @@ const Header = () => {
           <div
             className={`${styles.burger} ${isActive ? styles.burgerActive : ""}`}
           ></div>
-        </div>
+        </button>
       </div>
       <motion.div
         variants={background}

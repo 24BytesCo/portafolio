@@ -27,6 +27,11 @@ export default function Body({
   const getChars = (word: string) => {
     const chars: JSX.Element[] = [];
     word.split("").forEach((char, i) => {
+      if (char === " ") {
+        // un motion.span vacío colapsa el espacio; con &nbsp; se conserva
+        chars.push(<span key={`space-${i}`}>&nbsp;</span>);
+        return;
+      }
       chars.push(
         <motion.span
           custom={[i * 0.02, (word.length - i) * 0.01]}
@@ -49,8 +54,15 @@ export default function Body({
         const { title, href, target } = link;
 
         return (
-          <Link key={`l_${index}`} href={href} target={target}>
+          <Link
+            key={`l_${index}`}
+            href={href}
+            target={target}
+            aria-label={title}
+          >
+            {/* letras sueltas para la animación: el lector usa el aria-label */}
             <motion.p
+              aria-hidden="true"
               onClick={() => setIsActive(false)}
               onMouseOver={() => setSelectedLink({ isActive: true, index })}
               onMouseLeave={() => setSelectedLink({ isActive: false, index })}

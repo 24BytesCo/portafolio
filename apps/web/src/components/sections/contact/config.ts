@@ -14,7 +14,7 @@ const contact: Contact = {
       Icon: SiLinkedin,
     },
     {
-      name: "Github",
+      name: "GitHub",
       href: "https://github.com/24BytesCo",
       Icon: SiGithub,
     },
