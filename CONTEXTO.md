@@ -17,7 +17,9 @@ secop.24bytes.pro** y a los demás subdominios.
   (imagen `web-rescatada:latest`, **Next 15.5.25, usuario `node`**) detrás de
   Cloudflare Tunnel → NPM. Sirve `24bytes.pro` y `www.24bytes.pro`. Respaldos:
   `web-rescatada:respaldo-20260918` (la de antes del 18/09, Next 15.2.2),
-  `respaldo-20260918-2` (primer despliegue del 18/09, aún 15.2.2) y
+  `respaldo-20260918-2` (primer despliegue del 18/09, aún 15.2.2),
+  `respaldo-20260918b`/`c`/`d` (despliegues de la sesión General),
+  `respaldo-20260918e` (justo antes de la limpieza de Knip) y
   `respaldo-20260816`; árbol previo en
   `~/respaldos-portafolio/Portafolio-20260918-antes-correcciones.tgz`.
 - **Seguridad, 18/09 (`/cso`)**: el sitio corría Next 15.2.2, vulnerable a
@@ -56,6 +58,14 @@ secop.24bytes.pro** y a los demás subdominios.
   los componentes `<Figura src alt pie ancho alto marco />` y
   `<Nota titulo>…</Nota>` dentro del texto. Estilos en `globals.css` bajo
   «Entrada del blog». Respaldo de imagen `web-rescatada:respaldo-20260918c`.
+- **18/09 noche (sesión Portafolio)**: limpieza de Knip integrada sobre lo de la
+  sesión General y desplegada (`2253ebc..9d2de1e`), verificada desde fuera con
+  `/stats` y el blog incluidos. Fuera: variantes de plantilla sin usar,
+  precargador, testimonios y los paquetes `auth`, `comments` y `db`, con sus
+  variables en `env.ts`, `Dockerfile`, CI, `.env.example` y la plantilla del
+  compose (el servicio web ya no lleva variables de base de datos ni auth).
+  Knip limpio, 0 avisos de lint en la web (5 en `packages/ui`) y
+  `pnpm audit --prod` sin críticos (quedan 33 altos, transitivos).
 - **16/09**: `site.url` real, `sitemap.ts`, `robots.ts`, canonical relativo y
   las cuatro fichas de producto. Sitemap enviado en Search Console
   (`sc-domain:24bytes.pro`).
@@ -101,8 +111,9 @@ ssh user_24bytes@80.190.77.63 'cd ~/Documents/Proyectos/Portafolio && \
 
 `exclusiones.txt` (una por línea): `.git node_modules .next .turbo .cache .gstack
 .content-collections dist .env .env.* docker-compose.deploy.yml
-docker-compose.deploy.yml.* .gbrain-source docs/ CONTEXTO.md NO-LEVANTAR-AQUI.md`.
-Sin ellas el `--delete` se llevaría el `.env` y el compose del servidor.
+docker-compose.deploy.yml.* .gbrain-source docs/ CONTEXTO.md NO-LEVANTAR-AQUI.md
+.claude`. Sin ellas el `--delete` se llevaría el `.env` y el compose del
+servidor; `.claude` es donde los subagentes abren sus copias de trabajo.
 
 El build tarda ~4 min. El `nginx -s reload` del NPM es obligatorio (la IP del
 contenedor cambia y NPM cachea la vieja → 502). Vuelta atrás:
@@ -149,34 +160,41 @@ navegador con `CI=1 corepack pnpm exec next start -p 3100` desde `apps/web`.
 - En cada revisión, mirar la versión de `next` contra los avisos
   (`corepack pnpm audit --prod`): el RCE de diciembre estuvo nueve meses
   abierto sin que nadie lo viera.
+- **Dos sesiones desplegaron el portafolio a la vez el 18/09** (General y
+  Portafolio). Antes de desplegar, confirmar que ninguna otra sesión está a
+  mitad de un build: `ListAgents`, o preguntarle.
+- Un rebase puede mezclar SIN conflicto cambios incompatibles: la limpieza
+  quitaba `portafolio-pg` de la plantilla del compose mientras Umami pasaba a
+  depender de él, y git lo dejó roto sin avisar. Tras integrar, revisar a mano
+  las plantillas de despliegue y validar con `docker compose config`.
+- `rsync --delete` puede dejar en el servidor la carpeta vacía de un paquete
+  borrado: `rmdir` a mano (pasó con `packages/auth`, `comments` y `db`).
 
 ## 5. Pendientes
 
 1. Push de `develop` cuando Alexis lo pida.
-2. Limpieza de Knip en rama aparte: 37 archivos y 29 dependencias sin usar
-   (variantes compact/minimal, testimonios, precargador, auth, comentarios, db).
-   Los 21 avisos de lint que quedan están todos en ese código muerto, y quitar
-   `better-auth` elimina los 2 avisos críticos que quedan en `pnpm audit
-   --prod` (sin rutas que lo usen desde el 18/09). Con build y QA de control.
-   Si sale `packages/db`, el contenedor `portafolio-pg` (vacío) sobra.
-3. `/design-review` sobre el sitio ya corregido (fase 4 del plan).
-4. Reenviar el sitemap en Search Console. Opcional: ya estaba enviado el
+2. `/design-review` sobre el sitio ya corregido (fase 4 del plan); Alexis lo
+   dejó para otro día.
+3. Reenviar el sitemap en Search Console. Opcional: ya estaba enviado el
    17/09. Por API no se puede, porque el acceso es `webmasters.readonly`.
    Desde el navegador:
    https://search.google.com/search-console/sitemaps?resource_id=sc-domain%3A24bytes.pro
-5. Ficha de la demo de clínica (`clinica.24bytes.pro`) y del canal de vídeos:
+4. Ficha de la demo de clínica (`clinica.24bytes.pro`) y del canal de vídeos:
    sin escribir por falta de datos fiables.
-6. Blog sin entradas. La primera devuelve `/blog` al sitemap y quita el
-   noindex sola; cada guía técnica que enlace a SECOP suma.
-7. CSP con nonces (scripts y estilos) si algún día se quiere cerrar más: hoy
+5. Blog: una entrada publicada; cada guía técnica que enlace a SECOP suma.
+6. CSP con nonces (scripts y estilos) si algún día se quiere cerrar más: hoy
    solo cubre frame-ancestors, base-uri, object-src y form-action.
+7. Variables que ya nadie lee en el `.env` del servidor (`DATABASE_URL`,
+   `BETTER_AUTH_*`, `GOOGLE_*`, `GITHUB_*`) y en `docker-compose.deploy.yml`
+   (las del servicio web y su `depends_on` de `portafolio-pg`): no estorban;
+   quitarlas cuando se toque ese archivo. `portafolio-pg` SE QUEDA (§2b).
 
 ## 6. Decisiones (18/09)
 
 - Precargador eliminado del todo (no «una vez por sesión»).
-- Comentarios y login fuera de la interfaz y de las rutas: la base
-  `portafolio-pg` está vacía por diseño. Los paquetes `auth`, `db` y
-  `comments` siguen hasta la limpieza de Knip; `/login` redirige a `/`.
+- Comentarios y login fuera de la interfaz y de las rutas; `/login` redirige a
+  `/`. Los paquetes `auth`, `db` y `comments` salieron con la limpieza de Knip
+  el mismo 18/09. `portafolio-pg` se queda: aloja la base de Umami (§2b).
 - «Hello World» de la plantilla borrado; `/blog` queda vacío con noindex.
 - JSON-LD de las fichas como `CreativeWork`, no `SoftwareApplication`: Google
   exige offers y valoraciones y Search Console lo marcaría inválido.
