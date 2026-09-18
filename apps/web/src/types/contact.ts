@@ -1,4 +1,4 @@
-export interface Socials {
+interface Socials {
   name: string;
   href: string;
   Icon?: React.ComponentType<{ className?: string }>;

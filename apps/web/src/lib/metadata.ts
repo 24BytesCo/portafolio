@@ -1,7 +1,7 @@
 import type { Metadata } from "next/types";
 import { metadata as meta } from "@/app/config";
 
-export const baseUrl = meta.site.url;
+const baseUrl = meta.site.url;
 
 export function createMetadata(override: Metadata): Metadata {
   return {

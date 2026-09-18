@@ -17,7 +17,7 @@ import { createPortal } from "react-dom";
 import { cn } from "@repo/ui";
 import { Icons } from "@repo/ui/icons";
 
-export interface MorphingDialogContextType {
+interface MorphingDialogContextType {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   uniqueId: string;
@@ -37,7 +37,7 @@ function useMorphingDialog() {
   return context;
 }
 
-export interface MorphingDialogProviderProps {
+interface MorphingDialogProviderProps {
   children: React.ReactNode;
   transition?: Transition;
 }
@@ -67,7 +67,7 @@ function MorphingDialogProvider({
   );
 }
 
-export interface MorphingDialogProps {
+interface MorphingDialogProps {
   children: React.ReactNode;
   transition?: Transition;
 }
@@ -80,7 +80,7 @@ function MorphingDialog({ children, transition }: MorphingDialogProps) {
   );
 }
 
-export interface MorphingDialogTriggerProps {
+interface MorphingDialogTriggerProps {
   children: React.ReactNode;
   className?: string;
   style?: React.CSSProperties;
@@ -131,7 +131,7 @@ function MorphingDialogTrigger({
   );
 }
 
-export interface MorphingDialogContentProps {
+interface MorphingDialogContentProps {
   children: React.ReactNode;
   className?: string;
   style?: React.CSSProperties;
@@ -225,7 +225,7 @@ function MorphingDialogContent({
   );
 }
 
-export interface MorphingDialogContainerProps {
+interface MorphingDialogContainerProps {
   children: React.ReactNode;
   className?: string;
   style?: React.CSSProperties;
@@ -263,7 +263,7 @@ function MorphingDialogContainer({ children }: MorphingDialogContainerProps) {
   );
 }
 
-export interface MorphingDialogTitleProps {
+interface MorphingDialogTitleProps {
   children: React.ReactNode;
   className?: string;
   style?: React.CSSProperties;
@@ -288,7 +288,7 @@ function MorphingDialogTitle({
   );
 }
 
-export interface MorphingDialogSubtitleProps {
+interface MorphingDialogSubtitleProps {
   children: React.ReactNode;
   className?: string;
   style?: React.CSSProperties;
@@ -312,7 +312,7 @@ function MorphingDialogSubtitle({
   );
 }
 
-export interface MorphingDialogDescriptionProps {
+interface MorphingDialogDescriptionProps {
   children: React.ReactNode;
   className?: string;
   disableLayoutAnimation?: boolean;
@@ -351,7 +351,7 @@ function MorphingDialogDescription({
   );
 }
 
-export interface MorphingDialogImageProps {
+interface MorphingDialogImageProps {
   src: string;
   alt: string;
   className?: string;
@@ -377,7 +377,7 @@ function MorphingDialogImage({
   );
 }
 
-export interface MorphingDialogCloseProps {
+interface MorphingDialogCloseProps {
   children?: React.ReactNode;
   className?: string;
   variants?: {

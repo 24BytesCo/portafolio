@@ -1,5 +1,5 @@
 // credit: fuma-nama
-import type { AnchorHTMLAttributes, HTMLAttributes } from "react";
+import type { AnchorHTMLAttributes } from "react";
 import Link from "next/link";
 
 export function MDXLink({
@@ -17,25 +17,4 @@ export function MDXLink({
   }
 
   return <Link href={href} {...props} />;
-}
-
-export const headingTypes = ["h1", "h2", "h3", "h4", "h5", "h6"] as const;
-
-export function Heading({
-  as: As,
-  ...props
-}: { as: (typeof headingTypes)[number] } & HTMLAttributes<HTMLHeadingElement>) {
-  if (props.id)
-    return (
-      <a href={`#${props.id}`} className="group no-underline">
-        <As {...props}>
-          <span className="absolute mt-0.5 -ml-4 text-base text-neutral-500 opacity-0 transition-opacity group-hover:opacity-100">
-            #
-          </span>
-          {props.children}
-        </As>
-      </a>
-    );
-
-  return <As {...props}>{props.children}</As>;
 }

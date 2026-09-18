@@ -26,7 +26,7 @@ const baseUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
   : '';
 
-export const ContactEmail = ({ name, email, message }: ContactEmailProps) => {
+const ContactEmail = ({ name, email, message }: ContactEmailProps) => {
   const previewText = `Message from ${name} on Portfolio`;
 
   // TODO: Make a custom design, instead of the template

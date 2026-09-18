@@ -1,10 +1,3 @@
-export function trimString(len: number, str: string) {
-  if (str.length > len) {
-    return str.substring(0, len).trim() + "...";
-  }
-  return str;
-}
-
 // "31 de julio de 2026". En UTC: las fechas del frontmatter no traen hora y en
 // la zona local (UTC-5) saldrían con un día menos.
 export function formatearFecha(fecha: string | Date): string {
