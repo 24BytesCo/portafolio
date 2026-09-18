@@ -1,6 +1,6 @@
 ---
 title: "SECOP Monitor: dejar de revisar el SECOP a mano todos los días"
-description: "Qué le resuelve SECOP Monitor a un proveedor del Estado colombiano y cómo está construido por dentro, desde la ingesta horaria de datos abiertos hasta el aviso por correo y WhatsApp."
+description: "Qué le resuelve SECOP Monitor a un proveedor del Estado colombiano: alertas que trabajan solas, un resumen diario, seguimiento de procesos y contexto para decidir dónde presentarse."
 date: 2026-09-18
 author: Alexis Dorado Muñoz
 portada:
@@ -17,23 +17,37 @@ cta:
 
 Quien le vende al Estado colombiano conoce la rutina. Abrir el SECOP, escribir las mismas palabras de ayer, filtrar por departamento, revisar página por página y anotar en una hoja de cálculo lo que parece interesante. Todos los días, porque el proceso que sirve puede publicarse hoy y cerrar en una semana.
 
-Construí [SECOP Monitor](https://secop.24bytes.pro) para quitar esa rutina de encima. Este artículo cuenta qué gana quien lo usa y, para quien le interese la parte técnica, cómo está hecho.
+Construí [SECOP Monitor](https://secop.24bytes.pro) para quitar esa rutina de encima. Este artículo cuenta para quién es y qué gana quien lo usa.
 
 ## El problema no es encontrar información, es enterarse a tiempo
 
-La contratación pública colombiana es abierta. Los datos de SECOP I y SECOP II están publicados en datos.gov.co y cualquiera puede consultarlos. El problema es otro: son cientos de procesos nuevos cada día, repartidos entre miles de entidades, y nadie le avisa a un proveedor cuando aparece el suyo.
+La contratación pública colombiana es abierta. Los datos de SECOP I y SECOP II están publicados y cualquiera puede consultarlos. El problema es otro: son cientos de procesos nuevos cada día, repartidos entre miles de entidades, y nadie le avisa a un proveedor cuando aparece el suyo.
 
 Las empresas grandes lo resuelven con una persona dedicada a revisar. Una constructora pequeña, un consultor independiente o una empresa de suministros no tiene a esa persona. Se entera tarde, o no se entera.
 
+<Nota titulo="La diferencia">
+
+Entre enterarse el día que se publica un proceso y enterarse cuatro días después está, muchas veces, la diferencia entre presentar una buena oferta y no presentar ninguna.
+
+</Nota>
+
 ## Qué hace por quien lo usa
 
-**Alertas que trabajan solas.** El usuario describe lo que vende con sus propias palabras, por ejemplo obra civil, placa huella, acueducto o interventoría. Elige departamentos, municipios, modalidades y un tope de valor. Desde ese momento el sistema revisa por él cada hora.
+### Alertas que trabajan solas
 
-**Un resumen diario, no una avalancha.** Cada noche llega un correo, y un WhatsApp si el plan lo incluye, con los procesos nuevos que encajan, ordenados por relevancia. Cada proceso trae el objeto, la entidad, el valor y el enlace directo al SECOP.
+El usuario describe lo que vende con sus propias palabras, por ejemplo obra civil, placa huella, acueducto o interventoría. Elige departamentos, municipios, modalidades y un tope de valor. Desde ese momento el sistema revisa por él, todos los días, sin que tenga que volver a entrar al portal.
 
-**Seguimiento de los procesos que importan.** Cuando un proceso interesa, se marca para seguirlo. Si la entidad cambia los pliegos o mueve la fecha de cierre, el sistema lo detecta y avisa. Las fechas clave se pueden llevar al calendario del celular.
+### Un resumen diario, no una avalancha
 
-**Contexto para decidir si vale la pena presentarse.** Cada entidad, municipio y categoría tiene una ficha pública que muestra cuánto contrata, con qué modalidades y a qué ritmo. Antes de invertir días en una propuesta, se puede ver si esa alcaldía contrata sobre todo por mínima cuantía o si casi todo lo adjudica de forma directa.
+Cada noche llega un correo, y un WhatsApp si el plan lo incluye, con los procesos nuevos que encajan, ordenados por relevancia. Cada proceso trae el objeto, la entidad, el valor y el enlace directo al SECOP. Si ese día no hubo nada que valga la pena, no llega nada.
+
+### Seguimiento de los procesos que importan
+
+Cuando un proceso interesa, se marca para seguirlo. Si la entidad cambia los pliegos o mueve la fecha de cierre, el sistema lo detecta y avisa. Las fechas clave se pueden llevar al calendario del celular.
+
+### Contexto para decidir si vale la pena presentarse
+
+Cada entidad, municipio y categoría tiene una ficha pública que muestra cuánto contrata, con qué modalidades y a qué ritmo. Antes de invertir días en una propuesta, se puede ver si esa alcaldía contrata sobre todo por mínima cuantía o si casi todo lo adjudica de forma directa.
 
 <Figura
   src="/images/blog/secop-monitor-alertas-de-contratacion-publica/ficha-entidad.jpg"
@@ -43,7 +57,21 @@ Las empresas grandes lo resuelven con una persona dedicada a revisar. Una constr
   alto={1000}
 />
 
-**Guías para quien está empezando.** El [registro en SECOP II](https://secop.24bytes.pro/guias/registro-en-secop-ii), el RUP, los requisitos habilitantes y los errores que hacen rechazar una oferta, explicados sin jerga, con cursos gratuitos y certificado verificable.
+### Saber si el problema es el SECOP o es tu conexión
+
+El portal oficial se cae más de lo que uno quisiera, y casi siempre a la hora de cargar una oferta. Una [página de estado](https://secop.24bytes.pro/estado-secop) pública comprueba cada cinco minutos si SECOP II, Colombia Compra Eficiente y los datos abiertos están respondiendo.
+
+<Figura
+  src="/images/blog/secop-monitor-alertas-de-contratacion-publica/estado-secop.jpg"
+  alt="Página de estado que muestra si SECOP II, Colombia Compra Eficiente y datos.gov.co están operativos"
+  pie="La página de estado es pública y gratuita. No hace falta tener cuenta para consultarla."
+  ancho={1600}
+  alto={911}
+/>
+
+### Guías para quien está empezando
+
+El [registro en SECOP II](https://secop.24bytes.pro/guias/registro-en-secop-ii), el RUP, los requisitos habilitantes y los errores que hacen rechazar una oferta, explicados sin jerga, con cursos gratuitos y certificado verificable.
 
 <Figura
   src="/images/blog/secop-monitor-alertas-de-contratacion-publica/guias.jpg"
@@ -53,73 +81,14 @@ Las empresas grandes lo resuelven con una persona dedicada a revisar. Una constr
   alto={1000}
 />
 
-Se puede empezar gratis con una alerta, sin tarjeta.
+## Para quién es
 
-## Cómo está construido
+Para constructoras y contratistas de obra civil, empresas de suministros, consultores e interventores, prestadores de servicios profesionales y cualquier empresa que ya le vende al Estado o quiere empezar a hacerlo. Sirve igual para quien busca en todo el país y para quien solo trabaja en tres municipios.
 
-<Figura
-  src="/images/blog/secop-monitor-alertas-de-contratacion-publica/arquitectura.svg"
-  alt="Diagrama: datos.gov.co, ingesta horaria, PostgreSQL, matcher, resumen diario por correo y WhatsApp; de la base salen también el seguimiento y las fichas públicas"
-  pie="Todo gira alrededor de una sola base de datos. No hay motor de búsqueda aparte ni colas externas."
-  ancho={1600}
-  alto={450}
-  marco={false}
-/>
+Se puede empezar gratis con una alerta, sin tarjeta. Los planes de pago amplían el número de alertas, suman WhatsApp y permiten trabajar en equipo.
 
-### Ingesta: datos abiertos, cada hora
+## Hecho en Colombia, por alguien a quien le puedes escribir
 
-Un proceso programado consulta la API de datos abiertos (Socrata) de SECOP I y SECOP II cada hora y guarda lo nuevo en PostgreSQL. Solo se reprocesa un registro cuando sus metadatos cambiaron, de modo que la ingesta es barata aunque la base tenga cientos de miles de procesos.
+SECOP Monitor lo construyo y lo opero yo, desde Bogotá, bajo la marca 24Bytes. Los datos salen de las fuentes oficiales de contratación pública y se actualizan todos los días; para el detalle legal de un proceso, la fuente de verdad sigue siendo el propio SECOP.
 
-Como todo depende de una fuente externa, hay una sonda que cada cinco minutos comprueba si el SECOP responde y publica el resultado en una [página de estado](https://secop.24bytes.pro/estado-secop). Cuando el portal oficial se cae, los usuarios lo saben sin tener que adivinarlo.
-
-<Figura
-  src="/images/blog/secop-monitor-alertas-de-contratacion-publica/estado-secop.jpg"
-  alt="Página de estado que muestra si SECOP II, Colombia Compra Eficiente y datos.gov.co están operativos"
-  pie="La página de estado es pública. Se comprueba cada cinco minutos desde un servidor en Colombia."
-  ancho={1600}
-  alto={911}
-/>
-
-### El matcher: búsqueda de texto completo en PostgreSQL
-
-No hay un motor de búsqueda aparte. Cada proceso tiene un vector de búsqueda en español, sin tildes, y las palabras clave de cada alerta se convierten en una consulta de texto completo. La relevancia sale de la propia base de datos:
-
-```sql
-SELECT id, ts_rank("searchVector", q) AS score
-FROM "Proceso", websearch_to_tsquery('spanish', unaccent('obra civil OR acueducto')) q
-WHERE "searchVector" @@ q
-  AND departamento = 'MAGDALENA'
-  AND "createdAt" >= now() - interval '1 day';
-```
-
-A ese puntaje se le suman reglas propias de la alerta, como modalidad, municipio y rango de valor. Mantenerlo todo en PostgreSQL significa una sola pieza que respaldar, monitorear y pagar.
-
-### Una lección reciente: los campos de texto libre callan las alertas
-
-Hace poco un usuario creó una alerta y no recibió nada. Tenía la demanda, porque había decenas de procesos que le servían, pero en el campo de departamentos había escrito el nombre de un municipio junto al del departamento. El matcher comparaba por igualdad exacta y esa alerta no podía coincidir con nada. No había error, no había aviso, solo silencio.
-
-El arreglo tuvo tres capas. El asistente ahora solo acepta departamentos de un catálogo y, si alguien escribe un municipio con su departamento, los separa solo. La API rechaza lo que no reconoce con un mensaje claro. Y el matcher compara sin distinguir mayúsculas ni tildes.
-
-<Nota titulo="La lección">
-
-Un filtro que puede dejar un resultado vacío sin explicar por qué es un error esperando a ocurrir. Vale para cualquier producto, no solo para este.
-
-</Nota>
-
-### Frontend que Google puede leer
-
-La aplicación es Angular con renderizado en servidor. Las fichas públicas y las guías llegan al navegador como HTML completo, así que cargan rápido en un celular y los buscadores las leen sin ejecutar JavaScript. La parte privada, que es el tablero de cada usuario, se renderiza solo en el cliente.
-
-### Notificaciones y cobro
-
-El correo sale por Resend y el WhatsApp por la API oficial de Meta, con plantillas aprobadas. El cobro va por ePayco, con un webhook firmado e idempotente para que un pago confirmado dos veces no active dos veces nada.
-
-### Operación: nada expuesto, nada directo a producción
-
-Todo corre en contenedores detrás de un túnel de Cloudflare y un proxy que solo escucha en localhost. Ningún contenedor publica un puerto a internet. Cada cambio pasa primero por un entorno de QA que se despliega solo, y llega a producción únicamente después de probarse ahí. Las migraciones de base de datos en producción se revisan a mano antes de aplicarse.
-
-## Lo que viene
-
-Videos cortos para las guías más consultadas, un tope inteligente para que el resumen diario nunca abrume y enlaces con registro de clic para saber qué procesos le interesan de verdad a cada usuario.
-
-Si le vendes al Estado, o quieres empezar, puedes [crear tu primera alerta gratis](https://secop.24bytes.pro). Y si quieres construir algo parecido para tu sector, [hablemos](https://24bytes.pro).
+Si le vendes al Estado, o quieres empezar, puedes [crear tu primera alerta gratis](https://secop.24bytes.pro). Y si quieres una herramienta así para tu sector, [hablemos](https://24bytes.pro).
