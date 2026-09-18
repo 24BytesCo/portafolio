@@ -2,23 +2,14 @@
 // https://github.com/darkroomengineering/lenis/issues/319
 "use client";
 
-import React, { useEffect } from "react";
-import { ReactLenis, useLenis } from "@/lib/lenis";
+import React from "react";
+import { ReactLenis } from "@/lib/lenis";
 
 interface LenisProps {
   children: React.ReactNode;
 }
 
 function SmoothScroll({ children }: LenisProps) {
-  const lenis = useLenis();
-
-  useEffect(() => {
-    document.addEventListener("DOMContentLoaded", () => {
-      lenis?.stop();
-      lenis?.start();
-    });
-  }, []);
-
   return (
     <ReactLenis
       root

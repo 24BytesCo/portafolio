@@ -32,7 +32,7 @@ const ParallaxImage = ({
     yEnd = "10%",
     scaleStart = 1,
     scaleEnd = 1.5,
-  } = parallaxOptions || {};
+  } = parallaxOptions ?? {};
 
   const { scrollYProgress } = useScroll({
     target: containerRef,

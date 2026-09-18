@@ -43,7 +43,7 @@ const Screensaver: React.FC<ScreensaverProps> = ({
       x.set(initialX);
       y.set(initialY);
     }
-  }, [containerDimensions, elementDimensions, startPosition]);
+  }, [containerDimensions, elementDimensions, startPosition, x, y]);
 
   useAnimationFrame(() => {
     const velocity = speed;

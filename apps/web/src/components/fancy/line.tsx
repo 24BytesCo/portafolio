@@ -23,8 +23,15 @@ export default function Line({
   let time = Math.PI / 2;
   let reqId: number | null = null;
 
+  // Línea recta al montar: lo mismo que setPath con progress = 0 y x = 0.5,
+  // sin depender de funciones que se recrean en cada render.
   useEffect(() => {
-    setPath(progress);
+    const width = window.innerWidth;
+    path.current?.setAttributeNS(
+      null,
+      "d",
+      `M0 250 Q${width * 0.5} 250, ${width} 250`,
+    );
   }, []);
 
   const setPath = (progress: number) => {

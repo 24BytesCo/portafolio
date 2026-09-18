@@ -20,7 +20,7 @@ function ExperienceCard({
 }: ExperienceCardProps) {
   // Derivar nombre de empresa y ubicación si vienen unidos por guion o raya
   const segments = company.split(/—|–| - | -|-/);
-  const companyTitle = segments[0]?.trim() || company;
+  const companyTitle = (segments[0] ?? "").trim() || company;
   const location =
     segments.length > 1 ? segments.slice(1).join(" - ").trim() : undefined;
 

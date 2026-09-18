@@ -29,9 +29,8 @@ export function RouteProgress() {
     return () => document.removeEventListener("click", onClick, true);
   }, []);
 
-  // Stop when the pathname updates
+  // Stop when the pathname updates (sin barra activa, apagarla no hace nada)
   useEffect(() => {
-    if (!active) return;
     const id = setTimeout(() => setActive(false), 1000);
     return () => clearTimeout(id);
   }, [pathname]);

@@ -32,43 +32,40 @@ export default function Cursor() {
     y: useSpring(mouse.y, smoothOptions),
   };
 
-  const manageResize = () => {
-    const isFinePointer = window.matchMedia("(pointer: fine)").matches;
-    if (!isFinePointer) {
-      setIsVisible(false);
-      return;
-    }
-  };
-
-  const manageMouseMove = (e: MouseMoveEvent) => {
-    const isFinePointer = window.matchMedia("(pointer: fine)").matches;
-    if (!isFinePointer) {
-      setIsVisible(false);
-      return;
-    }
-    if (!isVisible) setIsVisible(true);
-
-    const { clientX, clientY } = e;
-    mouse.x.set(clientX - cursorSize / 2);
-    mouse.y.set(clientY - cursorSize / 2);
-  };
-
-  const manageMouseLeave = () => {
-    setIsVisible(false);
-  };
-
-  const handleMouseDown = (e: MouseEvent) => {
-    // prevent right click to trigger pressed
-    if (e.button === 2) return;
-
-    setIsPressed(true);
-  };
-
-  const handleMouseUp = () => {
-    setIsPressed(false);
-  };
-
   useEffect(() => {
+    const isFinePointer = () => window.matchMedia("(pointer: fine)").matches;
+
+    const manageResize = () => {
+      if (!isFinePointer()) setIsVisible(false);
+    };
+
+    const manageMouseMove = (e: MouseMoveEvent) => {
+      if (!isFinePointer()) {
+        setIsVisible(false);
+        return;
+      }
+      setIsVisible(true);
+
+      const { clientX, clientY } = e;
+      mouse.x.set(clientX - cursorSize / 2);
+      mouse.y.set(clientY - cursorSize / 2);
+    };
+
+    const manageMouseLeave = () => {
+      setIsVisible(false);
+    };
+
+    const handleMouseDown = (e: MouseEvent) => {
+      // prevent right click to trigger pressed
+      if (e.button === 2) return;
+
+      setIsPressed(true);
+    };
+
+    const handleMouseUp = () => {
+      setIsPressed(false);
+    };
+
     window.addEventListener("resize", manageResize);
 
     document.body.addEventListener("mouseleave", manageMouseLeave, {
@@ -87,12 +84,13 @@ export default function Cursor() {
     return () => {
       window.removeEventListener("resize", manageResize);
 
-      window.removeEventListener("mouseleave", manageMouseLeave);
+      // Se registra en body: quitarlo de window lo dejaba colgado.
+      document.body.removeEventListener("mouseleave", manageMouseLeave);
       window.removeEventListener("mousemove", manageMouseMove);
       window.removeEventListener("mousedown", handleMouseDown);
       window.removeEventListener("mouseup", handleMouseUp);
     };
-  }, []);
+  }, [cursorSize, mouse.x, mouse.y]);
 
   const template = ({
     rotate,

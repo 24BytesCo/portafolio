@@ -137,7 +137,9 @@ const TrailItem = ({ item, onComplete }: TrailItemProps) => {
       .catch(() => {
         onComplete(item.id);
       });
-  }, []);
+    // Todas estables (onComplete es un useCallback sin dependencias): la
+    // animación sigue corriendo una sola vez por elemento.
+  }, [animate, item.animationSequence, item.id, onComplete, scope]);
 
   return (
     <motion.div
