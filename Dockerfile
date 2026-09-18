@@ -62,7 +62,9 @@ EXPOSE 8080
 
 # Coloca la salida standalone en /app para que rutas como apps/web/.next/static resuelvan correctamente
 WORKDIR /app
-COPY --from=builder /app/apps/web/.next/standalone ./
+# Del usuario node (viene en la imagen base): el servidor ya no corre como root.
+# Solo necesita escribir en .next (caché del optimizador de imágenes e ISR).
+COPY --from=builder --chown=node:node /app/apps/web/.next/standalone ./
 COPY --from=builder /app/apps/web/.next/static ./apps/web/.next/static
 # Recursos públicos: copiar en varias ubicaciones para las expectativas de Next standalone
 COPY --from=builder /app/apps/web/public ./apps/web/public
@@ -73,6 +75,9 @@ COPY --from=builder /app/apps/web/public ./public
 # Aunque Next standalone suele incluirlas, algunos entornos resuelven el módulo virtual
 # en la ruta original. Se copian para evitar 500 en páginas de proyecto/blog.
 COPY --from=builder /app/apps/web/.content-collections/generated ./apps/web/.content-collections/generated
+
+RUN mkdir -p apps/web/.next/cache && chown node:node apps/web/.next/cache
+USER node
 
 # Inicia el servidor de Next (standalone incluye todos los archivos del servidor)
 CMD ["node", "apps/web/server.js"]
