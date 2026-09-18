@@ -36,6 +36,7 @@
     "remark-gfm": "^4.0.0",
     "remark-math": "^6.0.0",
     "schema-dts": "^1.1.2",
+    "server-only": "^0.0.1",
     "sharp": "^0.33.5",
     "sonner": "^1.7.4",
     "tailwindcss-animate": "^1.0.7",
@@ -63,7 +64,8 @@
     "prettier": "catalog:",
     "sass": "^1.85.1",
     "tailwindcss": "catalog:",
-    "typescript": "catalog:"
+    "typescript": "catalog:",
+    "typescript-eslint": "^8.21.0"
   },
   "lint-staged": {
     "*.{cjs,mjs,js,jsx,cts,mts,ts,tsx,json}": "eslint --fix"
