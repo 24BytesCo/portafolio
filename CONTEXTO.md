@@ -61,6 +61,30 @@ secop.24bytes.pro** y a los demás subdominios.
   (`sc-domain:24bytes.pro`).
 - Rama local `develop`: commits del 16 al 18/09 **sin push**.
 
+## 2b. Analítica propia (desde el 18/09)
+
+- **Umami 3.4.0 autoalojado**, servido bajo `https://24bytes.pro/stats` (panel
+  y script). Contenedor `portafolio-umami`, imagen `umami-24bytes:3.4.0`
+  compilada EN EL SERVIDOR desde `~/Documents/Proyectos/umami-src` con
+  `--build-arg BASE_PATH=/stats` (la imagen oficial no admite ruta base). Sin
+  puertos ni `proxy-net`: solo lo alcanza `portafolio-web` por `portafolio-net`,
+  con los rewrites de `next.config.mjs` (`UMAMI_INTERNAL_URL`).
+- Base `umami` (usuario `umami`) dentro de `portafolio-pg`. Credenciales en el
+  `.env` del servidor (`UMAMI_DB_PASSWORD`, `UMAMI_APP_SECRET`); clave del
+  usuario `admin` del panel en `~/.umami-admin-pass` del servidor (600). La de
+  fábrica (`umami`) ya no vale. Id del sitio: `edf47ff5-b6fd-4cde-a85a-4323e3968bfe`.
+- **Todo lo de analítica se resuelve en el BUILD** (NEXT_PUBLIC_* y rewrites), y
+  `.env` está en `.dockerignore`: la imagen se construye SIEMPRE con
+  `scripts/construir-imagen-produccion.sh`, que pasa los `--build-arg`. Un
+  `docker build` a secas deja la web sin medición y sin `/stats`.
+- **Medidor de lectura** (`components/blog/medidor-lectura.tsx`, en cada
+  artículo): eventos `lectura` (hito 25/50/75/100% del cuerpo), `lectura-tiempo`
+  (30 s, 1, 2, 3, 5 min de tiempo ACTIVO) y `lectura-fin` (por `sendBeacon`:
+  segundos, tramo y hasta dónde llegó). Verificado en producción el 18/09. Se
+  ven en el panel → Eventos, filtrando por la propiedad `articulo`.
+- Umami descarta agentes de bot: para probar con Playwright hay que poner un
+  User-Agent de navegador normal o el envío responde 200 y no guarda nada.
+
 ## 3. Cómo se despliega (comandos reales del 18/09)
 
 ```bash
@@ -70,7 +94,7 @@ ssh user_24bytes@80.190.77.63 'docker tag web-rescatada:latest web-rescatada:res
 rsync -ai --checksum --delete --exclude-from=exclusiones.txt ./ \
   user_24bytes@80.190.77.63:~/Documents/Proyectos/Portafolio/
 ssh user_24bytes@80.190.77.63 'cd ~/Documents/Proyectos/Portafolio && \
-  DOCKER_BUILDKIT=1 docker build -t web-rescatada:latest . && \
+  bash scripts/construir-imagen-produccion.sh && \
   docker compose -f docker-compose.deploy.yml up -d --force-recreate --no-deps portafolio-web && \
   docker exec proxy-app-1 nginx -s reload'
 ```
