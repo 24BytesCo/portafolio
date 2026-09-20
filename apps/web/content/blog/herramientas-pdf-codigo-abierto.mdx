@@ -1,0 +1,101 @@
+---
+title: "Por qué hice mis propias herramientas PDF y las publiqué como código abierto"
+description: "Las redes de muchas empresas bloquean los conversores de PDF en línea, y con razón. Hice una suite que procesa todo en el navegador, sin servidor, y la liberé para que cualquiera la use o la ejecute en su propio equipo."
+date: 2026-09-20
+author: Alexis Dorado Muñoz
+portada:
+  src: /images/blog/herramientas-pdf-codigo-abierto/portada.jpg
+  alt: "Portada de 24Bytes PDF: herramientas PDF que no suben tus archivos, de código abierto"
+  ancho: 1600
+  alto: 790
+cta:
+  titulo: "Úsala, clónala o mejórala"
+  texto: "Nueve herramientas PDF que funcionan en tu navegador. Gratis, sin registro y con el código a la vista."
+  href: "https://pdf.24bytes.pro"
+  etiqueta: "Abrir 24Bytes PDF"
+---
+
+Unir dos PDF. Sacar la página 4 de un documento. Bajarle el peso a un escaneo para que pase por el correo. Son tareas de dos minutos que casi todos resolvemos igual: se busca «unir pdf» en Google, se abre el primer resultado y se sube el archivo.
+
+Hasta que un día la página no abre, porque la red de la empresa la tiene bloqueada.
+
+## El bloqueo tiene sentido
+
+Lo noté trabajando en redes corporativas: los conversores de PDF más conocidos suelen estar en la lista de sitios bloqueados. Al principio molesta. Después uno entiende la razón.
+
+Esos servicios funcionan subiendo el archivo a un servidor ajeno, que lo procesa y lo devuelve. Para el área de seguridad de una empresa, eso es un empleado enviando contratos, nóminas, historias clínicas o cédulas de clientes a un tercero del que no sabe nada: dónde guarda los archivos, por cuánto tiempo, quién puede verlos. La forma más simple de evitarlo es bloquear el sitio.
+
+El problema es que la necesidad no desaparece. La gente sigue teniendo que unir dos PDF, y termina haciéndolo desde el celular con datos móviles o desde el computador de la casa, que es exactamente lo que la política quería evitar.
+
+<Nota titulo="La pregunta de fondo">
+
+Para unir dos PDF no hace falta un servidor. Un navegador moderno puede leer, modificar y guardar un PDF por sí solo. Si el archivo no tiene que salir del equipo, ¿por qué lo estamos subiendo?
+
+</Nota>
+
+## Así que hice la mía
+
+Empezó en 2025 como algo pequeño: una página para pasar imágenes a PDF que resolvía mi propia necesidad. Este año la convertí en [24Bytes PDF](https://pdf.24bytes.pro), una suite con nueve herramientas: unir, dividir, organizar páginas, comprimir, pasar imágenes o Markdown a PDF, exportar un PDF a imágenes, poner marca de agua y numerar páginas.
+
+La regla de diseño es una sola: **no hay servidor**. El sitio son archivos estáticos. Cuando cargas un PDF, el navegador lo lee en la memoria de tu equipo, lo procesa ahí y te entrega el resultado desde ahí. No existe un sitio al que el archivo pueda viajar, porque detrás de la página no hay nada que lo reciba.
+
+<Figura
+  src="/images/blog/herramientas-pdf-codigo-abierto/sitio.jpg"
+  alt="Portada de 24Bytes PDF con la rejilla de las nueve herramientas"
+  pie="Las nueve herramientas. Ninguna pide registro y ninguna envía el archivo a ninguna parte."
+  ancho={1600}
+  alto={1000}
+/>
+
+Se puede comprobar sin creerme: abre cualquier herramienta, desconecta el wifi y úsala. Funciona igual.
+
+<Figura
+  src="/images/blog/herramientas-pdf-codigo-abierto/organizar.jpg"
+  alt="Herramienta Organizar PDF mostrando las miniaturas de las páginas de un documento"
+  pie="Organizar PDF: las miniaturas se dibujan en el navegador y las páginas se reordenan, rotan o eliminan sin que el documento salga del equipo."
+  ancho={1600}
+  alto={1000}
+/>
+
+## Por qué código abierto
+
+Decir «no subimos tus archivos» es fácil. Lo dice cualquiera. La única forma honesta de sostenerlo es dejar que lo revisen, así que el código está publicado en [GitHub](https://github.com/24BytesCo/images-to-PDF) con licencia MIT.
+
+Eso cambia tres cosas.
+
+**Se puede auditar.** El área de seguridad de una empresa no tiene que confiar en mi palabra: puede leer el código y ver que no hay ninguna llamada que envíe el documento. No usa un framework ni un paso de compilación que esconda lo que pasa; es HTML, CSS y JavaScript legibles, con las librerías incluidas en el repositorio en lugar de cargarlas de un CDN.
+
+**Se puede ejecutar en local.** Si tu red bloquea también mi sitio, o si simplemente prefieres no depender de nadie, lo clonas y lo abres en tu propio equipo. No hay nada que instalar aparte de algo que sirva los archivos:
+
+```bash
+git clone https://github.com/24BytesCo/images-to-PDF.git
+cd images-to-PDF
+python3 -m http.server 8765
+```
+
+Abres `http://localhost:8765` y tienes la suite completa funcionando sin internet. Una empresa puede dejarla en su intranet y darle a su gente una alternativa aprobada, en vez de solo un bloqueo.
+
+**Se puede mejorar.** Cada herramienta son tres archivos: uno con los textos, uno con la interfaz y uno con la lógica. Si a alguien le falta una función, puede añadirla y proponerla, o quedarse con su propia versión.
+
+## Lo que no hace, dicho sin rodeos
+
+Trabajar sin servidor tiene límites, y prefiero decirlos antes de que alguien los descubra con un documento importante.
+
+- **Comprimir** vuelve a dibujar cada página como imagen. Reduce mucho los escaneos y los PDF con fotos, pero el texto deja de ser seleccionable, y un PDF que salió de Word puede quedar más pesado. La herramienta mide el resultado y, si no hubo ahorro, lo avisa en lugar de entregar un archivo peor.
+- **No hay PDF a Word.** Sin un servidor no se puede reconstruir bien el formato, y prefiero no ofrecer algo que salga mal.
+- **Los PDF protegidos con contraseña** no se pueden abrir. Se avisa y no se genera nada.
+- El tope de tamaño lo pone la memoria del dispositivo, no un plan de pago.
+
+<Figura
+  src="/images/blog/herramientas-pdf-codigo-abierto/markdown.jpg"
+  alt="Herramienta Markdown a PDF con el editor a la izquierda y la vista previa a la derecha"
+  pie="Markdown a PDF genera texto real y buscable, con tablas, código y enlaces, no una captura de la vista previa."
+  ancho={1600}
+  alto={1000}
+/>
+
+## Un aporte a la comunidad
+
+Llevo años usando software libre para trabajar: los lenguajes, las bases de datos, los servidores y hasta las librerías con las que está hecha esta suite son el trabajo de gente que decidió compartirlo. Esta es una forma pequeña de devolver algo.
+
+Si te sirve, úsala. Si tu empresa bloquea los conversores, pásale el enlace del repositorio a quien administra la red. Y si te falta una herramienta, en la portada hay un formulario que me llega directo al correo.
