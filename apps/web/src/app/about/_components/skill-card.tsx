@@ -59,7 +59,7 @@ export default function SkillCard({
             <div className="flex items-center justify-between gap-2">
               <DialogImage
                 src={thumbnail ?? "/placeholder.svg"}
-                alt={`An image which depicts the skill (${name})`}
+                alt={`Ilustración de la habilidad: ${name}`}
                 className="h-12 w-12 object-cover object-top"
                 style={{
                   borderRadius: "4px",
@@ -91,7 +91,7 @@ export default function SkillCard({
         >
           <DialogImage
             src={thumbnail ?? "/placeholder.svg"}
-            alt={`An image which depicts the skill (${name})`}
+            alt={`Ilustración de la habilidad: ${name}`}
             className="h-full w-full"
           />
           <div className="flex flex-col gap-2 p-6">
