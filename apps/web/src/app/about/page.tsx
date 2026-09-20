@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import NextLink from "next/link";
 import SkillCard from "@/app/about/_components/skill-card";
 import Link from "@/components/fancy/link";
 import ImageTrail from "@/components/fancy/motion-trail";
@@ -108,26 +109,49 @@ export default function About() {
                 wordGap="0.2em"
                 className="font-serif text-4xl leading-[1.15] text-pretty sm:text-5xl md:text-5xl lg:text-5xl xl:text-5xl"
               >
-                Construyo software de calidad combinando arquitectura, buenas
-                prácticas y trabajo en equipo.
+                Construyo productos de software completos y los pongo en
+                producción.
               </TextReveal>
               <TextReveal
                 as="p"
                 className="text-muted-foreground text-base leading-relaxed sm:text-lg md:text-lg lg:text-xl xl:text-2xl"
               >
-                Full‑Stack Developer con 6 años de experiencia y 2 como Tech
-                Lead. Experto en .NET/C#, TypeScript/Angular, Node.js y bases de
-                datos (SQL Server y MongoDB). He liderado y desarrollado
-                soluciones en arquitectura N‑capas, DDD y microservicios,
-                aplicando Clean Code, pruebas y CI/CD con Azure DevOps. Me
-                enfoco en cumplir plazos con calidad, comunicar impedimentos a
-                tiempo y mantener al equipo alineado.
+                Full-Stack Developer con 9 años de experiencia, 2 como Tech
+                Lead, y fundador de 24Bytes. Mi trabajo se mide en lo que está
+                corriendo ahora mismo: un SaaS con más de 600.000 procesos de
+                contratación pública indexados que notifica por correo y
+                WhatsApp, una plataforma de rendición de cuentas en producción
+                para una alcaldía, y un pipeline multi-LLM donde las reglas
+                críticas viven en código y no en el prompt.
               </TextReveal>
-              <Button asChild variant={"outline"} className="rounded-full px-6">
-                <a href="resume.pdf" target="_blank">
-                  Ver CV <Icons.arrowUpRight className="ml-2 size-5" />
-                </a>
-              </Button>
+              <TextReveal
+                as="p"
+                className="text-muted-foreground text-base leading-relaxed sm:text-lg md:text-lg lg:text-xl xl:text-2xl"
+              >
+                A través de 24Bytes tomo proyectos de punta a punta: backend y
+                arquitectura en .NET, NestJS y Python; frontend en Angular y
+                Next.js; IA aplicada con validación y auditoría de sus
+                respuestas; e infraestructura con Docker, Cloudflare, CI/CD,
+                respaldos cifrados y monitoreo. Entrego el producto funcionando,
+                con su dominio, su despliegue y su documentación, no solo el
+                código. Cumplo plazos, aviso los impedimentos a tiempo y
+                documento las decisiones. También estoy abierto a roles senior o
+                de liderazgo técnico.
+              </TextReveal>
+              <div className="flex flex-wrap gap-2">
+                <Button asChild className="rounded-full px-6">
+                  <NextLink href="/#contact">Hablemos de tu proyecto</NextLink>
+                </Button>
+                <Button
+                  asChild
+                  variant={"outline"}
+                  className="rounded-full px-6"
+                >
+                  <a href="resume.pdf" target="_blank">
+                    Ver CV <Icons.arrowUpRight className="ml-2 size-5" />
+                  </a>
+                </Button>
+              </div>
             </div>
           </div>
         </div>

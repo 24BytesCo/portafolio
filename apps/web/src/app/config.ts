@@ -9,10 +9,14 @@ const metadata: Metadata = {
   site: {
     title: "Alexis Dorado Muñoz · 24Bytes",
     description:
-      "Portafolio de Alexis Dorado Muñoz, fundador de 24Bytes: productos propios en producción como SECOP Monitor, Legado Público y BetLab.",
+      "Alexis Dorado Muñoz, fundador de 24Bytes: software a medida de la idea a producción. SaaS, IA aplicada e infraestructura. Disponible para proyectos.",
     url: "https://24bytes.pro",
     keywords: [
       "portafolio",
+      "24Bytes",
+      "desarrollo de software a medida",
+      "NestJS",
+      "IA aplicada",
       "desarrollador full stack",
       ".NET",
       "C#",

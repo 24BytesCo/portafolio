@@ -24,24 +24,26 @@ function About() {
                 as="p"
                 className="max-w-[700px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400"
               >
-                Fundador de 24Bytes, donde construyo y opero productos propios
-                en producción: SECOP Monitor, Legado Público, BetLab e Imágenes
-                a PDF. También soy Tech Lead y Desarrollador Full Stack con 6
-                años de experiencia (2 como Líder Técnico). Trabajo con .NET/C#,
-                TypeScript/Angular y Node.js; SQL Server y MongoDB; Git/GitHub y
-                Azure DevOps. Aplico DDD, N‑capas y microservicios, Entity
-                Framework, Clean Code y Scrum. Me tomo en serio los plazos y la
-                calidad, comunico impedimentos a tiempo y disfruto ayudar a
-                crecer a perfiles junior.
+                Construyo productos de software completos y los pongo en
+                producción: de la idea al dominio, el cobro, el despliegue y el
+                SEO. Soy Full-Stack Developer con 9 años de experiencia, 2 como
+                Tech Lead, y fundador de 24Bytes, el estudio desde el que
+                desarrollo proyectos para empresas y entidades públicas. Lo que
+                ofrezco se puede ver funcionando: SECOP Monitor, Legado Público,
+                BetLab y 24Bytes PDF. Si tienes un producto por construir,
+                hablemos.
               </TextReveal>
-              <div className="flex gap-2">
+              <div className="flex flex-wrap gap-2">
+                <Button asChild>
+                  <Link href="/#contact">Hablemos de tu proyecto</Link>
+                </Button>
+                <Button asChild variant={"outline"}>
+                  <Link href="/about">Ver más</Link>
+                </Button>
                 <Button asChild variant={"outline"}>
                   <a href="resume.pdf" target="_blank">
                     Ver CV <Icons.arrowUpRight className="ml-2 size-5" />
                   </a>
-                </Button>
-                <Button asChild>
-                  <Link href="/about">Ver más</Link>
                 </Button>
               </div>
             </div>
