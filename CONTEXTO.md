@@ -119,6 +119,16 @@ secop.24bytes.pro** y a los demás subdominios.
   HTML → PNG → WebP. Regla al editarlas: solo lo que está en producción de
   verdad (se quitaron «colas» y «proveedor de respaldo» por no constar).
 
+- **Experiencia y segunda entrada del blog** (sesión General, 20/09, `069dcdd`,
+  desplegado): `sections/experience/config.ts` rehecho desde el PDF de
+  LinkedIn de Alexis (24Bytes desde 2024-02, Inter Rapidísimo desde 2025-11 sin
+  descripción ni logo porque LinkedIn no la trae, Double V hasta 2025-08,
+  DIGITALWARE en dos etapas, S&P hasta 2022-04, Atik hasta 2021-09, consultor
+  privado 2019-2024, Inbox Tienda Virtual, everis). Fuera a propósito los cargos
+  no técnicos (Pignick, La Papal, Progresar, Solutec). Entrada
+  `content/blog/herramientas-pdf-codigo-abierto.mdx` con imágenes en
+  `public/images/blog/herramientas-pdf-codigo-abierto/`.
+
 ## 3. Cómo se despliega (comandos reales del 18/09)
 
 ```bash
