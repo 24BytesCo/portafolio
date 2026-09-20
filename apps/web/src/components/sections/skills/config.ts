@@ -11,7 +11,7 @@ const skills: Skill[] = [
   {
     name: "NestJS / Node.js",
     thumbnail: "/images/skills/v2/nestjs.webp",
-    description: `Backends en NestJS con Prisma: APIs REST, colas y tareas programadas, webhooks de pago, autenticación con Firebase y validación estricta de entrada. Es el motor de SECOP Monitor y BetLab.`,
+    description: `Backends en NestJS con Prisma: APIs REST, tareas programadas, webhooks de pago, autenticación con Firebase y validación estricta de entrada. Es el motor de SECOP Monitor y BetLab.`,
   },
   {
     name: "Angular / TypeScript / Next.js",
@@ -21,7 +21,7 @@ const skills: Skill[] = [
   {
     name: "IA aplicada con LLM",
     thumbnail: "/images/skills/v2/ia.webp",
-    description: `Pipelines con OpenAI, Gemini y Claude donde las reglas críticas viven en código y no en el prompt: validación y auditoría de cada respuesta, proveedor de respaldo, control de costos y embeddings locales para búsqueda semántica.`,
+    description: `Pipelines con OpenAI, Gemini y Claude donde las reglas críticas viven en código y no en el prompt: validación y auditoría de cada respuesta, control de costos y embeddings locales para búsqueda semántica.`,
   },
   {
     name: "Python y automatización",
