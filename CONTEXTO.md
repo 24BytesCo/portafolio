@@ -113,6 +113,12 @@ secop.24bytes.pro** y a los demás subdominios.
   salió a español (`d97cc82`). **Sin revisar**: `public/resume.pdf` puede seguir
   diciendo 6 años.
 
+- **Habilidades** (sesión General, 20/09, `63c368d` + corrección, desplegado):
+  de 4 a 8 en `sections/skills/config.ts` (una sola lista para portada y
+  `/about`), miniaturas nuevas en `public/images/skills/v2/` generadas con
+  HTML → PNG → WebP. Regla al editarlas: solo lo que está en producción de
+  verdad (se quitaron «colas» y «proveedor de respaldo» por no constar).
+
 ## 3. Cómo se despliega (comandos reales del 18/09)
 
 ```bash
