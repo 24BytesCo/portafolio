@@ -95,6 +95,11 @@ secop.24bytes.pro** y a los demás subdominios.
 - Umami descarta agentes de bot: para probar con Playwright hay que poner un
   User-Agent de navegador normal o el envío responde 200 y no guarda nada.
 
+- **`POST /api/contacto`** (sesión General, 20/09, commit `6ff4d2b`, desplegado;
+  respaldo `web-rescatada:respaldo-20260920`): recibe el formulario de
+  `pdf.24bytes.pro` (GitHub Pages, sin backend) y lo manda por Resend. Origen en
+  lista cerrada (`ORIGENES`), honeypot, Zod y 5 envíos/hora por IP en memoria.
+
 ## 3. Cómo se despliega (comandos reales del 18/09)
 
 ```bash
