@@ -1,11 +1,13 @@
-import { render } from '@react-email/render'
+import { render } from "@react-email/render";
 
-import Contact from './templates/contact'
+import Contact from "./templates/contact";
 
 interface ContactEmailInput {
-  name: string
-  email: string
-  message: string
+  name: string;
+  email: string;
+  message: string;
+  /** Sitio desde el que se escribió; la plantilla usa el portafolio por defecto. */
+  sitio?: string;
 }
 
 /**
@@ -14,10 +16,10 @@ interface ContactEmailInput {
  * antes lo hacía Resend internamente al recibir `react:`).
  */
 export async function renderContactEmail(input: ContactEmailInput) {
-  const element = Contact(input)
+  const element = Contact(input);
   const [html, text] = await Promise.all([
     render(element),
     render(element, { plainText: true }),
-  ])
-  return { html, text }
+  ]);
+  return { html, text };
 }

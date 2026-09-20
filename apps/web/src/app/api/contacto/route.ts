@@ -98,7 +98,12 @@ export async function POST(req: Request) {
     );
   }
 
-  const { html, text } = await renderContactEmail({ name, email, message });
+  const { html, text } = await renderContactEmail({
+    name,
+    email,
+    message,
+    sitio,
+  });
   const resultado = await enviarConResend(
     {
       from: env.EMAIL_FROM,
