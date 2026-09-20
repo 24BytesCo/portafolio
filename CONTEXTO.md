@@ -106,6 +106,13 @@ secop.24bytes.pro** y a los demás subdominios.
   Pendiente ligado: cuando haya cuenta de AdSense, `public/ads.txt` va AQUÍ
   (Google lo lee de la raíz `24bytes.pro` también para los subdominios).
 
+- **«Sobre mí» orientado a proyectos con 24Bytes** (sesión General, 20/09,
+  `cf9c0fc`, desplegado): portada y `/about` con el texto del «Acerca de» de
+  LinkedIn (9 años, 2 como Tech Lead), botón «Hablemos de tu proyecto» →
+  `/#contact`, descripción y palabras clave del sitio. El correo de contacto
+  salió a español (`d97cc82`). **Sin revisar**: `public/resume.pdf` puede seguir
+  diciendo 6 años.
+
 ## 3. Cómo se despliega (comandos reales del 18/09)
 
 ```bash
