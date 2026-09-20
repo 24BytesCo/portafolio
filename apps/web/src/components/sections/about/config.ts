@@ -29,10 +29,11 @@ const products: Product[] = [
     website: "https://www.youtube.com/@BetLabModel",
   },
   {
-    name: "Imágenes a PDF",
-    description: "Herramienta web gratuita para convertir imágenes a PDF.",
+    name: "24Bytes PDF",
+    description:
+      "Herramientas PDF que funcionan en el navegador, sin subir archivos.",
     slug: "images-to-pdf",
-    website: "https://24bytesco.github.io/images-to-PDF/",
+    website: "https://pdf.24bytes.pro",
   },
 ];
 

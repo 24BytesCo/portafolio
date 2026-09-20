@@ -1,27 +1,40 @@
 ---
-title: Imágenes a PDF
-description: Herramienta web gratuita que convierte y une imágenes JPG y PNG en un PDF procesándolo todo en el navegador. Nada se sube a ningún servidor.
+title: 24Bytes PDF
+description: "Suite de herramientas PDF que funciona entera en el navegador: unir, dividir, comprimir, Markdown a PDF, JPG a PDF y más. Los archivos nunca se suben a un servidor."
 thumbnail: /images/projects/images-to-pdf/cover.jpg
-date: 2025-11-30
-website: https://24bytesco.github.io/images-to-PDF/
+date: 2026-09-20
+website: https://pdf.24bytes.pro/
 github: https://github.com/24BytesCo/images-to-PDF
 tags:
   - label: JavaScript
   - label: PDF
   - label: Client-side
+  - label: pdf-lib
+  - label: pdf.js
   - label: GitHub Pages
 ---
 
-## Qué hace
+## Qué es
 
-Seleccionas varias imágenes, las ordenas y descargas un único PDF. Todo ocurre en el navegador: los archivos nunca salen del equipo, así que sirve para documentos con datos personales o de clientes.
+[24Bytes PDF](https://pdf.24bytes.pro/) reúne las tareas de todos los días con un PDF en un solo sitio, con una diferencia frente a los conversores conocidos: **no hay servidor**. El archivo se lee, se procesa y se descarga dentro del navegador, así que un contrato, una cédula escaneada o una historia clínica nunca viajan por internet. Se puede comprobar desconectando el wifi después de cargar la página: todo sigue funcionando.
 
-## Por qué existe
+Empezó en 2025 como una utilidad para pasar imágenes a PDF y en septiembre de 2026 se convirtió en una suite completa.
 
-Las herramientas en línea para esto suben los archivos a un servidor de terceros. Esta no tiene servidor: es HTML y JavaScript servidos como estáticos desde GitHub Pages, sin cuentas, sin límites artificiales y sin publicidad.
+## Herramientas
 
-## Detalles
+- [Unir PDF](https://pdf.24bytes.pro/unir-pdf/) y [dividir PDF](https://pdf.24bytes.pro/dividir-pdf/), incluido [extraer páginas](https://pdf.24bytes.pro/extraer-paginas-pdf/) por rango.
+- [Organizar PDF](https://pdf.24bytes.pro/organizar-pdf/): reordenar, [rotar](https://pdf.24bytes.pro/rotar-pdf/), duplicar y [eliminar páginas](https://pdf.24bytes.pro/eliminar-paginas-pdf/) sobre miniaturas.
+- [Markdown a PDF](https://pdf.24bytes.pro/markdown-a-pdf/) con texto real y buscable, tablas, código y enlaces; no una captura de la vista previa.
+- [Imágenes a PDF](https://pdf.24bytes.pro/imagenes-a-pdf/), con entradas propias para [JPG a PDF](https://pdf.24bytes.pro/jpg-a-pdf/) y [foto a PDF desde el celular](https://pdf.24bytes.pro/foto-a-pdf/).
+- [PDF a imágenes](https://pdf.24bytes.pro/pdf-a-imagenes/) en JPG o PNG, a 72, 150 o 300 ppp.
+- [Comprimir PDF](https://pdf.24bytes.pro/comprimir-pdf/), pensada para escaneos y fotos: compara el peso antes y después, y si no hubo ahorro lo dice en lugar de entregar un archivo peor.
+- [Marca de agua](https://pdf.24bytes.pro/marca-de-agua-pdf/) y [numeración de páginas](https://pdf.24bytes.pro/numerar-paginas-pdf/), con vista previa.
 
-- Conversión y unión en el cliente con generación del PDF en memoria.
-- Reordenamiento de páginas antes de exportar.
-- Código abierto en GitHub.
+## Cómo está hecho
+
+- Sitio estático sin framework: HTML, CSS y JavaScript, con las librerías incluidas en el repositorio (pdf-lib, pdf.js, jsPDF, pdfmake, marked, DOMPurify y JSZip). Nada se carga de un CDN.
+- Un generador en Python sin dependencias arma cada página a partir de un JSON con su contenido y un fragmento HTML con su interfaz, y escribe el sitemap, los datos estructurados y la página 404.
+- Las librerías pesadas se cargan al primer uso: la página de Markdown abre con 23 KB de JavaScript y trae pdfmake solo al exportar.
+- Lighthouse en móvil: rendimiento entre 94 y 100, y 100 en SEO y buenas prácticas.
+- Analítica propia sin cookies, y un formulario de contacto que llega a un endpoint de este mismo portafolio en lugar de pasar por un tercero.
+- Cada herramienta se probó con Playwright contra archivos reales: páginas contadas, texto extraído y descargas verificadas, en escritorio y a 390 px.
