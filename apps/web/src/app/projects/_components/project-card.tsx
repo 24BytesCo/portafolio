@@ -33,7 +33,7 @@ function ProjectCard({
   return (
     <Card
       className={cn(
-        "relative flex h-full flex-col justify-between border border-zinc-950/10 bg-white dark:border-zinc-50/10 dark:bg-zinc-900",
+        "group relative flex h-full flex-col justify-between border border-zinc-950/10 bg-white dark:border-zinc-50/10 dark:bg-zinc-900",
         className,
       )}
     >
@@ -42,14 +42,14 @@ function ProjectCard({
           {thumbnail ? (
             <AspectRatio
               ratio={16 / 9}
-              className="z-2 mb-2 inline-block overflow-hidden rounded-md"
+              className="mb-2 inline-block overflow-hidden rounded-md"
             >
               <Image
                 src={thumbnail}
-                alt={`Image of ${title}`}
+                alt={`Imagen de ${title}`}
                 fill
                 unoptimized
-                className="object-cover transition-transform duration-300 hover:scale-105"
+                className="object-cover transition-transform duration-300 group-hover:scale-105"
               />
             </AspectRatio>
           ) : null}
