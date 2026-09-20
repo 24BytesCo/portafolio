@@ -100,6 +100,12 @@ secop.24bytes.pro** y a los demás subdominios.
   `pdf.24bytes.pro` (GitHub Pages, sin backend) y lo manda por Resend. Origen en
   lista cerrada (`ORIGENES`), honeypot, Zod y 5 envíos/hora por IP en memoria.
 
+- **Ficha `images-to-pdf` → «24Bytes PDF»** (sesión General, 20/09, `90e7d0e`,
+  desplegado): mismo slug para no romper la URL, 15 enlaces a las herramientas
+  de `pdf.24bytes.pro` y dominio nuevo en el bloque de productos de la portada.
+  Pendiente ligado: cuando haya cuenta de AdSense, `public/ads.txt` va AQUÍ
+  (Google lo lee de la raíz `24bytes.pro` también para los subdominios).
+
 ## 3. Cómo se despliega (comandos reales del 18/09)
 
 ```bash
