@@ -1,0 +1,167 @@
+---
+title: "Una fábrica de videos para monetizar un canal de YouTube casi sin tocarlo"
+description: "Cómo construí un sistema privado que investiga, escribe, narra con mi voz, publica y mide un canal de YouTube cada día. Hoy corre en un canal de fútbol; está hecho para adaptarse a cualquier nicho."
+date: 2026-09-29
+author: Alexis Dorado Muñoz
+portada:
+  src: /images/blog/fabrica-de-videos-youtube/portada.jpg
+  alt: "Escena de un video generado por la fábrica: una ilustración a mano con un título resaltado en amarillo"
+  ancho: 1600
+  alto: 790
+cta:
+  titulo: "¿Quieres una fábrica así para tu nicho?"
+  texto: "Cuéntame de qué trata tu canal y te digo qué partes de este sistema te sirven."
+  href: "https://24bytes.pro/#contact"
+  etiqueta: "Hablemos"
+---
+
+Monetizar un canal de YouTube tiene una regla clara: 1.000 suscriptores y 4.000 horas de reproducción de videos largos en los últimos doce meses. Llegar ahí publicando a mano es un segundo trabajo. Hay que buscar el tema, investigarlo, escribir el guion, grabar la voz, editar, hacer la miniatura, escribir el título, subir, programar y, al final, mirar las estadísticas para saber qué funcionó.
+
+Construí un sistema que hace todo eso solo. Lo llamo la fábrica de videos. Es un proyecto privado, no un producto a la venta, y su único propósito es llevar un canal a la monetización con el menor trabajo humano posible. Hoy lo alimenta un canal de fútbol en español, pero nada en su diseño depende del fútbol: cambia la fuente de temas y el estilo del libreto, y sirve para finanzas, historia, tecnología o cualquier nicho que viva de explicar cosas.
+
+Este artículo cuenta cómo está hecho, módulo por módulo.
+
+## La idea: una línea de producción, no un editor con prisa
+
+La mayoría de las herramientas de video con IA resuelven una pieza: te generan un guion, o una voz, o una miniatura. El problema de un canal no es ninguna pieza por separado, es la cadena completa repetida todos los días sin que nadie la empuje.
+
+Por eso la fábrica está pensada como una línea de producción. Cada etapa deja su resultado en un sitio conocido, la siguiente lo recoge, y un tablero muestra en qué punto va cada video. Si algo falla, se corta la corrida, se descarta lo malo y se regenera. Prefiero no publicar a publicar un error.
+
+<Figura
+  src="/images/blog/fabrica-de-videos-youtube/hoy.jpg"
+  alt="Tablero Hoy de la fábrica de videos con los partidos del día y el estado de cada largo y cada short"
+  pie="El tablero del día: qué se seleccionó, qué largos y shorts ya están publicados y qué sigue pendiente. Nadie tiene que preguntar en qué va la producción."
+  ancho={1600}
+  alto={1000}
+/>
+
+## Módulo 1: encontrar de qué hablar
+
+Un canal vive de sus temas. La fábrica tiene dos fuentes.
+
+La primera es el calendario: en un canal deportivo, los partidos del día. Un puntaje de atractivo decide cuáles merecen video según la liga, el país y lo que históricamente ha traído audiencia. Las ligas que nunca rinden quedan fuera por código, no por intuición.
+
+La segunda es la actualidad. Cada madrugada, un agente de investigación rastrea la prensa de los últimos tres días. Trabaja como el modo Research de Claude: un agente principal reparte el trabajo entre cuatro subagentes que buscan en paralelo, cada uno en un frente distinto (prensa nacional, medios deportivos, protagonistas en el exterior, los clubes grandes). Juntan lo encontrado, confirman cada hecho en al menos dos fuentes y proponen entre ocho y doce temas con un resumen, el ángulo polémico y un puntaje de interés.
+
+<Figura
+  src="/images/blog/fabrica-de-videos-youtube/polemicas.jpg"
+  alt="Página de polémicas con los temas propuestos por el buscador, su puntaje, sus fuentes y los botones Crear video y Descartar"
+  pie="Los temas que propuso el buscador esa madrugada, ordenados por puntaje y con sus fuentes. Un botón los convierte en video; otro los descarta."
+  ancho={1600}
+  alto={1000}
+/>
+
+A las 5:30 el código elige el mejor tema del día y lo manda a producción. Si quiero uno en particular, lo escribo en la misma página y pulso «Investigar y crear video». La fábrica guarda todo lo que ya se hizo, así que no repite temas aunque lleguen redactados de otra forma.
+
+## Módulo 2: investigar y escribir
+
+Con el tema elegido, otro agente hace la investigación de fondo. Parte el asunto en cuatro ángulos (los hechos y la cronología, las declaraciones textuales, las versiones enfrentadas, el contexto y lo que pasó después), lanza un subagente por ángulo y reúne entre 25 y 40 fuentes. La regla es no inventar nada: cada dato sale de una fuente, y lo que solo aparece en una fuente dudosa no entra.
+
+El resultado es un ensayo de unas dos mil palabras, escrito para ser narrado: prosa corrida, sin viñetas ni tablas, con una postura clara y un gancho en la primera frase. También se puede saltar este paso y pegar material propio en «Crear desde material»: una transcripción, unas notas o una noticia.
+
+<Figura
+  src="/images/blog/fabrica-de-videos-youtube/crear-material.jpg"
+  alt="Formulario Crear desde material con los campos de material, enfoque y título sugerido, y la cola de pedidos debajo"
+  pie="Cualquier texto se convierte en video: se pega el material, se escribe el enfoque y la fábrica hace el resto. Los pedidos se generan en orden y se publican solos al terminar."
+  ancho={1600}
+  alto={1000}
+/>
+
+A partir del ensayo, un modelo de lenguaje escribe el libreto en dos pasos: primero un monólogo continuo, con la promesa del final en la introducción y un cambio de ritmo cada minuto o minuto y medio para sostener la atención, y después ese monólogo partido en escenas con su título, su ilustración y su texto en pantalla.
+
+## Módulo 3: la voz
+
+Los videos no usan una voz sintética genérica. Usan la mía, clonada con VoxCPM2, un modelo de código abierto, a partir de una grabación limpia de un par de minutos. Para que suene natural, la referencia es un libreto con preguntas y cambios de tono, porque el modelo copia la entonación y el ambiente de lo que escucha, incluido el ruido de fondo.
+
+Las pausas tampoco se meten a mano. El texto se marca de forma que el propio modelo respire donde debe: una pausa larga después de cada punto, una corta en cada coma. Las horas, las fechas y las siglas se escriben como se pronuncian antes de narrarlas.
+
+La voz corre en una GPU alquilada por horas en Runpod que se enciende solo cuando hay audio pendiente y se apaga al terminar. Antes de apagarla, el sistema comprueba que no quede ningún trabajo a medias. Una noche normal de producción cuesta centavos de dólar.
+
+## Módulo 4: el video y la miniatura
+
+Cada escena se dibuja como una página de cuaderno: fondo cuadriculado, una ilustración a mano, el título resaltado y figuras pequeñas en los bordes. Las ilustraciones se reutilizan desde una biblioteca para no pagar dos veces por la misma imagen, y los escudos y banderas salen de una API de datos deportivos. Todo se compone con Pillow y se une con ffmpeg.
+
+<Figura
+  src="/images/blog/fabrica-de-videos-youtube/video-cuaderno.jpg"
+  alt="Escena de un video de la fábrica con una bandera dibujada a mano y un texto en pantalla"
+  pie="Una escena de un video largo. El capítulo va arriba a la izquierda y el dato clave abajo, para quien ve sin sonido."
+  ancho={1600}
+  alto={840}
+/>
+
+Cada video largo sale en pareja con un short de libreto propio, que se publica después del largo y apunta a él como video relacionado. Los shorts traen suscriptores; los largos traen las horas que cuentan para monetizar.
+
+La miniatura la hace otro agente. Todos los días a las 4:00 abre el chat de Gemini de mi suscripción, le pasa el título y el resumen del libreto y pide una miniatura. Después la mira: revisa letra por letra que el texto esté bien escrito, que las camisetas y banderas correspondan y que no haya manos deformes. Si algo falla, pide un ajuste concreto; si tras tres intentos sigue mal, no sube nada y me lo cuenta en el correo del día.
+
+<Figura
+  src="/images/blog/fabrica-de-videos-youtube/miniatura-agente.jpg"
+  alt="Miniatura generada por el agente con el texto Dura caída, análisis sin filtro, y un jugador arrodillado en un estadio"
+  pie="Una miniatura aprobada por el agente. Las miniaturas de las polémicas llevan además dos variantes para la prueba A/B de YouTube."
+  ancho={1280}
+  alto={720}
+/>
+
+<Figura
+  src="/images/blog/fabrica-de-videos-youtube/miniaturas.jpg"
+  alt="Página de miniaturas con la cuadrícula de videos del canal y un botón Regenerar miniatura en cada uno"
+  pie="Desde el tablero se puede pedir una miniatura nueva para cualquier video, con una indicación opcional de en qué debe enfocarse."
+  ancho={1600}
+  alto={1000}
+/>
+
+## Módulo 5: publicar
+
+YouTube no ofrece una API cómoda para todo lo que hace falta, así que la subida la hace un navegador automatizado con Playwright sobre el mismo Chrome del canal. Sube el archivo, espera la confirmación de Studio de que el procesamiento terminó (sin esa confirmación no se publica nada), pone la descripción, la miniatura, los tres títulos de la prueba A/B y el video relacionado, y programa la hora.
+
+Las polémicas salen en tres horarios fijos. Los títulos se reescriben solos cuando cambia el día: un video que anunciaba un partido «este jueves» pasa a decir «mañana» y luego «hoy».
+
+## Módulo 6: medir y decidir
+
+Todas las madrugadas se descargan las estadísticas de YouTube Studio y se cargan en la base de datos. Con eso, el tablero responde tres preguntas.
+
+¿Vamos a llegar? La página Meta separa las horas que cuentan (solo videos largos) de las que no, y calcula cuántas hacen falta por día para llegar antes de la fecha límite.
+
+<Figura
+  src="/images/blog/fabrica-de-videos-youtube/meta.jpg"
+  alt="Página Meta con las horas que cuentan para monetizar, el promedio de horas por día y el avance de suscriptores"
+  pie="La meta, sin adornos: horas válidas, el ritmo de los últimos siete días contra el que hace falta, y cuándo se llega a los mil suscriptores."
+  ancho={1600}
+  alto={1000}
+/>
+
+¿Qué funciona? Una tabla compara cada categoría de video por vistas, horas por video, porcentaje de clics y porcentaje visto. De ahí salieron decisiones concretas: recortar las ligas que no traen audiencia, dar prioridad a los temas investigados, que rinden mucho más por video que los videos de calendario, y dejar de lado formatos que no despegaban.
+
+<Figura
+  src="/images/blog/fabrica-de-videos-youtube/que-funciona.jpg"
+  alt="Página Qué funciona con la tabla de rendimiento por categoría de video"
+  pie="Rendimiento por categoría. Las decisiones de qué producir más y qué dejar de producir salen de aquí, no de la intuición."
+  ancho={1600}
+  alto={1000}
+/>
+
+¿Qué video está envejeciendo mejor? La vista de cohortes compara cada video contra los demás a la misma edad, para saber si un formato nuevo va mejor o peor que el anterior sin esperar meses.
+
+## Las tecnologías
+
+- **Tablero y API:** Angular 18 con componentes standalone y signals, NestJS 11 y Prisma sobre PostgreSQL.
+- **Producción:** un worker en Python 3.12 que arma libretos, escenas y videos con Pillow y ffmpeg.
+- **Voz:** VoxCPM2 en una GPU de Runpod que se enciende a demanda.
+- **Agentes:** Claude Code sin ventana, con Opus para investigar y Sonnet para las tareas rutinarias. Cada agente tiene solo las herramientas que necesita y guarda la transcripción completa de su corrida para depurar.
+- **Imágenes:** Gemini, a través de la suscripción, y una biblioteca de ilustraciones reutilizables.
+- **Publicación:** Playwright sobre Chrome, con un candado que impide que dos procesos toquen Studio a la vez.
+- **Orquestación:** temporizadores de systemd para cada etapa, correos de resumen por Resend y alertas cuando algo falla.
+- **Infraestructura:** Docker Compose en un servidor propio, sin ningún puerto abierto a internet. El tablero se publica por un túnel de Cloudflare con acceso restringido.
+
+## Lo que aprendí
+
+**Las reglas van en el código, no en el prompt.** Cuando un modelo debe no hablar de apuestas, no repetir un tema o no publicar un video sin confirmar la subida, eso se valida con código. El prompt ayuda; el código garantiza.
+
+**Un agente necesita ojos, no solo manos.** El agente de miniaturas funciona porque mira lo que produjo antes de subirlo. Los primeros intentos sin revisión publicaban palabras mal escritas y camisetas equivocadas.
+
+**Medir antes de producir más.** Producir mucho es fácil cuando todo es automático. Lo difícil es saber qué merece la pena producir. Sin la página de rendimiento, el canal seguiría llenándose de videos que nadie ve.
+
+**Todos los formatos, un solo camino.** Cada vez que un formato tuvo su propio atajo, terminó saliendo con la voz vieja o el estilo equivocado. Hoy todos pasan por la misma voz, el mismo libreto y el mismo control de calidad.
+
+## Adaptarlo a otro nicho
+
+Lo específico del fútbol está en tres piezas: la fuente de temas (el calendario de partidos y la prensa deportiva), el tono del libreto y las ilustraciones. Todo lo demás, la investigación con fuentes, la voz, el montaje, las miniaturas, la publicación y la medición, funciona igual para un canal de finanzas personales, de historia o de tecnología. Cambiar de nicho es reescribir esas tres piezas, no construir otra fábrica.
