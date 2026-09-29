@@ -129,6 +129,13 @@ secop.24bytes.pro** y a los demás subdominios.
   `content/blog/herramientas-pdf-codigo-abierto.mdx` con imágenes en
   `public/images/blog/herramientas-pdf-codigo-abierto/`.
 
+- **29/09 (sesión Portafolio)**: artículo «Una fábrica de videos para
+  monetizar un canal de YouTube casi sin tocarlo» (`5f68d48`), escrito por
+  la sesión Videos Betlab y publicado aquí. No nombra el canal a propósito:
+  presumir de automatización puede perjudicar su revisión de monetización.
+  El CTA de un artículo apunta a `https://24bytes.pro/#contact` (el ancla es
+  `contact`, no `contacto`).
+
 ## 3. Cómo se despliega (comandos reales del 18/09)
 
 ```bash
@@ -215,7 +222,10 @@ navegador con `CI=1 corepack pnpm exec next start -p 3100` desde `apps/web`.
    https://search.google.com/search-console/sitemaps?resource_id=sc-domain%3A24bytes.pro
 4. Ficha de la demo de clínica (`clinica.24bytes.pro`) y del canal de vídeos:
    sin escribir por falta de datos fiables.
-5. Blog: una entrada publicada; cada guía técnica que enlace a SECOP suma.
+5. Blog: tres entradas publicadas (SECOP Monitor, herramientas PDF y la
+   fábrica de videos). Cada guía técnica que enlace a un producto suma.
+   Un artículo nuevo necesita SIEMPRE `public/images/blog/<slug>/cover.jpg`
+   a 1200×630: es lo que usan el índice y el `og:image`, y sin él salen rotos.
 6. CSP con nonces (scripts y estilos) si algún día se quiere cerrar más: hoy
    solo cubre frame-ancestors, base-uri, object-src y form-action.
 7. Variables que ya nadie lee en el `.env` del servidor (`DATABASE_URL`,
