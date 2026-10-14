@@ -34,6 +34,14 @@ export default function RootLayout({
   return (
     <html lang="es" suppressHydrationWarning>
       <head>
+        {/* AdSense: <script> plano, no next/script (AdSense rechaza el atributo data-nscript). */}
+        {env.NODE_ENV === "production" ? (
+          <script
+            async
+            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1072758812585458"
+            crossOrigin="anonymous"
+          />
+        ) : null}
         {env.NODE_ENV === "development" ? (
           <Script src="https://unpkg.com/react-scan/dist/auto.global.js" />
         ) : null}
