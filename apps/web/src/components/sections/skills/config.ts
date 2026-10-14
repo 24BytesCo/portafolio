@@ -24,6 +24,16 @@ const skills: Skill[] = [
     description: `Pipelines con OpenAI, Gemini y Claude donde las reglas críticas viven en código y no en el prompt: validación y auditoría de cada respuesta, control de costos y embeddings locales para búsqueda semántica.`,
   },
   {
+    name: "RAG y grafos de conocimiento",
+    thumbnail: "/images/skills/v2/rag.webp",
+    description: `Preguntas en lenguaje natural sobre un código base, respondidas con citas verificables: recuperación híbrida (léxica y semántica) con embeddings y pgvector, reordenamiento y fusión de resultados, y validación de cada cita contra el código real. Grafos de conocimiento desde el análisis estático con Roslyn y Neo4j con Cypher para ver el impacto de un cambio. La calidad se mide con Recall@k y MRR, no a ojo.`,
+  },
+  {
+    name: "WebAssembly y Web Workers",
+    thumbnail: "/images/skills/v2/wasm.webp",
+    description: `Trabajo pesado dentro del navegador y sin servidor: ffmpeg y libheif compilados a WebAssembly, corriendo en hilos aparte para que la página no se congele, con el núcleo servido desde almacenamiento propio y caché permanente. Es lo que mueve las 49 herramientas de 24Bytes, donde los archivos del usuario nunca se suben.`,
+  },
+  {
     name: "Python y automatización",
     thumbnail: "/images/skills/v2/python.webp",
     description: `Scripts y workers con asyncio y httpx, automatización de navegador con Playwright, ingesta de datos abiertos y generación automática de audio y video con ffmpeg.`,
