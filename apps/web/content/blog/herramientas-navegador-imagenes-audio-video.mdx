@@ -1,0 +1,102 @@
+---
+title: "Las herramientas que tenía en local ahora son 49, y el código está abierto"
+description: "Llevaba años resolviendo con scripts propios lo de convertir fotos del iPhone, comprimir un video o sacarle el audio a una grabación. Las pasé al navegador, sumé imágenes, audio y video a las de PDF, y lo publiqué todo con licencia MIT."
+date: 2026-10-14
+author: Alexis Dorado Muñoz
+portada:
+  src: /images/blog/herramientas-navegador-imagenes-audio-video/portada.jpg
+  alt: "Portada de 24Bytes Herramientas para imágenes, con la cuadrícula de utilidades"
+  ancho: 1600
+  alto: 790
+cta:
+  titulo: "Úsalas, clónalas o mejóralas"
+  texto: "49 utilidades de PDF, imágenes, audio y video que funcionan en tu navegador. Gratis, sin registro y con el código a la vista."
+  href: "https://pdf.24bytes.pro"
+  etiqueta: "Abrir las herramientas"
+---
+
+En septiembre conté [por qué hice mis propias herramientas de PDF y las publiqué como código abierto](/blog/herramientas-pdf-codigo-abierto): las redes corporativas bloquean los conversores en línea, y tienen razón, porque esos servicios funcionan subiendo tus archivos al servidor de un tercero.
+
+Lo que no conté es que el PDF era solo una parte. Las demás tareas las venía resolviendo hace años con lo mío: una carpeta de scripts de ffmpeg para comprimir un video que no cabía en WhatsApp, un comando para sacarle el MP3 a una grabación, otro para convertir las fotos HEIC del iPhone a JPG, un atajo para quitarle los datos de ubicación a una imagen antes de mandarla. Funcionaban, pero solo en mi equipo y solo si uno se acuerda de la sintaxis.
+
+Este mes los pasé al navegador. Hoy son **49 herramientas repartidas en cuatro sitios**, con la misma regla de siempre: el archivo no sale de tu equipo. Y el código sigue abierto, con licencia MIT.
+
+## Lo que ya estaba: PDF
+
+<Figura
+  src="/images/blog/herramientas-navegador-imagenes-audio-video/pdf.jpg"
+  alt="Portada de 24Bytes PDF con las diez herramientas en cuadrícula"
+  pie="Las diez de PDF: unir, dividir, organizar, comprimir, marca de agua, numerar páginas, imágenes a PDF, Markdown a PDF, PDF a imágenes y el preparador de ofertas del SECOP II."
+  ancho={1600}
+  alto={1000}
+/>
+
+## Lo nuevo: imágenes
+
+Quince utilidades. La que más uso yo: **HEIC a JPG**, porque las fotos del iPhone llegan en un formato que medio mundo no abre. También comprimir, convertir, redimensionar, recortar, rotar, unir varias en una, marca de agua, pixelar una cara o una placa, generar un favicon, sacar la paleta de colores de una imagen y hacer códigos QR.
+
+Hay una que no es de diseño sino de privacidad: **quitar los datos EXIF**. Una foto tomada con el celular lleva dentro el modelo del equipo, la fecha y, muchas veces, las coordenadas exactas de dónde se tomó. Publicarla tal cual es publicar esa información.
+
+<Figura
+  src="/images/blog/herramientas-navegador-imagenes-audio-video/imagenes.jpg"
+  alt="Portada de 24Bytes Herramientas para imágenes con sus quince utilidades"
+  pie="Imágenes: de la conversión de HEIC al generador de QR, pasando por quitar los datos EXIF antes de publicar una foto."
+  ancho={1600}
+  alto={1000}
+/>
+
+## Lo nuevo: audio y video
+
+Once de audio y trece de video, que son las que antes resolvía a punta de comandos. Video a MP3, recortar, unir, cambiar la velocidad, quitar silencios, reducir ruido, normalizar el volumen, grabar la voz desde el micrófono. Y en video: comprimir —con un modo que apunta a un tamaño concreto, para que quepa en WhatsApp o en Discord—, recortar, unir, convertir a MP4, pasar a vertical 9:16, extraer fotogramas, cambiar o quitar el audio, video a GIF y grabar la pantalla.
+
+<Figura
+  src="/images/blog/herramientas-navegador-imagenes-audio-video/video.jpg"
+  alt="Portada de 24Bytes Herramientas para video con sus trece utilidades"
+  pie="Video: comprimir a un tamaño objetivo, pasar a vertical, extraer fotogramas o grabar la pantalla, sin instalar nada."
+  ancho={1600}
+  alto={1000}
+/>
+
+Esto es lo que más me costó, y vale la pena explicar por qué.
+
+Procesar video en el navegador significa meter ahí dentro el mismo motor que uno usa por consola: **ffmpeg compilado a WebAssembly**. El núcleo pesa 32 MB, así que no puede viajar con cada página. Se sirve desde un almacenamiento propio con caché permanente y solo se descarga cuando alguien abre una herramienta que lo necesita; la primera vez tarda, las siguientes ya no.
+
+Y como esa primera espera existe, la página la explica: muestra el avance, cuánto falta y por qué está tardando, en vez de dejar una rueda girando. Una espera que se entiende molesta mucho menos que una que no.
+
+<Figura
+  src="/images/blog/herramientas-navegador-imagenes-audio-video/audio.jpg"
+  alt="Portada de 24Bytes Herramientas para audio con sus once utilidades"
+  pie="Audio: sacar el MP3 de un video, recortar, unir, normalizar el volumen, quitar silencios o reducir el ruido de una grabación."
+  ancho={1600}
+  alto={1000}
+/>
+
+## La que no existía en ningún lado
+
+Quien se presenta a una licitación en Colombia conoce el trámite: la oferta se sube al SECOP II foliada y partida en archivos que no pasen de cierto peso. Eso, a mano, es una tarde.
+
+<Figura
+  src="/images/blog/herramientas-navegador-imagenes-audio-video/oferta-secop.jpg"
+  alt="Herramienta para preparar una oferta del SECOP II: une, folia y parte el PDF"
+  pie="Preparar oferta para SECOP II: une los documentos en el orden que le des, folia con numeración corrida de principio a fin y entrega los archivos por debajo de 50 MB."
+  ancho={1600}
+  alto={1000}
+/>
+
+La hice porque la necesitaba para [SECOP Monitor](/projects/secop-monitor), y porque no encontré ninguna que foliara con numeración corrida cuando el resultado queda partido en varios archivos.
+
+## Por qué abrirlo
+
+Son herramientas que ya tenía. Dejarlas en mi equipo no me daba nada que no tuviera, y publicarlas cuesta poco: son archivos estáticos.
+
+El código abierto aquí no es una postura, es la única forma de que la promesa sea verificable. Decir «tus archivos no se suben» no vale nada si nadie puede comprobarlo. Con el código a la vista, cualquiera revisa que no haya una petición escondida; y sin confiar en mí: basta con desconectar el wifi después de cargar la página y ver que todo sigue funcionando.
+
+Están en [GitHub](https://github.com/24BytesCo/images-to-PDF) con licencia MIT. Se pueden clonar, levantar en la red interna de una empresa o tomarles una pieza suelta. Si algo falta o falla, el repositorio tiene issues.
+
+## Lo que no hacen
+
+No hay OCR, no hay firma digital y no hay edición de texto dentro del PDF. Los archivos muy grandes dependen de la memoria del equipo: un video de dos horas en un portátil justo puede no terminar. Y la primera carga de las herramientas de audio y video descarga el motor, así que con una conexión lenta se siente.
+
+Nada de eso se arregla subiendo el archivo a un servidor ajeno. Se arregla, cuando toque, con mejores herramientas locales.
+
+En la [ficha del proyecto](/projects/images-to-pdf) está el detalle de cómo está hecho.
