@@ -158,6 +158,15 @@ secop.24bytes.pro** y a los demás subdominios.
   de septiembre. Respaldo de imagen `web-rescatada:respaldo-20261014-1748`.
   La hoja de vida manda: si cambia, se actualizan `resume.pdf`,
   `experience/config.ts` y el bloque de productos de `about/config.ts`.
+  Segunda tanda del día (`b1fe320`, `f814449`, `1df44aa`, respaldo
+  `respaldo-20261014-1800`): el logo de Inter Rapidísimo pasa a 630×303 —la
+  tarjeta pinta los logos a 130 px de ancho con alto automático, así que la
+  proporción tiene que ser la misma (2,08) o se ven de distinto tamaño—, la
+  portada de la ficha muestra los cuatro sitios, un producto puede declarar
+  varios dominios (`sitios` en `about/config.ts`) y se pintan en fila, y
+  Habilidades suma RAG con grafos de conocimiento y WebAssembly con sus
+  miniaturas (estilo de `/images/skills/v2`: fondo oscuro, halo de color,
+  sigla y pie; se generan con sharp).
 
 ## 3. Cómo se despliega (comandos reales del 18/09)
 
