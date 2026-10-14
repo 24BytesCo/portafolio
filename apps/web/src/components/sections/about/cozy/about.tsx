@@ -84,6 +84,19 @@ function About() {
                         <Icons.arrowUpRight className="size-3.5" />
                       </a>
                     ) : null}
+                    {product.sitios?.map((sitio) => (
+                      <a
+                        key={sitio.href}
+                        href={sitio.href}
+                        target="_blank"
+                        rel="noopener"
+                        aria-label={`Abrir ${sitio.etiqueta} de ${product.name} (se abre en una pestaña nueva)`}
+                        className="inline-flex items-center gap-1 font-medium underline underline-offset-4 hover:text-zinc-950 dark:hover:text-zinc-50"
+                      >
+                        {sitio.etiqueta}
+                        <Icons.arrowUpRight className="size-3.5" />
+                      </a>
+                    ))}
                   </div>
                 </li>
               ))}

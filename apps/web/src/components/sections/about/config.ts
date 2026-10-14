@@ -3,6 +3,9 @@ interface Product {
   description: string;
   slug: string;
   website?: string;
+  // Para los productos repartidos en varios dominios: se pintan en fila en vez
+  // de un único «Visitar sitio».
+  sitios?: { etiqueta: string; href: string }[];
 }
 
 // Fichas completas en content/projects/<slug>.mdx; esto es solo el resumen
@@ -33,7 +36,12 @@ const products: Product[] = [
     description:
       "49 utilidades de PDF, imágenes, audio y video que corren en el navegador, sin subir archivos.",
     slug: "images-to-pdf",
-    website: "https://pdf.24bytes.pro",
+    sitios: [
+      { etiqueta: "PDF", href: "https://pdf.24bytes.pro" },
+      { etiqueta: "Imágenes", href: "https://imagenes.24bytes.pro" },
+      { etiqueta: "Audio", href: "https://audio.24bytes.pro" },
+      { etiqueta: "Video", href: "https://video.24bytes.pro" },
+    ],
   },
 ];
 
