@@ -9,12 +9,15 @@ const experiences: Experience[] = [
     company: "24Bytes — Bogotá",
     logo: "/images/logos-experiencia/24bytes.png",
     description:
-      "Estudio de software donde diseño, desarrollo y opero productos propios de punta a punta: arquitectura, infraestructura, despliegue, cobro y SEO; SECOP Monitor: SaaS de alertas de contratación pública con Angular SSR, NestJS, Prisma y PostgreSQL, pagos y WhatsApp Cloud API, con más de 600.000 procesos indexados; Legado Público: rendición de cuentas sobre mapa a nivel de vereda, en producción para una alcaldía de Antioquia, con migración completa de Firebase a Supabase autoalojado; BetLab Model: analítica deportiva con varios LLM (Gemini, OpenAI, Claude) donde las reglas críticas viven en código, y contenido multimedia generado automáticamente; Infraestructura propia: Docker, Linux, Cloudflare (Tunnel y WAF), CI/CD con runners propios, respaldos cifrados y monitoreo.",
+      "Estudio de software donde diseño, desarrollo y opero productos propios de punta a punta: arquitectura, infraestructura, despliegue, cobro y SEO; SECOP Monitor: SaaS de alertas de contratación pública con Angular SSR, NestJS, Prisma y PostgreSQL, pagos y WhatsApp Cloud API, con más de 600.000 procesos indexados; Legado Público: rendición de cuentas sobre mapa a nivel de vereda, en producción para una alcaldía de Antioquia, con migración completa de Firebase a Supabase autoalojado; BetLab Model: analítica deportiva con varios LLM (Gemini, OpenAI, Claude) donde las reglas críticas viven en código, y contenido multimedia generado automáticamente; Infraestructura propia: Docker, Linux, Cloudflare (Tunnel y WAF), CI/CD con runners propios, respaldos cifrados y monitoreo; 24Bytes Herramientas: 49 utilidades gratuitas y de código abierto de PDF, imagen, audio y video que se ejecutan en el navegador, sin subir archivos; Fábrica de videos: sistema autónomo que investiga, produce y publica video, con un revisor por LLM que bloquea las publicaciones con errores.",
   },
   {
     name: "Ingeniero Master",
     duration: "2025-11 - Presente",
     company: "Inter Rapidísimo — Bogotá",
+    logo: "/images/logos-experiencia/inter-rapidisimo.png",
+    description:
+      "Base de Conocimiento construida desde cero, con funciones de Ingeniero de IA: un sistema RAG que responde preguntas en lenguaje natural sobre el software de la empresa, con citas verificables al código fuente; Recuperación híbrida, léxica y semántica, con embeddings y pgvector, enrutada según el tipo de pregunta, con reordenamiento y fusión de resultados; Control de alucinaciones: cada cita se valida contra el código real, con verificadores de paráfrasis y atribución, y respuestas deterministas sin modelo cuando el dato lo permite; Grafos de conocimiento desde el análisis estático del código (Roslyn, SQL), con una variante en Neo4j (Cypher y Graph Data Science) para análisis de impacto y detección de módulos acoplados; Integración de los LLM propios de la empresa para clasificación, expansión de consultas y redacción, con prompts versionados y perfiles por modelo, y evaluación de la recuperación con Recall@k y MRR; .NET 8 con arquitectura hexagonal, desarrollo guiado por pruebas y Azure DevOps.",
   },
   {
     name: "Desarrollador Full Stack",
