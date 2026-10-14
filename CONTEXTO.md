@@ -103,8 +103,22 @@ secop.24bytes.pro** y a los demás subdominios.
 - **Ficha `images-to-pdf` → «24Bytes PDF»** (sesión General, 20/09, `90e7d0e`,
   desplegado): mismo slug para no romper la URL, 15 enlaces a las herramientas
   de `pdf.24bytes.pro` y dominio nuevo en el bloque de productos de la portada.
-  Pendiente ligado: cuando haya cuenta de AdSense, `public/ads.txt` va AQUÍ
-  (Google lo lee de la raíz `24bytes.pro` también para los subdominios).
+  **HECHO el 14/10** (sesión Suite-Herramientas, `2097629`, desplegado):
+  `apps/web/public/ads.txt` con `pub-1072758812585458` y el script de AdSense en
+  el `<head>` de `layout.tsx`, solo con `NODE_ENV=production` y como `<script>`
+  plano (con `next/script` AdSense rechaza el atributo `data-nscript`).
+  Verificado: `ads.txt` 200 en https, http y www, y el script en la portada.
+  Respaldo de imagen `web-rescatada:respaldo-20261014-1542`. En el panel de
+  AdSense el sitio queda «Preparando» con ads.txt «No se encuentra» hasta que
+  Google lo rastree: revisar a las 48 h y, si sigue, mirar el WAF de Cloudflare.
+  **El producto cambió de nombre y de alcance el 14/10**: «24Bytes PDF» pasa a
+  **24Bytes Herramientas**, 49 utilidades en cuatro sitios (`pdf.`, `imagenes.`,
+  `audio.` y `video.24bytes.pro`) desde el repo `images-to-PDF`, todas en el
+  navegador y sin subir archivos. Ficha y bloque de productos actualizados el
+  14/10 por esta sesión. Fuente de verdad: `images-to-PDF/CONTEXTO.md`.
+  El formulario de `/api/contacto` solo acepta el origen `pdf.24bytes.pro`;
+  para activar los otros tres hay que añadirlos a `ORIGENES` (lo pide la sesión
+  Suite-Herramientas antes de tocarlo).
 
 - **«Sobre mí» orientado a proyectos con 24Bytes** (sesión General, 20/09,
   `cf9c0fc`, desplegado): portada y `/about` con el texto del «Acerca de» de
@@ -142,7 +156,7 @@ secop.24bytes.pro** y a los demás subdominios.
 ssh user_24bytes@80.190.77.63 hostname        # debe decir vmi3513850
 ssh user_24bytes@80.190.77.63 'docker tag web-rescatada:latest web-rescatada:respaldo-$(date +%Y%m%d)'
 # Primero con -n (en seco) y revisar las líneas «*deleting»; luego sin -n.
-rsync -ai --checksum --delete --exclude-from=exclusiones.txt ./ \
+rsync -ai --checksum --delete --exclude-from=scripts/exclusiones-rsync.txt ./ \
   user_24bytes@80.190.77.63:~/Documents/Proyectos/Portafolio/
 ssh user_24bytes@80.190.77.63 'cd ~/Documents/Proyectos/Portafolio && \
   bash scripts/construir-imagen-produccion.sh && \
@@ -150,7 +164,8 @@ ssh user_24bytes@80.190.77.63 'cd ~/Documents/Proyectos/Portafolio && \
   docker exec proxy-app-1 nginx -s reload'
 ```
 
-`exclusiones.txt` (una por línea): `.git node_modules .next .turbo .cache .gstack
+La lista vive en el repo, en `scripts/exclusiones-rsync.txt` (antes había que
+copiarla a mano de aquí, y una sesión desplegó con un archivo temporal). Es: `.git node_modules .next .turbo .cache .gstack
 .content-collections dist .env .env.* docker-compose.deploy.yml
 docker-compose.deploy.yml.* .gbrain-source docs/ CONTEXTO.md NO-LEVANTAR-AQUI.md
 .claude`. Sin ellas el `--delete` se llevaría el `.env` y el compose del
@@ -198,6 +213,9 @@ navegador con `CI=1 corepack pnpm exec next start -p 3100` desde `apps/web`.
 - Hay Docker en el portátil (WSL): antes de desplegar un cambio del
   `Dockerfile`, construir y arrancar la imagen aquí
   (`docker run -p 127.0.0.1:3200:3000 -e PORT=3000 -e CI=1 …`).
+- El navegador de gstack (`browse`) necesita `bun`, y el shell no interactivo no
+  carga `.bashrc`: `export PATH="$HOME/.bun/bin:$PATH"` antes de usarlo, o falla
+  con «Executable not found in $PATH: bun».
 - En cada revisión, mirar la versión de `next` contra los avisos
   (`corepack pnpm audit --prod`): el RCE de diciembre estuvo nueve meses
   abierto sin que nadie lo viera.

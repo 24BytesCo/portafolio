@@ -1,40 +1,45 @@
 ---
-title: 24Bytes PDF
-description: "Suite de herramientas PDF que funciona entera en el navegador: unir, dividir, comprimir, Markdown a PDF, JPG a PDF y más. Los archivos nunca se suben a un servidor."
+title: 24Bytes Herramientas
+description: "Suite de 49 utilidades gratuitas de PDF, imágenes, audio y video que funcionan enteras en el navegador: los archivos nunca se suben a un servidor. Cuatro sitios publicados desde un solo repositorio."
 thumbnail: /images/projects/images-to-pdf/cover.jpg
-date: 2026-09-20
+date: 2026-10-14
 website: https://pdf.24bytes.pro/
 github: https://github.com/24BytesCo/images-to-PDF
 tags:
   - label: JavaScript
-  - label: PDF
   - label: Client-side
-  - label: pdf-lib
-  - label: pdf.js
-  - label: GitHub Pages
+  - label: ffmpeg.wasm
+  - label: libheif
+  - label: Cloudflare Workers
+  - label: Playwright
 ---
 
 ## Qué es
 
-[24Bytes PDF](https://pdf.24bytes.pro/) reúne las tareas de todos los días con un PDF en un solo sitio, con una diferencia frente a los conversores conocidos: **no hay servidor**. El archivo se lee, se procesa y se descarga dentro del navegador, así que un contrato, una cédula escaneada o una historia clínica nunca viajan por internet. Se puede comprobar desconectando el wifi después de cargar la página: todo sigue funcionando.
+**24Bytes Herramientas** son 49 utilidades para los archivos de todos los días, repartidas en cuatro sitios y construidas desde un solo repositorio. Todas comparten la misma diferencia frente a los conversores conocidos: **no hay servidor**. El archivo se lee, se procesa y se descarga dentro del navegador, así que un contrato, una cédula escaneada, una grabación o un video familiar nunca viajan por internet. Se puede comprobar desconectando el wifi después de cargar la página: todo sigue funcionando.
 
-Empezó en 2025 como una utilidad para pasar imágenes a PDF y en septiembre de 2026 se convirtió en una suite completa.
+Empezó en 2025 como una utilidad para pasar imágenes a PDF. En septiembre de 2026 se convirtió en una suite de PDF, y en octubre sumó imágenes, audio y video.
 
-## Herramientas
+## Los cuatro sitios
 
-- [Unir PDF](https://pdf.24bytes.pro/unir-pdf/) y [dividir PDF](https://pdf.24bytes.pro/dividir-pdf/), incluido [extraer páginas](https://pdf.24bytes.pro/extraer-paginas-pdf/) por rango.
-- [Organizar PDF](https://pdf.24bytes.pro/organizar-pdf/): reordenar, [rotar](https://pdf.24bytes.pro/rotar-pdf/), duplicar y [eliminar páginas](https://pdf.24bytes.pro/eliminar-paginas-pdf/) sobre miniaturas.
-- [Markdown a PDF](https://pdf.24bytes.pro/markdown-a-pdf/) con texto real y buscable, tablas, código y enlaces; no una captura de la vista previa.
-- [Imágenes a PDF](https://pdf.24bytes.pro/imagenes-a-pdf/), con entradas propias para [JPG a PDF](https://pdf.24bytes.pro/jpg-a-pdf/) y [foto a PDF desde el celular](https://pdf.24bytes.pro/foto-a-pdf/).
-- [PDF a imágenes](https://pdf.24bytes.pro/pdf-a-imagenes/) en JPG o PNG, a 72, 150 o 300 ppp.
-- [Comprimir PDF](https://pdf.24bytes.pro/comprimir-pdf/), pensada para escaneos y fotos: compara el peso antes y después, y si no hubo ahorro lo dice en lugar de entregar un archivo peor.
-- [Marca de agua](https://pdf.24bytes.pro/marca-de-agua-pdf/) y [numeración de páginas](https://pdf.24bytes.pro/numerar-paginas-pdf/), con vista previa.
+**[PDF](https://pdf.24bytes.pro/) — 10 herramientas.** Unir, dividir, organizar (reordenar, rotar, duplicar y eliminar páginas sobre miniaturas), comprimir, marca de agua, numerar páginas, imágenes a PDF, [Markdown a PDF](https://pdf.24bytes.pro/markdown-a-pdf/) con texto real y buscable, PDF a imágenes, y el preparador de ofertas para el SECOP II.
+
+**[Imágenes](https://imagenes.24bytes.pro/) — 15 herramientas.** HEIC a JPG, comprimir, convertir de formato, redimensionar, recortar, rotar y voltear, unir, marca de agua, pixelar, quitar los datos EXIF y la ubicación, pasar a Base64, SVG a PNG, generador de favicon, paleta de colores y generador de códigos QR.
+
+**[Audio](https://audio.24bytes.pro/) — 11 herramientas.** Video a MP3, recortar, convertir de formato, unir, ajustar volumen y normalizar, cambiar la velocidad, quitar silencios, reducir ruido, fundidos de entrada y salida, audio a video y grabadora de voz.
+
+**[Video](https://video.24bytes.pro/) — 13 herramientas.** Comprimir (con un modo que apunta a un tamaño concreto, para que quepa en WhatsApp o Discord), recortar, unir, convertir a MP4, cambiar la velocidad, rotar y voltear, pasar a vertical 9:16, extraer fotogramas, cambiar o quitar el audio, video a GIF, GIF a video y grabador de pantalla.
+
+## Preparar una oferta para el SECOP II
+
+La herramienta que más trabajo específico tiene detrás. Quien se presenta a una licitación en Colombia debe subir su oferta foliada y en archivos que no superen cierto peso. [Esta](https://pdf.24bytes.pro/oferta-secop-pdf/) une los documentos en el orden que se le dé, folia con numeración corrida de principio a fin aunque el resultado quede partido, y entrega los archivos por debajo de 50 MB. Sin esto se hace a mano, documento por documento.
 
 ## Cómo está hecho
 
-- Sitio estático sin framework: HTML, CSS y JavaScript, con las librerías incluidas en el repositorio (pdf-lib, pdf.js, jsPDF, pdfmake, marked, DOMPurify y JSZip). Nada se carga de un CDN.
-- Un generador en Python sin dependencias arma cada página a partir de un JSON con su contenido y un fragmento HTML con su interfaz, y escribe el sitemap, los datos estructurados y la página 404.
-- Las librerías pesadas se cargan al primer uso: la página de Markdown abre con 23 KB de JavaScript y trae pdfmake solo al exportar.
-- Lighthouse en móvil: rendimiento entre 94 y 100, y 100 en SEO y buenas prácticas.
-- Analítica propia sin cookies, y un formulario de contacto que llega a un endpoint de este mismo portafolio en lugar de pasar por un tercero.
-- Cada herramienta se probó con Playwright contra archivos reales: páginas contadas, texto extraído y descargas verificadas, en escritorio y a 390 px.
+- **Generador estático propio, sin dependencias.** Un programa en Python arma cada página a partir de una configuración por sitio: textos, enlaces cruzados, sitemap, robots y datos estructurados. Un sitio nuevo es una entrada en ese archivo, no un proyecto nuevo.
+- **Cuatro sitios, un repositorio.** Cada uno se publica como un Cloudflare Worker de recursos estáticos con su propio dominio; el dominio, el DNS y el certificado se adjuntan por API.
+- **HEIC sin servidor.** Las fotos del iPhone se convierten con libheif compilado a WebAssembly dentro de un Web Worker, para que la página no se congele. Safari usa su propio decodificador, que ya trae.
+- **Audio y video con ffmpeg.wasm.** El núcleo pesa 32 MB, así que no viaja con la página: se sirve desde un bucket propio en `cdn.24bytes.pro`, con caché permanente y acceso restringido a los dominios de la suite, y solo se descarga cuando alguien abre una herramienta que lo necesita.
+- **La espera se explica.** Mientras ffmpeg trabaja, la página muestra el avance, cuánto falta y por qué tarda, en vez de dejar una rueda girando.
+- **155 pruebas automatizadas de extremo a extremo con Playwright** sobre archivos reales: se cuentan las páginas del PDF resultante, se extrae su texto y se verifican la duración, el códec y las dimensiones de los audios y videos con ffprobe. Cada herramienta se revisa además en escritorio y a 390 px de ancho.
+- **Analítica propia sin cookies** y un formulario de contacto que llega a un endpoint de este mismo portafolio, en lugar de pasar por un tercero.

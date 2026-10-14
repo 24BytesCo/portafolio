@@ -29,9 +29,9 @@ const products: Product[] = [
     website: "https://www.youtube.com/@BetLabModel",
   },
   {
-    name: "24Bytes PDF",
+    name: "24Bytes Herramientas",
     description:
-      "Herramientas PDF que funcionan en el navegador, sin subir archivos.",
+      "49 utilidades de PDF, imágenes, audio y video que corren en el navegador, sin subir archivos.",
     slug: "images-to-pdf",
     website: "https://pdf.24bytes.pro",
   },

@@ -1,0 +1,17 @@
+.git
+node_modules
+.next
+.turbo
+.cache
+.gstack
+.content-collections
+dist
+.env
+.env.*
+docker-compose.deploy.yml
+docker-compose.deploy.yml.*
+.gbrain-source
+docs/
+CONTEXTO.md
+NO-LEVANTAR-AQUI.md
+.claude
