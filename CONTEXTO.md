@@ -150,6 +150,15 @@ secop.24bytes.pro** y a los demás subdominios.
   El CTA de un artículo apunta a `https://24bytes.pro/#contact` (el ancla es
   `contact`, no `contacto`).
 
+- **14/10 (sesión Portafolio)**: desplegado y verificado desde fuera —
+  ficha «24Bytes Herramientas» (`a553762`), hoja de vida del 14/10 en
+  `public/resume.pdf` con Inter Rapidísimo (logo y la Base de Conocimiento)
+  y los dos productos nuevos de 24Bytes (`f558540`), y el artículo
+  `herramientas-navegador-imagenes-audio-video` (`53ac641`), continuación del
+  de septiembre. Respaldo de imagen `web-rescatada:respaldo-20261014-1748`.
+  La hoja de vida manda: si cambia, se actualizan `resume.pdf`,
+  `experience/config.ts` y el bloque de productos de `about/config.ts`.
+
 ## 3. Cómo se despliega (comandos reales del 18/09)
 
 ```bash
