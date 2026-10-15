@@ -168,6 +168,24 @@ secop.24bytes.pro** y a los demás subdominios.
   miniaturas (estilo de `/images/skills/v2`: fondo oscuro, halo de color,
   sigla y pie; se generan con sharp).
 
+## 2c. Publicidad (AdSense), desde el 15/10
+
+- **Cliente único**: `ca-pub-1072758812585458`. El script vive en el `<head>` de
+  `layout.tsx` y solo con `NODE_ENV=production`; `public/ads.txt` en la raíz.
+- **Dónde SÍ van anuncios**: los cuatro sitios de herramientas (`pdf.`,
+  `imagenes.`, `audio.` y `video.24bytes.pro`), que son tráfico gratuito y sin
+  datos de clientes. Al 15/10 todavía NO los tienen: en `images-to-PDF`,
+  `tools/sitios.json` trae `adsense_client` vacío y `/ads.txt` da 404.
+- **Dónde NO**, decidido por Alexis: `secop.24bytes.pro` y `sanroque.24bytes.pro`
+  son productos de pago, `betlab.24bytes.pro` es panel privado de inversores, y
+  `goapp.` y `clinica.` son demos comerciales. Ninguno carga el script.
+- **El portafolio es frente comercial**: la recomendación es dejarlo sin
+  anuncios (exclusión `24bytes.pro` con «esta página y las que empiecen así»).
+  Alternativa que Alexis estaba evaluando: dejarlos solo en `/blog` y `/blog/*`,
+  excluyendo `/`, `/about` y `/projects*`.
+- En `betlab.`, `sanroque.` y `goapp.` el `/ads.txt` responde 200 pero devuelve
+  el HTML de la app (Angular sirve cualquier ruta): no es un ads.txt real.
+
 ## 3. Cómo se despliega (comandos reales del 18/09)
 
 ```bash
