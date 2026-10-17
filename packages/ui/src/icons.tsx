@@ -41,6 +41,7 @@ export const Icons = {
   code: Code,
   success: CheckCircle,
   spinner: Loader2,
+  chevronDown: ChevronDown,
   chevronLeft: ChevronLeft,
   chevronRight: ChevronRight,
   trash: Trash,

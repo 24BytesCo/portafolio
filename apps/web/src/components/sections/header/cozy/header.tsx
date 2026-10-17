@@ -1,8 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { metadata as meta } from "@/app/config";
 import MotionLink from "@/components/fancy/link";
+import { links } from "@/components/sections/header/config";
 import { AnimatePresence, motion } from "motion/react";
 
 import { background, opacity } from "./anim";
@@ -11,6 +14,7 @@ import styles from "./style.module.scss";
 
 const Header = () => {
   const [isActive, setIsActive] = useState<boolean>(false);
+  const pathname = usePathname();
 
   useEffect(() => {
     if (isActive) {
@@ -57,6 +61,39 @@ const Header = () => {
         >
           {meta.author.name}
         </MotionLink>
+        {/* Navegación visible en escritorio: sin ella el único enlace del
+            encabezado era el logo y no se veía qué secciones existen. */}
+        <nav
+          aria-label="Navegación principal"
+          className="mr-8 hidden items-center gap-6 md:flex"
+        >
+          {links.map((link) => {
+            const activo =
+              link.href === "/"
+                ? pathname === "/"
+                : pathname.startsWith(link.href);
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                aria-current={activo ? "page" : undefined}
+                className={`inline-flex items-center py-2 underline-offset-8 transition-colors hover:underline ${
+                  activo
+                    ? "underline decoration-2"
+                    : "text-zinc-600 dark:text-zinc-400"
+                }`}
+              >
+                {link.title}
+              </Link>
+            );
+          })}
+          <Link
+            href="/#contact"
+            className="inline-flex items-center rounded-full bg-zinc-950 px-4 py-2 font-medium text-zinc-50 transition-opacity hover:opacity-80 dark:bg-zinc-50 dark:text-zinc-950"
+          >
+            Hablemos
+          </Link>
+        </nav>
         <button
           type="button"
           onClick={() => setIsActive(!isActive)}

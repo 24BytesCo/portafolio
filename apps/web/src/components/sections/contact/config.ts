@@ -6,7 +6,9 @@ import {
 } from "@icons-pack/react-simple-icons";
 
 const contact: Contact = {
-  email: "alexis.dorado.munoz@gmail.com",
+  // Correo del dominio: el Gmail personal restaba credibilidad en un sitio que
+  // se presenta como estudio. Necesita la regla de reenvío en Cloudflare.
+  email: "Alexis.Dorado@24bytes.pro",
   socials: [
     {
       name: "LinkedIn",

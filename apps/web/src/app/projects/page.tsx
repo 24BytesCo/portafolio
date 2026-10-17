@@ -9,6 +9,8 @@ import Line from "@/components/fancy/line";
 import TextReveal from "@/components/fancy/text-reveal";
 import { createMetadata } from "@/lib/metadata";
 
+import { Icons } from "@repo/ui/icons";
+
 const title = "Proyectos";
 const description = "Algunos proyectos en los que he trabajado.";
 
@@ -54,6 +56,13 @@ export default function ProjectsPage(): React.ReactElement {
     return (Number.isNaN(tB) ? 0 : tB) - (Number.isNaN(tA) ? 0 : tA);
   });
 
+  // Los productos que están corriendo van arriba; los ejercicios y pruebas
+  // técnicas quedan en un archivo plegado para no enterrarlos.
+  const esProducto = (p: (typeof projects)[number]): boolean =>
+    (p.data.tags ?? []).some((t) => t.label === "Producto en producción");
+  const destacados = projects.filter(esProducto);
+  const archivo = projects.filter((p) => !esProducto(p));
+
   // Resolución robusta de portada en carpeta del proyecto
   function coverPath(slug: string): string | undefined {
     const publicDir = path.join(process.cwd(), "public");
@@ -81,10 +90,10 @@ export default function ProjectsPage(): React.ReactElement {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <section
-        className="relative flex min-h-[calc(50dvh)] items-center justify-center"
+        className="relative flex min-h-[28dvh] items-center justify-center"
         id="hero"
       >
-        <div className="flex flex-col items-center md:max-w-7xl">
+        <div className="flex flex-col items-center px-4 text-center md:max-w-7xl">
           {/* todo: re-add delay of 0.2seconds */}
           <TextReveal
             as="h1"
@@ -92,22 +101,50 @@ export default function ProjectsPage(): React.ReactElement {
           >
             Mis Proyectos
           </TextReveal>
-
-          <Line className={"mt-16"} />
+          <p className="mt-6 max-w-2xl text-base text-gray-500 md:text-lg dark:text-gray-400">
+            Cinco productos corriendo en producción, con su dominio, su cobro y
+            su despliegue. Debajo, el archivo con ejercicios y pruebas técnicas
+            de años anteriores.
+          </p>
+          <Line className={"mt-10"} />
         </div>
       </section>
       <section className="grid w-full grid-cols-1 gap-4 p-4 md:grid-cols-2 2xl:grid-cols-3">
-        {projects.map((project, index) => (
+        {destacados.map((project, index) => (
           <ProjectCard
             title={project.data.title}
             href={project.url}
             description={project.data.description}
-            key={`project_${index}`}
+            key={`destacado_${index}`}
             tags={project.data.tags}
             thumbnail={coverPath(project.slugs[0] ?? "")}
           />
         ))}
       </section>
+      {archivo.length > 0 ? (
+        <section className="w-full p-4">
+          <details className="group rounded-xl border border-zinc-950/10 dark:border-zinc-50/10">
+            <summary className="flex cursor-pointer list-none items-center justify-between gap-4 p-4 font-medium">
+              <span>
+                Archivo: ejercicios y pruebas técnicas ({archivo.length})
+              </span>
+              <Icons.chevronDown className="size-5 transition-transform group-open:rotate-180" />
+            </summary>
+            <div className="grid grid-cols-1 gap-4 p-4 pt-0 md:grid-cols-2 2xl:grid-cols-3">
+              {archivo.map((project, index) => (
+                <ProjectCard
+                  title={project.data.title}
+                  href={project.url}
+                  description={project.data.description}
+                  key={`archivo_${index}`}
+                  tags={project.data.tags}
+                  thumbnail={coverPath(project.slugs[0] ?? "")}
+                />
+              ))}
+            </div>
+          </details>
+        </section>
+      ) : null}
     </main>
   );
 }

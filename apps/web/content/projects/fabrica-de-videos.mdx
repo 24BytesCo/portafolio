@@ -1,0 +1,39 @@
+---
+title: Fábrica de videos
+description: Sistema autónomo que investiga, escribe, narra con mi voz clonada, monta, publica y mide dos canales de YouTube todos los días, con un revisor por LLM que bloquea lo que sale con errores.
+thumbnail: /images/projects/fabrica-de-videos/cover.jpg
+date: 2026-10-15
+website: https://www.youtube.com/@previasypolemicas
+tags:
+  - label: Producto en producción
+  - label: Python
+  - label: NestJS
+  - label: Angular
+  - label: LLM (Gemini, OpenAI, Claude)
+  - label: Playwright
+  - label: ffmpeg
+  - label: YouTube
+---
+
+## Qué hace
+
+Un canal de YouTube exige todos los días lo mismo: buscar de qué hablar, escribir el libreto, grabar la voz, montar el video, diseñar la miniatura, subirlo y mirar qué funcionó. La fábrica hace esas siete cosas sola, en horarios fijos, y deja constancia de cada paso. Hoy alimenta dos canales a la vez con el mismo motor: [Previas y Polémicas](https://www.youtube.com/@previasypolemicas) y [Vestuario Caliente](https://www.youtube.com/@vestuariocaliente).
+
+## Lo que hay dentro
+
+- **Investigación automática**: agentes que barren fuentes cada madrugada, eligen el tema del día y entregan el material ya verificado, con sus enlaces.
+- **Libreto en dos pasos** y narración con mi voz clonada, con el mismo tratamiento de pausas para todos los formatos.
+- **Montaje con ffmpeg**: fondos ilustrados por tramo, titulares animados, subtítulos y un Short por cada video largo.
+- **Revisor por LLM** que compara el libreto contra el material y bloquea la publicación cuando encuentra una contradicción. Ante un error se corta la corrida, se borra lo malo y se regenera; nada sale a medias.
+- **Subida sin cuota de API**: un navegador real pilotado con Playwright contra YouTube Studio, con verificación posterior de que el video quedó publicado de verdad y no en borradores.
+- **Panel propio** con las cifras del canal: suscriptores, horas válidas para monetizar y estado de cada pedido, con reintento manual de los que fallaron.
+
+## Arquitectura
+
+API NestJS y panel Angular para la operación, workers en Python para la producción, y el render repartido entre el portátil y el servidor según el peso de cada trabajo. Todo en contenedores detrás de Cloudflare Tunnel, con el panel cerrado por Cloudflare Access. Las cifras que se ven en el [artículo del blog](/blog/fabrica-de-videos-dos-canales) salen en vivo de ese panel, por la red interna, sin exponer nada a internet.
+
+## Lo difícil
+
+- **Que publicar sin supervisión no signifique publicar errores.** El candado está en código: el revisor corta, y lo que no pasa no sale.
+- **Costo cercano a cero hasta que el canal monetice**: cachés, bibliotecas y servicios gratuitos antes que generar, y cada céntimo de API medido.
+- **Replicar el canal sin rehacer el sistema**: el segundo canal entró con su propia infraestructura y sus propias reglas, sin tocar el primero. Está hecho para adaptarse a cualquier nicho.

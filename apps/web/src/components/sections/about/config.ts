@@ -32,6 +32,22 @@ const products: Product[] = [
     website: "https://www.youtube.com/@BetLabModel",
   },
   {
+    name: "Fábrica de videos",
+    description:
+      "Sistema autónomo que investiga, narra con mi voz y publica dos canales de YouTube todos los días.",
+    slug: "fabrica-de-videos",
+    sitios: [
+      {
+        etiqueta: "Previas y Polémicas",
+        href: "https://www.youtube.com/@previasypolemicas",
+      },
+      {
+        etiqueta: "Vestuario Caliente",
+        href: "https://www.youtube.com/@vestuariocaliente",
+      },
+    ],
+  },
+  {
     name: "24Bytes Herramientas",
     description:
       "49 utilidades de PDF, imágenes, audio y video que corren en el navegador, sin subir archivos.",

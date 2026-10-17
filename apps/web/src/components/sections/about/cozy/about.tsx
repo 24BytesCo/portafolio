@@ -30,20 +30,20 @@ function About() {
                 Tech Lead, y fundador de 24Bytes, el estudio desde el que
                 desarrollo proyectos para empresas y entidades públicas. Lo que
                 ofrezco se puede ver funcionando: SECOP Monitor, Legado Público,
-                BetLab y 24Bytes PDF. Si tienes un producto por construir,
-                hablemos.
+                BetLab, la fábrica de videos y 24Bytes PDF. Si tienes un
+                producto por construir, hablemos.
               </TextReveal>
+              {/* La portada le habla al cliente. El CV y la apertura a roles
+                  senior viven en /about, para no mezclar las dos audiencias. */}
               <div className="flex flex-wrap gap-2">
                 <Button asChild>
                   <Link href="/#contact">Hablemos de tu proyecto</Link>
                 </Button>
                 <Button asChild variant={"outline"}>
-                  <Link href="/about">Ver más</Link>
+                  <Link href="/servicios">Qué puedo hacer por ti</Link>
                 </Button>
                 <Button asChild variant={"outline"}>
-                  <a href="resume.pdf" target="_blank">
-                    Ver CV <Icons.arrowUpRight className="ml-2 size-5" />
-                  </a>
+                  <Link href="/about">Sobre mí</Link>
                 </Button>
               </div>
             </div>
@@ -64,11 +64,11 @@ function About() {
                   <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
                     {product.description}
                   </p>
-                  <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm">
+                  <div className="mt-1 flex flex-wrap items-center gap-x-4 text-sm">
                     <Link
                       href={`/projects/${product.slug}`}
                       aria-label={`Ver ficha de ${product.name}`}
-                      className="font-medium underline underline-offset-4 hover:text-zinc-950 dark:hover:text-zinc-50"
+                      className="inline-flex min-h-11 items-center font-medium underline underline-offset-4 hover:text-zinc-950 dark:hover:text-zinc-50"
                     >
                       Ver ficha
                     </Link>
@@ -78,7 +78,7 @@ function About() {
                         target="_blank"
                         rel="noopener"
                         aria-label={`Visitar sitio de ${product.name} (se abre en una pestaña nueva)`}
-                        className="inline-flex items-center gap-1 font-medium underline underline-offset-4 hover:text-zinc-950 dark:hover:text-zinc-50"
+                        className="inline-flex min-h-11 items-center gap-1 font-medium underline underline-offset-4 hover:text-zinc-950 dark:hover:text-zinc-50"
                       >
                         Visitar sitio
                         <Icons.arrowUpRight className="size-3.5" />
@@ -91,7 +91,7 @@ function About() {
                         target="_blank"
                         rel="noopener"
                         aria-label={`Abrir ${sitio.etiqueta} de ${product.name} (se abre en una pestaña nueva)`}
-                        className="inline-flex items-center gap-1 font-medium underline underline-offset-4 hover:text-zinc-950 dark:hover:text-zinc-50"
+                        className="inline-flex min-h-11 items-center gap-1 font-medium underline underline-offset-4 hover:text-zinc-950 dark:hover:text-zinc-50"
                       >
                         {sitio.etiqueta}
                         <Icons.arrowUpRight className="size-3.5" />
