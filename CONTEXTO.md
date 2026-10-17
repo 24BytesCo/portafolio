@@ -268,24 +268,114 @@ navegador con `CI=1 corepack pnpm exec next start -p 3100` desde `apps/web`.
 ## 5. Pendientes
 
 1. Push de `develop` cuando Alexis lo pida.
-2. `/design-review` sobre el sitio ya corregido (fase 4 del plan); Alexis lo
-   dejó para otro día.
-3. Reenviar el sitemap en Search Console. Opcional: ya estaba enviado el
+2. **Prueba social**: ninguna ficha tiene testimonio ni resultado del lado del
+   cliente. Hace falta una frase de San Roque (Legado Público) y un número que
+   le sirva a quien contrata, no volumen propio como «600.000 procesos». Es el
+   único bloqueador de la auditoría del 17/10 que sigue abierto, y depende de
+   que Alexis consiga la cita.
+3. Correo `Alexis.Dorado@24bytes.pro`: **el sitio ya lo muestra**, pero la regla
+   de reenvío en Cloudflare la crea Alexis. Hasta entonces, quien escriba a esa
+   dirección rebota. El formulario no depende de ella (usa `EMAIL_TO`).
+4. Reenviar el sitemap en Search Console. Opcional: ya estaba enviado el
    17/09. Por API no se puede, porque el acceso es `webmasters.readonly`.
    Desde el navegador:
    https://search.google.com/search-console/sitemaps?resource_id=sc-domain%3A24bytes.pro
-4. Ficha de la demo de clínica (`clinica.24bytes.pro`) y del canal de vídeos:
+5. Ficha de la demo de clínica (`clinica.24bytes.pro`) y del canal de vídeos:
    sin escribir por falta de datos fiables.
-5. Blog: tres entradas publicadas (SECOP Monitor, herramientas PDF y la
-   fábrica de videos). Cada guía técnica que enlace a un producto suma.
+6. Blog: cinco entradas publicadas (SECOP Monitor, herramientas PDF,
+   herramientas de imagen/audio/video, la fábrica de videos y su
+   actualización del 15/10 con video embebido). Cada guía técnica que enlace
+   a un producto suma.
    Un artículo nuevo necesita SIEMPRE `public/images/blog/<slug>/cover.jpg`
    a 1200×630: es lo que usan el índice y el `og:image`, y sin él salen rotos.
-6. CSP con nonces (scripts y estilos) si algún día se quiere cerrar más: hoy
+7. CSP con nonces (scripts y estilos) si algún día se quiere cerrar más: hoy
    solo cubre frame-ancestors, base-uri, object-src y form-action.
-7. Variables que ya nadie lee en el `.env` del servidor (`DATABASE_URL`,
+8. Variables que ya nadie lee en el `.env` del servidor (`DATABASE_URL`,
    `BETTER_AUTH_*`, `GOOGLE_*`, `GITHUB_*`) y en `docker-compose.deploy.yml`
    (las del servicio web y su `depends_on` de `portafolio-pg`): no estorban;
    quitarlas cuando se toque ese archivo. `portafolio-pg` SE QUEDA (§2b).
+
+### Auditoría con ojos de cliente y qué se arregló (17/10)
+
+Se revisó el sitio como lo vería alguien que entra a contratar (`/design-review`
+de gstack, modo solo diagnóstico; informe completo en
+`~/.gstack/projects/Proyectos/designs/design-audit-20261015/`). Diagnóstico:
+sitio que gana al reclutador y pierde al cliente, porque no había oferta, el
+correo era un Gmail personal y `/projects` enterraba los productos reales bajo
+veinte pruebas técnicas de 2021.
+
+Arreglado el 17/10:
+
+- **`/servicios`**: tres paquetes por alcance (producto a medida, automatización
+  con IA, operación), sin precio por decisión de Alexis: la cifra se habla en la
+  primera llamada. Textos en `src/components/sections/servicios/config.ts`.
+- **`/projects`** separa los que llevan la etiqueta `Producto en producción` del
+  resto, que queda en un `<details>` plegado. **Para que un proyecto suba a
+  destacados basta con añadirle esa etiqueta en su `.mdx`.**
+- **Navegación visible en escritorio** (`header/cozy/header.tsx`): antes el único
+  enlace del encabezado era el logo y no se veía qué secciones existían. La
+  hamburguesa se queda para el menú de pantalla completa. Ojo con el SCSS: el
+  selector del logo es `> a` a propósito, porque un `a` suelto posicionaba en
+  absoluto también los enlaces de la nav nueva.
+- **Audiencias separadas**: la portada le habla al cliente; «Ver CV» y la
+  apertura a roles senior se quedan solo en `/about`. Alexis sigue mandando
+  hojas de vida, así que esa parte NO se quita.
+- **Zonas táctiles de 44 px**: enlaces de producto, botón de menú y el `size`
+  por defecto de `@repo/ui/button` (`h-11 md:h-9`), que afecta a todo el sitio.
+- **Ficha de la fábrica de videos** y su tarjeta en el bloque de productos de la
+  portada, enlazando los dos canales.
+
+Lo que NO se tocó, a propósito: el titular de la portada («Un desarrollador full
+stack que ❤️ crear software») y la foto del héroe, que la auditoría señala como
+el punto más débil para un cliente. Son decisión de Alexis.
+
+### Cifras en vivo desde la fábrica de videos (15/10)
+
+El artículo `fabrica-de-videos-dos-canales` no lleva las cifras escritas: las
+sirve la API de la fábrica. Cadena, toda dentro del servidor:
+
+`portafolio-web` → `http://fabrica-videos:3000/api/meta?canal=previasypolemicas`
+(los dos contenedores están en `proxy-net`; por fuera es `fabrica.24bytes.pro`
+tras Cloudflare Access y **no se usa** esa vía).
+
+- `src/lib/cifras-canal.ts` lee y mapea (`suscriptores`, `horasValidas`,
+  `metaHoras`, `horasValidasDe`). Caché de 30 min.
+- `src/app/api/canal/route.ts` la expone al navegador; `<CifrasCanal />`
+  (servidor) pinta el HTML y `cifras-canal-vista.tsx` (cliente) la refresca al
+  cargar.
+- `[slug]/page.tsx` pasó a **ISR de 30 min** (`export const revalidate = 1800`)
+  para que el HTML servido no quede congelado en el momento del build. En el
+  build no hay red hacia la fábrica, así que la primera versión sale con el
+  respaldo y se refresca al servirse.
+- **Respaldo obligatorio**: el panel de la fábrica usa basic auth
+  (`DASHBOARD_USER`/`DASHBOARD_PASSWORD`), hoy abierto por `DASHBOARD_LIBRE=1`.
+  Si se vuelve a cerrar, la llamada falla y salen las cifras de respaldo
+  escritas en `RESPALDO`; la página no se rompe, solo deja de refrescar.
+- **No se aceptan cifras menores que el respaldo**: una carga a medias de la
+  fábrica haría que un artículo publicado mostrara menos de lo ya contado.
+- El dato se recalcula una vez al día (timer `betlab-stats-tabla`, 00:40) y
+  `horasValidas` viene de la pestaña de Monetización, que va atrasada: por eso
+  la leyenda dice la fecha del dato y no «en tiempo real».
+- **Pendiente en la fábrica**: el total de videos. `/api/meta` no lo devuelve,
+  así que va `~1.000` del respaldo. El lector ya recoge `videosPublicados` si
+  algún día aparece.
+- El título y el aviso del artículo anterior perdieron las cifras que llevaban
+  escritas: un titular con «1.044 suscriptores» envejece al día siguiente.
+
+### Video de YouTube en una entrada (15/10)
+
+`apps/web/src/components/blog/video-youtube.tsx`, registrado en
+`src/app/blog/[slug]/page.tsx` junto a `Figura` y `Nota`. Carga diferida: hasta
+que no se pulsa, la página solo trae una imagen local; el `<iframe>` de
+`youtube-nocookie` se monta al hacer clic. Se usa así:
+
+```mdx
+<VideoYouTube id="Syi2LZ-BUEU" titulo="…" miniatura="/images/blog/<slug>/reproductor.jpg" pie="…" />
+```
+
+La CSP del sitio no declara `frame-src`, así que el iframe entra sin tocarla.
+En `Permissions-Policy` están apagados `accelerometer` y `gyroscope`: el
+`allow` del iframe no los pide para no reclamar lo que la cabecera niega.
 
 ## 6. Decisiones (18/09)
 
