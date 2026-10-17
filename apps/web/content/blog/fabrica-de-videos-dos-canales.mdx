@@ -1,0 +1,90 @@
+---
+title: "La fábrica de videos ya opera dos canales y va camino de monetizar"
+description: "Dos semanas después del primer artículo, el sistema que produce y publica un canal de YouTube solo corre en dos canales a la vez. Esto es lo que cambió, con las cifras en vivo del panel y un video de tres minutos que lo muestra funcionando."
+date: 2026-10-15
+author: Alexis Dorado Muñoz
+portada:
+  src: /images/blog/fabrica-de-videos-dos-canales/portada.jpg
+  alt: "Un canal que se hace solo: IA que investiga, narra, diseña y publica en YouTube"
+  ancho: 1920
+  alto: 1080
+cta:
+  titulo: "¿Quieres una fábrica así para tu nicho?"
+  texto: "Cuéntame de qué trata tu canal y te digo qué partes de este sistema te sirven."
+  href: "https://24bytes.pro/#contact"
+  etiqueta: "Hablemos"
+---
+
+En septiembre conté [cómo construí una fábrica de videos](/blog/fabrica-de-videos-youtube): un sistema que investiga, escribe, narra con mi voz, monta, publica y mide un canal de YouTube todos los días sin que nadie lo empuje. Dos semanas después el sistema ya no alimenta un canal, sino dos, y las cifras alcanzan para hablar de resultados y no de intenciones.
+
+Grabé un video de tres minutos que lo muestra funcionando, narrado con mi voz clonada por el propio sistema.
+
+<VideoYouTube
+  id="Syi2LZ-BUEU"
+  titulo="Fábrica de Videos de 24Bytes: IA que produce y publica un canal de YouTube sola"
+  miniatura="/images/blog/fabrica-de-videos-dos-canales/reproductor.jpg"
+  pie="Tres minutos: qué es, por qué existe, cómo funciona y qué logra. Capítulos: 0:08 qué es · 0:23 por qué existe · 0:55 cómo funciona · 2:15 lo que logra."
+/>
+
+## Dónde va el proyecto
+
+La meta no se ha movido: para monetizar un canal hacen falta 1.000 suscriptores y 4.000 horas de reproducción de videos largos en doce meses. Estas cifras no están escritas en el artículo: las sirve el propio panel de la fábrica, así que suben solas a medida que el sistema publica.
+
+<CifrasCanal />
+
+<Figura
+  src="/images/blog/fabrica-de-videos-dos-canales/canal.jpg"
+  alt="Canal Previas y Polémicas del Fútbol en YouTube, con 1,04 mil suscriptores y mil videos publicados"
+  pie="El canal el 15 de octubre de 2026: 1,04 mil suscriptores y mil videos. Todo lo que se ve ahí lo publicó el sistema, sin intervención manual."
+  ancho={1600}
+  alto={900}
+/>
+
+El dato que más enseña no es ninguno de esos tres. Un solo video —una polémica sobre Chiqui Tapia— sumó **408 horas**: cuando se publicó este artículo era más de un tercio de todo lo acumulado. En YouTube las horas no las pone el volumen: las ponen uno o dos aciertos. Producir mucho sirve para encontrarlos; lo que los convierte en horas es el tema, el nombre propio y el momento.
+
+## Dos canales, no uno
+
+La fábrica opera hoy dos canales con identidad propia:
+
+- **Previas y Polémicas del Fútbol** ([@previasypolemicas](https://www.youtube.com/@previasypolemicas)), el canal original.
+- **Vestuario Caliente** ([@vestuariocaliente](https://www.youtube.com/@vestuariocaliente)), activo desde el 8 de octubre, con su propio tono y su propia línea editorial.
+
+Esto era la prueba de fuego del diseño. Si el sistema estuviera atado a un canal, el segundo habría exigido duplicar código. Lo que exigió fue dar de alta un canal, su identidad y sus formatos: el resto de la cadena —investigación, libreto, voz, montaje, revisión, publicación y medición— es la misma para ambos.
+
+## Lo que cambió desde el primer artículo
+
+### Los temas los buscan agentes con fuentes
+
+Cada madrugada, agentes de investigación recorren la prensa deportiva y proponen las polémicas del día con sus fuentes. El sistema elige las más fuertes con un criterio explícito —nombres grandes, conflicto real, noticia fresca— y un agente investigador escribe el material verificado y un título que despierte curiosidad. Hasta **tres polémicas al día**.
+
+A eso se suman **diez previas diarias** repartidas por país: cuatro de Argentina, cuatro de Colombia y dos del resto. Las de Argentina y Colombia salen además en video largo, que es el formato cuyas horas cuentan para la monetización.
+
+### El diseño dejó de ser una imagen quieta
+
+Los videos ya no son escenas estáticas. Los titulares se animan con **Remotion** y aparecen sincronizados con la voz, justo cuando se dice cada frase. Los fondos se generan con **Gemini**, y encima van escudos, tablas y estadísticas reales traídas de una API de datos deportivos. Nada de cifras inventadas: lo que aparece en pantalla sale de la misma fuente que usa el libreto.
+
+### Un revisor automático que frena errores
+
+Antes de publicar, un revisor construido sobre Claude Sonnet lee el material y el libreto buscando contradicciones, datos que no cuadran y afirmaciones sin respaldo. Si encuentra algo, el video no sale. Es la regla que me ahorra el peor escenario de un sistema automático: publicar rápido y publicar mal.
+
+### La publicación aprovecha lo que YouTube premia
+
+El subidor funciona con Playwright sobre el navegador real del canal. Programa cada pieza en la mejor franja y deja puesto todo lo que de otro modo nadie pondría: miniatura, tarjetas que apuntan a la polémica del día, pantalla final, un comentario fijado que abre el debate y un segundo comentario que invita al video relacionado. Los shorts salen **cada hora** y funcionan como embudo hacia los largos.
+
+### Un panel para decidir con datos
+
+El tablero propio (Angular, NestJS y PostgreSQL) responde cuatro preguntas, una por página: **Hoy**, todo lo que se subió en el día; **Qué funciona**, el porcentaje de clics, las horas y las vistas por categoría; **Meta**, las horas válidas que faltan y a qué ritmo; y **Canales**, el estado de cada uno por separado.
+
+## Las tecnologías
+
+Claude, Gemini, NotebookLM, Remotion, Playwright, Docker, NestJS, Angular, Python y PostgreSQL. Cada pieza hace una cosa: los modelos investigan y escriben, Remotion anima, Playwright publica, el panel mide y Docker mantiene todo corriendo en un servidor propio sin un solo puerto abierto a internet.
+
+## Lo que confirma esta etapa
+
+**Un sistema que no se puede clonar a un segundo caso no es un sistema, es un montaje.** El valor de la fábrica no estuvo en el primer canal, sino en que el segundo costó configuración y no código.
+
+**El volumen encuentra los aciertos; no los sustituye.** Mil videos para que uno aporte el tercio de las horas no es un fracaso de los otros novecientos noventa y nueve: es el precio de encontrar ese uno, y la razón para medir cuál fue y por qué.
+
+**La revisión automática es parte del producto, no un extra.** Publicar solo tiene sentido si algo puede decir que no.
+
+Lo específico del fútbol sigue estando en tres piezas: la fuente de temas, el tono del libreto y el estilo visual. Todo lo demás funciona igual para finanzas, historia o tecnología. Si tienes un canal o quieres montarlo, [hablemos](/#contact).

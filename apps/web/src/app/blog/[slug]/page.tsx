@@ -6,10 +6,12 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { metadata as meta } from "@/app/config";
 import { blog } from "@/app/source";
+import { CifrasCanal } from "@/components/blog/cifras-canal";
 import { Figura } from "@/components/blog/figura";
 import { Indice } from "@/components/blog/indice";
 import { MedidorLectura } from "@/components/blog/medidor-lectura";
 import { Nota } from "@/components/blog/nota";
+import { VideoYouTube } from "@/components/blog/video-youtube";
 import { MDXLink } from "@/lib/mdx/default-components";
 import { createMetadata } from "@/lib/metadata";
 import { formatearFecha } from "@/lib/utils";
@@ -31,6 +33,11 @@ const lectura = Newsreader({
 // a transmitir la respuesta con 200). Con generateStaticParams en [] (sin
 // entradas de blog) esto hace que todo /blog/* responda 404.
 export const dynamicParams = false;
+
+// Media hora de vida: lo que tarda en reflejarse una cifra nueva de la fábrica
+// en el HTML servido (el artículo de los dos canales la pinta en el servidor).
+// Sin esto la página quedaría congelada en el momento del build.
+export const revalidate = 1800;
 
 export function generateStaticParams() {
   return blog
@@ -169,8 +176,10 @@ export default async function BlogPage(props0: {
             components={{
               ...defaultMdxComponents,
               a: MDXLink,
+              CifrasCanal,
               Figura,
               Nota,
+              VideoYouTube,
             }}
           />
         </article>
