@@ -5,6 +5,7 @@ import type { CreativeWork, WithContext } from "schema-dts";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { metadata as meta } from "@/app/config";
+import { VideoYouTube } from "@/components/blog/video-youtube";
 import { project } from "@/app/source";
 import { MDXLink } from "@/lib/mdx/default-components";
 import { createMetadata } from "@/lib/metadata";
@@ -154,6 +155,7 @@ export default async function ProjectPage(props0: {
             components={{
               ...defaultMdxComponents,
               a: MDXLink,
+              VideoYouTube,
             }}
           />
         </div>
