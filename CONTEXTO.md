@@ -273,9 +273,13 @@ navegador con `CI=1 corepack pnpm exec next start -p 3100` desde `apps/web`.
    le sirva a quien contrata, no volumen propio como «600.000 procesos». Es el
    único bloqueador de la auditoría del 17/10 que sigue abierto, y depende de
    que Alexis consiga la cita.
-3. Correo `Alexis.Dorado@24bytes.pro`: **el sitio ya lo muestra**, pero la regla
-   de reenvío en Cloudflare la crea Alexis. Hasta entonces, quien escriba a esa
-   dirección rebota. El formulario no depende de ella (usa `EMAIL_TO`).
+3. Correo `Alexis.Dorado@24bytes.pro`: el sitio lo muestra y **no rebota**.
+   Comprobado el 18/10 con una sonda SMTP contra `route1.mx.cloudflare.net`:
+   acepta esa dirección con `250 Ok`, pero también acepta un buzón inventado,
+   así que hay **catch-all** en Email Routing y la puerta SMTP no distingue.
+   Un correo de prueba enviado ese día no produjo rebote en ocho minutos.
+   Falta que Alexis confirme que llegó a `secop.monitor@gmail.com`; si llegó,
+   no hay nada que configurar. El formulario no depende de ella (usa `EMAIL_TO`).
 4. Reenviar el sitemap en Search Console. Opcional: ya estaba enviado el
    17/09. Por API no se puede, porque el acceso es `webmasters.readonly`.
    Desde el navegador:
@@ -324,6 +328,11 @@ Arreglado el 17/10:
   por defecto de `@repo/ui/button` (`h-11 md:h-9`), que afecta a todo el sitio.
 - **Ficha de la fábrica de videos** y su tarjeta en el bloque de productos de la
   portada, enlazando los dos canales.
+
+Desplegado el 18/10 con el procedimiento de §3 (respaldo de imagen
+`web-rescatada:respaldo-20261018`, cero borrados en el `rsync -n`) y verificado
+desde fuera: `/`, `/servicios`, `/projects`, `/projects/fabrica-de-videos` y
+`/about` en 200, sitemap con 41 URLs e incluyendo `/servicios`.
 
 Lo que NO se tocó, a propósito: el titular de la portada («Un desarrollador full
 stack que ❤️ crear software») y la foto del héroe, que la auditoría señala como
