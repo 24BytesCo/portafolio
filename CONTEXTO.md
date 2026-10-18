@@ -273,13 +273,12 @@ navegador con `CI=1 corepack pnpm exec next start -p 3100` desde `apps/web`.
    le sirva a quien contrata, no volumen propio como «600.000 procesos». Es el
    único bloqueador de la auditoría del 17/10 que sigue abierto, y depende de
    que Alexis consiga la cita.
-3. Correo `Alexis.Dorado@24bytes.pro`: el sitio lo muestra y **no rebota**.
-   Comprobado el 18/10 con una sonda SMTP contra `route1.mx.cloudflare.net`:
-   acepta esa dirección con `250 Ok`, pero también acepta un buzón inventado,
-   así que hay **catch-all** en Email Routing y la puerta SMTP no distingue.
-   Un correo de prueba enviado ese día no produjo rebote en ocho minutos.
-   Falta que Alexis confirme que llegó a `secop.monitor@gmail.com`; si llegó,
-   no hay nada que configurar. El formulario no depende de ella (usa `EMAIL_TO`).
+3. ~~Correo `Alexis.Dorado@24bytes.pro`~~ **CERRADO el 18/10**: entrega bien.
+   Hay **catch-all** en Email Routing, así que no hacía falta crear ninguna
+   regla; el correo de prueba llegó a la bandeja y no hubo rebote. La sonda SMTP
+   contra `route1.mx.cloudflare.net` no sirve para distinguirlo: acepta con
+   `250 Ok` tanto esa dirección como un buzón inventado. El formulario de
+   contacto sigue sin depender de ella (usa `EMAIL_TO`).
 4. Reenviar el sitemap en Search Console. Opcional: ya estaba enviado el
    17/09. Por API no se puede, porque el acceso es `webmasters.readonly`.
    Desde el navegador:
