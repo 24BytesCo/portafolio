@@ -1,12 +1,13 @@
 import fs from "node:fs";
 import path from "node:path";
 import type { Metadata } from "next";
-import type { CreativeWork, WithContext } from "schema-dts";
+import type { CreativeWork } from "schema-dts";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { metadata as meta } from "@/app/config";
 import { VideoYouTube } from "@/components/blog/video-youtube";
 import { project } from "@/app/source";
+import { grafo, referenciaPersona } from "@/lib/entidad";
 import { MDXLink } from "@/lib/mdx/default-components";
 import { createMetadata } from "@/lib/metadata";
 import { MDXContent } from "@content-collections/mdx/react";
@@ -117,19 +118,18 @@ export default async function ProjectPage(props0: {
 
   // No usar SoftwareApplication: Google exige offers/valoraciones y Search
   // Console lo marca inválido sin ellas.
-  const jsonLd: WithContext<CreativeWork> = {
-    "@context": "https://schema.org",
+  const obra: CreativeWork = {
     "@type": "CreativeWork",
     name: page.data.title,
     description: page.data.description,
     url: `${meta.site.url}/projects/${slug}`,
     image: cover2 ? `${meta.site.url}${cover2}` : undefined,
-    author: {
-      "@type": "Person",
-      name: meta.author.name,
-      url: meta.site.url,
-    },
+    inLanguage: "es",
+    author: referenciaPersona,
+    creator: referenciaPersona,
   };
+
+  const jsonLd = grafo(obra);
 
   return (
     <main className="my-14 flex-1">

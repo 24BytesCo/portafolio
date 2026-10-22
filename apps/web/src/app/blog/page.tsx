@@ -1,4 +1,4 @@
-import type { Blog, WithContext } from "schema-dts";
+import type { Blog } from "schema-dts";
 import React from "react";
 import Link from "next/link";
 import PostCard from "@/app/blog/_components/post-card";
@@ -6,7 +6,7 @@ import { metadata as meta } from "@/app/config";
 import { blog } from "@/app/source";
 import Line from "@/components/fancy/line";
 import TextReveal from "@/components/fancy/text-reveal";
-import { contact } from "@/components/sections/contact/config";
+import { grafo, referenciaPersona } from "@/lib/entidad";
 import { createMetadata } from "@/lib/metadata";
 
 import { Button } from "@repo/ui/button";
@@ -56,19 +56,17 @@ export const metadata = {
       }),
 };
 
-const jsonLd: WithContext<Blog> = {
-  "@context": "https://schema.org",
+const bitacora: Blog = {
   "@type": "Blog",
+  "@id": `${meta.site.url}/blog#bitacora`,
   name: title,
   description,
   url: `${meta.site.url}/blog`,
-  author: {
-    "@type": "Person",
-    name: meta.author.name,
-    url: meta.site.url,
-    sameAs: [...contact.socials.map((social) => social.href)],
-  },
+  inLanguage: "es",
+  author: referenciaPersona,
 };
+
+const jsonLd = grafo(bitacora);
 
 export default function BlogPage(): React.ReactElement {
   return (
