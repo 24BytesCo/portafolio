@@ -1,0 +1,87 @@
+---
+title: "PHP2Shell: el parche salió el miércoles y la mitad de internet no lo va a aplicar"
+description: "Dos fallos críticos en el núcleo de PHP, un parche publicado el 21 de octubre y un parque donde entre el 54 % y el 79 % de los servidores corre ramas que ya no reciben arreglos. El problema no es el fallo: es quién puede aplicar la corrección y quién no."
+date: 2026-10-23
+author: Alexis Dorado Muñoz
+portada:
+  src: /images/blog/php2shell-la-mitad-de-internet-no-parchea/portada.jpg
+  alt: "PHP2Shell: CVE-2026-109618 y CVE-2026-109619, parcheados en PHP 8.2.35, 8.3.36, 8.4.27 y 8.5.12"
+  ancho: 1600
+  alto: 790
+cta:
+  titulo: "¿Sabes en cuánto tiempo se parchea lo tuyo?"
+  texto: "Si no tienes a nadie que responda esa pregunta con una fecha, podemos hablarlo. Operar software ajeno y propio es parte de lo que hago."
+  href: "/servicios"
+  etiqueta: "Ver qué puedo hacer por ti"
+---
+
+El 21 de octubre de 2026 la PHP Foundation publicó una versión de seguridad de emergencia para dos fallos en el núcleo del intérprete: [CVE-2026-109618 y CVE-2026-109619](https://github.com/php/php-src/security/advisories/GHSA-w8hw-w9fx-j79w), bautizados **PHP2Shell**, con una puntuación CVSS v4.0 de 9.2. Las versiones corregidas son 8.5.12, 8.4.27, 8.3.36 y 8.2.35, y hay que reiniciar los procesos trabajadores: mientras `php-fpm` o Apache sigan vivos, el código vulnerable sigue en memoria.
+
+Hasta ahí, una semana normal en seguridad. Lo que hace a este caso distinto no es el fallo, que es elegante y feo a partes iguales. Es la respuesta a una pregunta incómoda: **de los millones de servidores afectados, ¿cuántos pueden aplicar el parche?**
+
+## Por qué no sirve tener el código limpio
+
+La mayoría de los sustos en el mundo PHP vienen de un plugin de WordPress, de una plantilla o de un error lógico en la aplicación. Este no.
+
+El fallo está en el motor, en C. Cuando PHP se queda sin memoria —el `memory_limit` de siempre— no desenrolla la pila con cuidado: salta fuera con un `longjmp()` y abandona la operación a medias. En determinados puntos, esa salida deja estructuras de memoria a medio inicializar que después se leen durante la limpieza de la petición. De ahí a controlar lo que el proceso ejecuta hay un camino, y varios equipos lo recorrieron.
+
+La consecuencia práctica es brutal: en configuraciones con `mod_php`, la corrupción puede ocurrir **antes de que se ejecute una sola línea de tu aplicación**. Un script que solo imprime «hola» es tan vulnerable como un comercio electrónico con diez años de parches encima. Las pruebas de laboratorio reportadas incluyen instalaciones limpias y al día de WordPress, Drupal, Joomla, Magento, Laravel y Nextcloud. No hay nada que arreglar en ese código, porque el código no es el problema.
+
+<Nota titulo="Un matiz que casi nadie cita">
+Red Hat señala que en sus despliegues estándar, con PHP-FPM en lugar de `mod_php`, los trabajadores terminan ante fallos tempranos de inicialización antes de llegar a las estructuras corrompidas, lo que vuelve la ejecución remota de código **difícil en la práctica**. «Difícil» no es «imposible», y el parche sigue siendo obligatorio. Pero conviene distinguir entre un 9.2 en una tabla y lo que de verdad pasa en tu máquina.
+</Nota>
+
+## El número que importa no es la gravedad: es el reparto
+
+Aquí es donde se pone interesante, y donde conviene desconfiar de las cifras redondas. Cada firma que escaneó internet esa semana publicó un porcentaje distinto de servidores corriendo ramas sin soporte:
+
+- [Qualys](https://blog.qualys.com/vulnerabilities-threat-research/2026/10/20/php-announces-critical-security-release-for-two-vulnerabilities): 110 millones de 155 millones de instalaciones con versión conocida, un **71 %**, en ramas de 5.4 a 8.1. En las primeras doce horas tras la divulgación se parchearon 199.000.
+- [Flare](https://flare.io/learn/resources/blog/php2shell-exposure): de 2,2 millones de servicios que revelan su versión, un **73 %** fuera de soporte. PHP 7.4 por sí solo era el 21 % de los registros.
+- Modat: **79 %** de 4,38 millones de servicios.
+- CybelAngel: **54 %**.
+- Censys: 1,58 millones de equipos con versión identificable, de los cuales 1,57 millones sin parchear el 21 de octubre.
+
+Ninguna de esas cifras es mentira, y ninguna mide lo mismo. Las dos distorsiones van en direcciones opuestas y conviene tenerlas claras antes de repetir un titular:
+
+- **Sobreestiman** porque las distribuciones de Linux retroportan los arreglos sin cambiar la cadena de versión: un Debian que anuncia `PHP/7.4.33` puede llevar el parche aplicado desde hace días.
+- **Subestiman** porque muchos servidores ocultan la versión, y los que están dentro de un cortafuegos o de un panel de administración ni siquiera aparecen en el escaneo.
+
+Cuando cinco escáneres serios dan entre un 54 % y un 79 %, lo honesto es decir que **la mayoría del parque corre software sin soporte** y dejar el número exacto en paz.
+
+## Por qué no lo van a parchear
+
+Esta es la parte que no se arregla con un boletín de seguridad.
+
+**No existe binario oficial.** El proyecto PHP solo publica versiones compiladas para las ramas 8.2 a 8.5. Si tu servidor corre 7.4 o 8.1, no hay un paquete que instalar: dependes de que tu distribución retroporte el arreglo, o de recompilar. Y conviene mirar el calendario antes de celebrar: **el soporte de seguridad de PHP 8.2 termina el 31 de diciembre de 2026**, así que buena parte de los que hoy están «dentro» se quedan fuera en diez semanas.
+
+**Subir de 7.4 a 8.x no es un `apt upgrade`.** Es un cambio de versión mayor que rompe código, y en la mayoría de pymes y administraciones locales ese código lo escribió hace ocho años una agencia que ya no existe. El coste de parchear no es el parche: es la migración que el parche obliga a hacer.
+
+**PHP está dentro de cosas que no parecen PHP.** El inventario que mantiene el [NCSC-NL](https://github.com/NCSC-NL/php2shell) recoge NAS de QNAP, interfaces de administración de cortafuegos, balanceadores y paneles de control: equipos donde el administrador no puede actualizar el paquete por su cuenta, porque el intérprete viene empotrado en el firmware del fabricante. Ahí no se parchea cuando sale el arreglo de PHP; se parchea cuando el fabricante quiere, si es que lo hace.
+
+**Y en el alojamiento compartido nadie tiene el control.** Millones de sitios viven en un hosting donde el dueño del sitio no decide la versión del intérprete. Si el proveedor tarda, el cliente espera. Por eso el dato de [Melurna](https://www.melurna.com/blog/php2shell-patch-status/) —un 23 % de sitios parcheados en las primeras 24 horas— es mejor noticia de lo que parece: ese porcentaje lo pusieron los proveedores de hosting gestionado actualizando a miles de clientes de golpe. Los que no están en uno de esos, no tienen quién los actualice.
+
+## Dos años de retraso y una lección de gobernanza
+
+El detalle más revelador del episodio no es técnico. La propia PHP Foundation reconoció en su informe posterior que los primeros indicios del fallo aparecieron **en 2024**, durante la auditoría externa que realizó Quarkslab con financiación de la Sovereign Tech Agency. Nadie consiguió entonces construir un ataque concreto, todas las correcciones propuestas rompían algo, y la decisión se encalló. La fundación lo llamó por su nombre: una falla estructural de su proceso, agravada por operar con poco más de una decena de personas sosteniendo el intérprete sobre el que corre buena parte de la web.
+
+Lo que cambió entre 2024 y 2026 fue la herramienta. Lo que los auditores humanos habían archivado como *probablemente inexplotable* se convirtió en una cadena de explotación funcional cuando varios equipos —Calif dentro del programa Patch the Planet de OpenAI, y Wiz con sus propios modelos— volvieron sobre el mismo código con asistencia de modelos de lenguaje. Conviene decirlo sin épica: los reportes describen **investigación asistida**, no un modelo descubriendo solo. El propio investigador de Calif subrayó que el criterio y la dirección de la búsqueda siguieron siendo humanos.
+
+Aun así, la conclusión incomoda igual. **El margen entre «este fallo es demasiado difícil de explotar» y «aquí está el exploit» se ha estrechado**, y ese margen es exactamente donde vivía una parte de la seguridad de todo el software viejo que hay en producción.
+
+Como remate, el embargo se rompió antes de tiempo: la PHP Foundation acusó públicamente a Chainguard de publicar binarios parcheados por su cuenta, y Amazon detectó un intento de explotación el **17 de octubre**, cuatro días antes de que existiera parche o anuncio. Alguien sabía.
+
+## Lo que hago yo, y lo que recomiendo preguntar
+
+Seré honesto con mi posición: **no tengo PHP en producción.** Lo comprobé antes de escribir esto, no de memoria: ningún contenedor de los que opero ejecuta el intérprete. Mi parte del mundo corre sobre NestJS, Angular, Python y Postgres, así que esta semana no he tenido que parchear nada.
+
+Pero sacar de aquí que «PHP es inseguro» sería la lección equivocada, y además falsa: el fallo estuvo catorce años en el árbol de código **de uno de los proyectos más auditados que existen**. Lo mismo puede estar hoy en el intérprete que tú uses. La pregunta que deja PHP2Shell no es qué lenguaje eliges, sino esta:
+
+> Cuando mañana salga un fallo crítico en algo que tú no escribiste y que está debajo de tu aplicación, **¿cuánto tardas en aplicar el arreglo, y de quién dependes para hacerlo?**
+
+Si quien opera tu software no puede contestar eso con un número de horas, el riesgo no es teórico. Tres preguntas concretas para hacerle hoy:
+
+1. **¿Qué versiones exactas corren en producción**, incluidos los intérpretes y las imágenes base, y dónde está esa lista escrita?
+2. **¿Cuánto se tardó en aplicar el último parche de seguridad crítico?** No la política: la fecha real de la última vez.
+3. **¿Qué partes no podemos parchear nosotros** porque dependen de un fabricante o de un proveedor de alojamiento, y qué plan hay para esas?
+
+Las tres se responden en una tarde. La alternativa es enterarte el día que toque, que es el peor día para empezar a averiguarlo.
