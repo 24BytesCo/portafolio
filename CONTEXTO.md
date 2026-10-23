@@ -337,6 +337,25 @@ Lo que NO se tocó, a propósito: el titular de la portada («Un desarrollador f
 stack que ❤️ crear software») y la foto del héroe, que la auditoría señala como
 el punto más débil para un cliente. Son decisión de Alexis.
 
+### Contador de lecturas (23/10)
+
+Las vistas salen de Umami, que ya recogía los datos desde el 18/09: no se
+añadió ningún contador nuevo ni se guarda nada propio. `src/lib/vistas.ts`
+pide a Umami por la red interna el recuento de **todas** las rutas en una sola
+llamada cacheada media hora, y el componente `<Vistas>` la pinta en los
+artículos y en las fichas de proyecto. Ambas rutas tienen `revalidate = 1800`,
+así que el número se refresca solo cada media hora sin desplegar.
+
+Sin `UMAMI_API_KEY` no se muestra nada y nada se rompe: la clave se crea en
+/stats → Settings → API keys y se guarda con `scripts/poner-umami-api-key.sh`,
+que la pide por teclado y la escribe en el `.env` del servidor sin que pase por
+el repositorio. `VISTAS_MINIMO` esconde el contador por debajo de ese número de
+lecturas (0 = mostrar siempre), por si las cifras bajas restan en vez de sumar.
+
+El `docker-compose.deploy.yml` del servidor pasa ahora `UMAMI_INTERNAL_URL`,
+`UMAMI_API_KEY` y `VISTAS_MINIMO` al contenedor web; antes la URL interna solo
+existía como argumento de build.
+
 ### Indexación y marca personal (22/10)
 
 Diagnóstico con la API de Search Console, no impresiones: `/blog`, las dos
