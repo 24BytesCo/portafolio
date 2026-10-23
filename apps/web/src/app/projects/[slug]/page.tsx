@@ -7,6 +7,7 @@ import { notFound } from "next/navigation";
 import { metadata as meta } from "@/app/config";
 import { VideoYouTube } from "@/components/blog/video-youtube";
 import { project } from "@/app/source";
+import { Vistas } from "@/components/blog/vistas";
 import { grafo, referenciaPersona } from "@/lib/entidad";
 import { MDXLink } from "@/lib/mdx/default-components";
 import { createMetadata } from "@/lib/metadata";
@@ -19,6 +20,10 @@ import Header from "./header";
 // resolviendo dinámicamente y notFound() llega tarde (loading.tsx ya empezó
 // a transmitir la respuesta con 200).
 export const dynamicParams = false;
+
+// Media hora, para que el contador de lecturas se refresque solo. El contenido
+// de la ficha no cambia entre despliegues; el número sí.
+export const revalidate = 1800;
 
 // Pre-generate static params for all project pages at build time
 export function generateStaticParams() {
@@ -139,6 +144,10 @@ export default async function ProjectPage(props0: {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
         <Header metadata={page.data} />
+        <Vistas
+          ruta={`/projects/${slug}`}
+          className="mt-4 text-sm text-gray-500 dark:text-gray-400"
+        />
         {cover2 ? (
           <Image
             src={cover2}

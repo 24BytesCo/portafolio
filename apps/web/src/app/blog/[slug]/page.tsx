@@ -12,6 +12,7 @@ import { Indice } from "@/components/blog/indice";
 import { MedidorLectura } from "@/components/blog/medidor-lectura";
 import { Nota } from "@/components/blog/nota";
 import { VideoYouTube } from "@/components/blog/video-youtube";
+import { Vistas } from "@/components/blog/vistas";
 import { grafo, referenciaOrganizacion, referenciaPersona } from "@/lib/entidad";
 import { MDXLink } from "@/lib/mdx/default-components";
 import { createMetadata } from "@/lib/metadata";
@@ -150,6 +151,7 @@ export default async function BlogPage(props0: {
           <div className="entrada-fecha">
             <p className="entrada-autor">{formatearFecha(rawDate)}</p>
             <p className="entrada-dato">{minutos} min de lectura</p>
+            <Vistas ruta={`/blog/${slug}`} className="entrada-dato" />
           </div>
         </div>
       </header>

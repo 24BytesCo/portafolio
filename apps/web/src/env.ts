@@ -17,6 +17,10 @@ export const env = createEnv({
    */
   server: {
     TURNSTILE_SECRET_KEY: z.string().min(1).optional(),
+    // Contador de lecturas: clave de API de Umami y mínimo para mostrarlo.
+    UMAMI_API_KEY: z.string().optional(),
+    UMAMI_INTERNAL_URL: z.string().optional(),
+    VISTAS_MINIMO: z.coerce.number().optional(),
     CONTACT_CAPTCHA_PROVIDER: z.enum(["turnstile", "none"]).optional(),
   },
 
