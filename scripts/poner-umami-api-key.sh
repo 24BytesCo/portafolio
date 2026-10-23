@@ -12,10 +12,29 @@ set -Eeuo pipefail
 SERVIDOR="user_24bytes@80.190.77.63"
 RUTA="~/Documents/Proyectos/Portafolio"
 
-read -rsp "Pega la clave de API de Umami (no se verá al escribir): " CLAVE
-echo
+# Con terminal se pide por teclado; sin ella (la consola de Claude no es
+# interactiva) se lee de la entrada estándar.
+CLAVE=""
+if [[ -t 0 ]]; then
+  read -rsp "Pega la clave de API de Umami (no se verá al escribir): " CLAVE || true
+  echo
+else
+  IFS= read -r CLAVE || true
+fi
+
 if [[ -z "${CLAVE// }" ]]; then
-  echo "Clave vacía: no se cambió nada." >&2
+  cat >&2 <<'AYUDA'
+No llegó ninguna clave, así que no se cambió nada.
+
+La clave se crea en https://24bytes.pro/stats → Settings → API keys.
+Dos formas de dársela a este script:
+
+  1. En una terminal normal (no la consola de Claude, que no es interactiva):
+       bash scripts/poner-umami-api-key.sh
+
+  2. Sin terminal, por la entrada estándar, borrando el archivo después:
+       printf '%s' 'LA_CLAVE' > /tmp/clave && bash scripts/poner-umami-api-key.sh < /tmp/clave; shred -u /tmp/clave
+AYUDA
   exit 1
 fi
 
