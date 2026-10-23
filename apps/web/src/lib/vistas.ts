@@ -31,7 +31,9 @@ function normalizar(ruta: string): string {
 async function mapaDeVistas(): Promise<Map<string, number>> {
   const base = env.UMAMI_INTERNAL_URL;
   const clave = env.UMAMI_API_KEY;
-  const sitio = env.NEXT_PUBLIC_UMAMI_WEBSITE_ID;
+  // El id va también como variable de servidor: la NEXT_PUBLIC_ se resuelve en
+  // el build y no se puede cambiar sin recompilar.
+  const sitio = env.UMAMI_WEBSITE_ID ?? env.NEXT_PUBLIC_UMAMI_WEBSITE_ID;
   if (!base || !clave || !sitio) return new Map();
 
   // Redondeado a la media hora: si el `endAt` cambiara en cada render, la URL
@@ -39,7 +41,7 @@ async function mapaDeVistas(): Promise<Map<string, number>> {
   const fin = Math.floor(Date.now() / VENTANA_MS) * VENTANA_MS;
   const url =
     `${base}/stats/api/websites/${sitio}/metrics` +
-    `?type=url&startAt=${INICIO_MS}&endAt=${fin}&limit=500`;
+    `?type=path&startAt=${INICIO_MS}&endAt=${fin}&limit=500`;
 
   try {
     const respuesta = await fetch(url, {

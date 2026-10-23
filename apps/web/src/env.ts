@@ -20,6 +20,7 @@ export const env = createEnv({
     // Contador de lecturas: clave de API de Umami y mínimo para mostrarlo.
     UMAMI_API_KEY: z.string().optional(),
     UMAMI_INTERNAL_URL: z.string().optional(),
+    UMAMI_WEBSITE_ID: z.string().optional(),
     VISTAS_MINIMO: z.coerce.number().optional(),
     CONTACT_CAPTCHA_PROVIDER: z.enum(["turnstile", "none"]).optional(),
   },
