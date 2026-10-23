@@ -346,6 +346,16 @@ llamada cacheada media hora, y el componente `<Vistas>` la pinta en los
 artículos y en las fichas de proyecto. Ambas rutas tienen `revalidate = 1800`,
 así que el número se refresca solo cada media hora sin desplegar.
 
+**Trampa que costó dos despliegues**: el número NO se puede calcular al
+renderizar la página. El HTML de artículos y fichas se genera durante
+`docker build`, y ese contenedor de build no está en `portafolio-net`, así que
+no alcanza a Umami: el contador salía vacío y el ISR servía ese HTML como
+`x-nextjs-cache: HIT` indefinidamente. Por eso el dato se pide **ya en marcha**,
+desde el navegador, a `/api/vistas` (la consulta a Umami se sigue cacheando
+media hora en el servidor, así que no hay una petición a la analítica por
+visitante). Segundo tropiezo: en Umami 3 el tipo de métrica es `type=path`;
+`type=url` responde 400.
+
 Sin `UMAMI_API_KEY` no se muestra nada y nada se rompe: la clave se crea en
 /stats → Settings → API keys y se guarda con `scripts/poner-umami-api-key.sh`,
 que la pide por teclado y la escribe en el `.env` del servidor sin que pase por
