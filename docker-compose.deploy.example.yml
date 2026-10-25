@@ -60,7 +60,7 @@ services:
   # SIN puertos y SIN proxy-net: solo lo alcanza portafolio-web por la red
   # interna, que lo sirve bajo /stats con un rewrite de Next.
   portafolio-umami:
-    image: umami-24bytes:3.4.0
+    image: umami-24bytes:3.4.1
     container_name: portafolio-umami
     restart: unless-stopped
     depends_on:
