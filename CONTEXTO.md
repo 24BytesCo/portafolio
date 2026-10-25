@@ -73,8 +73,8 @@ secop.24bytes.pro** y a los demás subdominios.
 
 ## 2b. Analítica propia (desde el 18/09)
 
-- **Umami 3.4.0 autoalojado**, servido bajo `https://24bytes.pro/stats` (panel
-  y script). Contenedor `portafolio-umami`, imagen `umami-24bytes:3.4.0`
+- **Umami autoalojado (3.4.0 en prod; 3.4.1 pendiente de compilar, trae Next 16.4.2)**, servido bajo `https://24bytes.pro/stats` (panel
+  y script). Contenedor `portafolio-umami`, imagen `umami-24bytes:3.4.1`
   compilada EN EL SERVIDOR desde `~/Documents/Proyectos/umami-src` con
   `--build-arg BASE_PATH=/stats` (la imagen oficial no admite ruta base). Sin
   puertos ni `proxy-net`: solo lo alcanza `portafolio-web` por `portafolio-net`,
