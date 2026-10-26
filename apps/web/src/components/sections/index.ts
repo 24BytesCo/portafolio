@@ -1,4 +1,5 @@
 import About from "./about/cozy/about";
+import Blog from "./blog/cozy/blog";
 import Contact from "./contact/cozy/contact";
 import Experience from "./experience/modern/experience";
 import Footer from "./footer/modern/footer";
@@ -7,4 +8,14 @@ import Hero from "./hero/modern/hero";
 import Projects from "./projects/modern/projects";
 import Skills from "./skills/cozy/skills";
 
-export { Header, Hero, About, Projects, Skills, Experience, Contact, Footer };
+export {
+  Header,
+  Hero,
+  About,
+  Projects,
+  Skills,
+  Experience,
+  Blog,
+  Contact,
+  Footer,
+};

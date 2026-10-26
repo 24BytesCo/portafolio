@@ -12,6 +12,8 @@ import { Indice } from "@/components/blog/indice";
 import { MedidorLectura } from "@/components/blog/medidor-lectura";
 import { Nota } from "@/components/blog/nota";
 import { VideoYouTube } from "@/components/blog/video-youtube";
+import { Vistas } from "@/components/blog/vistas";
+import { grafo, referenciaOrganizacion, referenciaPersona } from "@/lib/entidad";
 import { MDXLink } from "@/lib/mdx/default-components";
 import { createMetadata } from "@/lib/metadata";
 import { formatearFecha } from "@/lib/utils";
@@ -103,8 +105,7 @@ export default async function BlogPage(props0: {
     alto: 630,
   };
 
-  const jsonLd = {
-    "@context": "https://schema.org",
+  const entrada = {
     "@type": "BlogPosting",
     headline: page.data.title,
     description: page.data.description,
@@ -112,13 +113,12 @@ export default async function BlogPage(props0: {
     dateModified: fechaIso(rawDate),
     image: `${meta.site.url}/images/blog/${slug}/cover.jpg`,
     mainEntityOfPage: `${meta.site.url}/blog/${slug}`,
-    author: {
-      "@type": "Person",
-      name: meta.author.name,
-      url: `${meta.site.url}/about`,
-    },
-    publisher: { "@type": "Organization", name: "24Bytes", url: meta.site.url },
+    inLanguage: "es",
+    author: referenciaPersona,
+    publisher: referenciaOrganizacion,
   };
+
+  const jsonLd = grafo(entrada);
 
   return (
     <main className={`${lectura.variable} entrada my-24 flex-1`}>
@@ -151,6 +151,7 @@ export default async function BlogPage(props0: {
           <div className="entrada-fecha">
             <p className="entrada-autor">{formatearFecha(rawDate)}</p>
             <p className="entrada-dato">{minutos} min de lectura</p>
+            <Vistas ruta={`/blog/${slug}`} className="entrada-dato" />
           </div>
         </div>
       </header>

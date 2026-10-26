@@ -1,12 +1,14 @@
 import fs from "node:fs";
 import path from "node:path";
 import type { Metadata } from "next";
-import type { CreativeWork, WithContext } from "schema-dts";
+import type { CreativeWork } from "schema-dts";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { metadata as meta } from "@/app/config";
 import { VideoYouTube } from "@/components/blog/video-youtube";
 import { project } from "@/app/source";
+import { Vistas } from "@/components/blog/vistas";
+import { grafo, referenciaPersona } from "@/lib/entidad";
 import { MDXLink } from "@/lib/mdx/default-components";
 import { createMetadata } from "@/lib/metadata";
 import { MDXContent } from "@content-collections/mdx/react";
@@ -18,6 +20,10 @@ import Header from "./header";
 // resolviendo dinámicamente y notFound() llega tarde (loading.tsx ya empezó
 // a transmitir la respuesta con 200).
 export const dynamicParams = false;
+
+// Media hora, para que el contador de lecturas se refresque solo. El contenido
+// de la ficha no cambia entre despliegues; el número sí.
+export const revalidate = 1800;
 
 // Pre-generate static params for all project pages at build time
 export function generateStaticParams() {
@@ -117,19 +123,18 @@ export default async function ProjectPage(props0: {
 
   // No usar SoftwareApplication: Google exige offers/valoraciones y Search
   // Console lo marca inválido sin ellas.
-  const jsonLd: WithContext<CreativeWork> = {
-    "@context": "https://schema.org",
+  const obra: CreativeWork = {
     "@type": "CreativeWork",
     name: page.data.title,
     description: page.data.description,
     url: `${meta.site.url}/projects/${slug}`,
     image: cover2 ? `${meta.site.url}${cover2}` : undefined,
-    author: {
-      "@type": "Person",
-      name: meta.author.name,
-      url: meta.site.url,
-    },
+    inLanguage: "es",
+    author: referenciaPersona,
+    creator: referenciaPersona,
   };
+
+  const jsonLd = grafo(obra);
 
   return (
     <main className="my-14 flex-1">
@@ -139,6 +144,10 @@ export default async function ProjectPage(props0: {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
         <Header metadata={page.data} />
+        <Vistas
+          ruta={`/projects/${slug}`}
+          className="mt-4 text-sm text-gray-500 dark:text-gray-400"
+        />
         {cover2 ? (
           <Image
             src={cover2}

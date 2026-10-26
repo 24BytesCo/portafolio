@@ -42,10 +42,11 @@ export default function ServiciosPage(): React.ReactElement {
           Qué puedo hacer por ti
         </TextReveal>
         <p className="mt-6 max-w-2xl text-gray-500 md:text-lg dark:text-gray-400">
-          Trabajo solo y tomo pocos proyectos a la vez, así que lo que entrego
-          lo construyo y lo opero yo. Estos son los tres tipos de encargo que
-          acepto. El precio depende del alcance y lo hablamos en la primera
-          llamada, cuando ya sabemos qué hay que construir.
+          Lo que entrego lo construyo y lo opero yo: hablas con quien escribe
+          el código, no con un comercial que luego lo delega. Estos son los
+          tres tipos de encargo que acepto. El precio depende del alcance y lo
+          hablamos en la primera llamada, cuando ya sabemos qué hay que
+          construir.
         </p>
       </section>
 

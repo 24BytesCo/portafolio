@@ -337,6 +337,65 @@ Lo que NO se tocó, a propósito: el titular de la portada («Un desarrollador f
 stack que ❤️ crear software») y la foto del héroe, que la auditoría señala como
 el punto más débil para un cliente. Son decisión de Alexis.
 
+### Contador de lecturas (23/10)
+
+Las vistas salen de Umami, que ya recogía los datos desde el 18/09: no se
+añadió ningún contador nuevo ni se guarda nada propio. `src/lib/vistas.ts`
+pide a Umami por la red interna el recuento de **todas** las rutas en una sola
+llamada cacheada media hora, y el componente `<Vistas>` la pinta en los
+artículos y en las fichas de proyecto. Ambas rutas tienen `revalidate = 1800`,
+así que el número se refresca solo cada media hora sin desplegar.
+
+**Trampa que costó dos despliegues**: el número NO se puede calcular al
+renderizar la página. El HTML de artículos y fichas se genera durante
+`docker build`, y ese contenedor de build no está en `portafolio-net`, así que
+no alcanza a Umami: el contador salía vacío y el ISR servía ese HTML como
+`x-nextjs-cache: HIT` indefinidamente. Por eso el dato se pide **ya en marcha**,
+desde el navegador, a `/api/vistas` (la consulta a Umami se sigue cacheando
+media hora en el servidor, así que no hay una petición a la analítica por
+visitante). Segundo tropiezo: en Umami 3 el tipo de métrica es `type=path`;
+`type=url` responde 400.
+
+Sin `UMAMI_API_KEY` no se muestra nada y nada se rompe: la clave se crea en
+/stats → Settings → API keys y se guarda con `scripts/poner-umami-api-key.sh`,
+que la pide por teclado y la escribe en el `.env` del servidor sin que pase por
+el repositorio. `VISTAS_MINIMO` esconde el contador por debajo de ese número de
+lecturas (0 = mostrar siempre), por si las cifras bajas restan en vez de sumar.
+
+El `docker-compose.deploy.yml` del servidor pasa ahora `UMAMI_INTERNAL_URL`,
+`UMAMI_API_KEY` y `VISTAS_MINIMO` al contenedor web; antes la URL interna solo
+existía como argumento de build.
+
+### Indexación y marca personal (22/10)
+
+Diagnóstico con la API de Search Console, no impresiones: `/blog`, las dos
+entradas de la fábrica y la ficha `/projects/fabrica-de-videos` salían como
+**«Google no reconoce esta URL»** — ni rastreadas. No era culpa del sitemap
+(41 URLs, descargado el 21/10, cero errores) ni de `robots`: las páginas están
+en el sitemap, son `index, follow` y la portada las enlaza. Es rastreo escaso
+sobre un dominio sin autoridad. Buscar «Alexis Dorado Muñoz» no devolvía nada
+del sitio, y en los últimos 28 días no hubo una sola impresión por su nombre.
+
+Lo que se hizo:
+
+- **Una sola entidad** (`src/lib/entidad.ts`): `Person` y `Organization` con
+  `@id` estable, y un `@graph` por página. Antes cada página declaraba su
+  propio `Person` suelto, sin identificador: tres copias que un buscador no
+  puede casar. `/about` pasa a `ProfilePage` y es la página canónica de la
+  persona; entradas y fichas enlazan al mismo `@id` como autor.
+- **Sección «Del blog» en la portada** con las tres últimas entradas. Antes
+  ningún enlace del cuerpo apuntaba a una entrada, solo el menú.
+- **IndexNow** (`scripts/avisar-indexnow.sh` y la clave en `apps/web/public/`):
+  avisa a Bing de todas las URLs del sitemap. Google no participa, pero Bing
+  alimenta a Copilot y a ChatGPT. Primer envío el 22/10: 41 URLs, respuesta 202.
+
+Lo que **no** puede hacer esta sesión: pedir indexación de una URL. El acceso a
+Search Console es `webmasters.readonly`, y la Indexing API de Google solo
+admite `JobPosting` y `BroadcastEvent` — para un artículo hay que usar la
+inspección de URL a mano. Y ninguna señal interna sustituye a los enlaces
+externos: mientras LinkedIn, GitHub y los canales de YouTube no apunten al
+dominio, el nombre propio no tiene de dónde ganar posición.
+
 ### Cifras en vivo desde la fábrica de videos (15/10)
 
 El artículo `fabrica-de-videos-dos-canales` no lleva las cifras escritas: las

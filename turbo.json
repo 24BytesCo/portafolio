@@ -60,7 +60,11 @@
     },
     "globalEnv": [
         "RESEND_API_KEY",
-        "PORT"
+        "PORT",
+        "UMAMI_INTERNAL_URL",
+        "UMAMI_API_KEY",
+        "UMAMI_WEBSITE_ID",
+        "VISTAS_MINIMO"
     ],
     "globalPassThroughEnv": [
         "NODE_ENV",
