@@ -1,0 +1,123 @@
+---
+title: "13.097 intentos de entrar en una semana y ni un puerto abierto: así protejo siete productos en un servidor"
+description: "Dos avisos críticos la misma semana, 124 boletines cruzados contra las versiones reales y tres despliegues que se negaron a correr. Lo que protege un producto no es el modelo de IA que lleva dentro: es la fontanería."
+date: 2026-10-27
+author: Alexis Dorado Muñoz
+portada:
+  src: /images/blog/cero-puertos-abiertos-asi-protejo-siete-productos/portada.jpg
+  alt: "Cadena de exposición: Cloudflare, túnel, proxy en la interfaz local y contenedores por nombre"
+  ancho: 1600
+  alto: 790
+cta:
+  titulo: "¿Sabes por dónde entra el tráfico a lo tuyo?"
+  texto: "Si nadie puede dibujarte esa cadena en una servilleta, probablemente haya un puerto abierto que no sabes que existe. Operar software propio y ajeno es parte de lo que hago."
+  href: "/servicios"
+  etiqueta: "Ver qué puedo hacer por ti"
+---
+
+En los últimos siete días, los registros del servidor donde corren mis productos acumulan **13.097 intentos fallidos de inicio de sesión**. Robots probando `root`, `admin`, `ubuntu`, uno detrás de otro, día y noche. Ninguno entró, y no por suerte.
+
+Esa cifra es la parte aburrida. La semana interesante empezó el 20 de octubre, cuando coincidieron dos avisos de máxima gravedad: [PHP2Shell](/blog/php2shell-la-mitad-de-internet-no-parchea), la ejecución remota de código en el núcleo de PHP que obligó a apagar portales de gobierno, y el [boletín de seguridad de Node.js del 21 de octubre](https://nodejs.org/en/blog/vulnerability/october-2026-security-releases), con una corrupción de memoria en Brotli explotable en remoto. El primero no me tocaba —no tengo PHP en producción, y lo comprobé antes de decirlo—. El segundo sí: **todas mis APIs son Node**.
+
+Lo que sigue es lo que hice en esos diez días, por qué cada decisión está donde está, y las tres veces que algo se negó a funcionar y resultó ser lo mejor que pasó en la semana.
+
+## Lo primero: nada se publica a internet
+
+Siete productos en producción sobre un mismo servidor —un monitor de contratación pública con clientes de pago y pasarela, una plataforma con inversores y dinero real, el sistema de un cliente con tres entornos, una fábrica de contenido, este sitio con su analítica y dos demos comerciales— reparten 63 contenedores entre producción, pruebas y demos. Si uno cae, caen la facturación y la reputación a la vez.
+
+Por eso el principio número uno no es una herramienta, es una regla: **ningún contenedor publica puertos a internet. Nunca.** Todo el tráfico sigue la misma cadena, sin excepciones:
+
+> internet → **Cloudflare** (DNS + WAF) → **túnel cifrado** → **proxy que escucha solo en la interfaz local** → **contenedor, por nombre**
+
+Las consecuencias prácticas de esa cadena valen más que cualquier antivirus:
+
+- **El origen no es alcanzable.** El túnel abre la conexión desde dentro hacia fuera; no hay nada a lo que llamar desde internet aunque alguien descubra la dirección del servidor. Lo verifiqué como lo verificaría un atacante: escaneo de puertos desde fuera, petición directa a la dirección del origen, y enumeración de subdominios a partir de los registros públicos de certificados. Ninguno apunta al servidor.
+- **La mitad de los CVE pierden su vector.** Buena parte de los avisos de «servidor expuesto» —nginx, Postgres, paneles de administración— bajan de gravedad en cuanto cruzas la versión con la exposición real. No es que no apliquen: es que no hay por dónde alcanzarlos.
+- **Queda un solo puerto abierto en todo el servidor: SSH**, con llave y sin contraseña. Esos 13.097 intentos golpean la única puerta que existe, y golpean una cerradura sin ojo.
+
+<Nota titulo="La decisión que tomé el primer día">
+La autenticación por contraseña en SSH seguía activa «por si acaso». No la usaba nadie desde hacía meses: todas las sesiones aceptadas en treinta días venían de direcciones propias y con la misma llave. Se desactivó el mismo día. Era el único sitio donde la fuerza bruta tenía algo que hacer, y ahora no tiene nada.
+</Nota>
+
+## ¿Y si ya estaban dentro?
+
+Antes de parchear nada hay una pregunta más incómoda: **¿cómo sé que no han entrado ya?** Un servidor comprometido al que le aplicas actualizaciones sigue comprometido.
+
+La revisión fue de solo lectura y buscó lo que deja un intruso, no lo que deja un escáner: llaves autorizadas en todas las cuentas, sesiones aceptadas y fallidas, usuarios con shell, tareas programadas y servicios de arranque, procesos por consumo de CPU, binarios con permisos especiales, archivos de sistema modificados en los últimos días, conexiones salientes, imágenes y contenedores, y quién tiene montado el socket de Docker —que es, en la práctica, ser root—.
+
+Resultado: una única llave en todas las cuentas, cero mineros, cero tareas desconocidas, cada conexión saliente explicada, cortafuegos denegando por defecto con una sola excepción. **Cero intrusiones.** Queda escrito como línea base para repetirlo cada mes: la próxima vez la pregunta no será «¿hay algo raro?», sino «¿qué cambió respecto a octubre?».
+
+## Donde de verdad se roba dinero: el código
+
+El perímetro es lo fácil. La revisión que importa es la del código de cada producto buscando las clases de fallo que mueven dinero o datos: autorización por ruta, acceso a datos de otro usuario, validación de firmas en los webhooks de pago, inyección, peticiones del servidor a URL que controla un tercero, subida de archivos.
+
+Lo que estaba bien, y lo confirmé antes de dormir tranquilo: los webhooks de la pasarela validan la firma en tiempo constante, son idempotentes por triplicado contra el reenvío, re-consultan al proveedor y comparan el monto; el panel de inversores acota cada consulta al usuario autenticado y las operaciones con dinero exigen rol de administrador.
+
+Lo que no estaba bien:
+
+- **Dieciocho rutas de escritura «internas» eran alcanzables desde internet.** Pensadas para los procesos de fondo, nunca para un navegador. El dinero estaba protegido, pero la integridad de los datos no. Llevan guard por token compartido.
+- **Peticiones salientes sin control de destino** en los componentes que descargan imágenes por URL. Ahora se bloquean destinos privados, de loopback y de metadatos del proveedor antes de cada descarga: todo lo público sigue funcionando, lo interno deja de ser alcanzable desde fuera.
+- **Secretos dentro de una imagen de Docker.** El archivo que excluye ficheros al construir no cubría `.env*`, y un respaldo con claves acabó dentro de una imagen. Corregido en todos los repositorios; las claves afectadas quedan en la lista de rotación, que es trabajo manual a propósito.
+- Endpoints de administración sin comprobar rol, una subida de hojas de cálculo sin validar el tipo real, un acceso de demostración sin límite de intentos. Cada uno con su guard, su validación o su límite.
+- **Dependencias:** `npm audit` aplicado en seis repositorios; en uno, los críticos pasaron de cinco a cero.
+
+<Nota titulo="Las reglas duras van en el código, no en el prompt">
+Varios de estos productos tienen IA en el pipeline. Un modelo «casi siempre» obedece la instrucción, y «casi» no es una medida de seguridad. Todo límite que no se negocia —qué puede escribir, a qué puede llamar, cuánto puede gastar— vive en un guard, una validación o un candado del código. El prompt es para el estilo, no para los permisos.
+</Nota>
+
+## 124 avisos, 13 que de verdad aplicaban
+
+El problema de la seguridad operativa no es encontrar avisos: hay cientos cada semana. Es saber **cuáles te alcanzan con tus versiones exactas y tu exposición real**. El método que uso tiene tres pasos y el orden importa:
+
+1. **Barrido** por grupos de componentes —runtime, frameworks, librerías, base de datos, sistema, contenedores, túnel, navegadores automatizados, cadena de suministro—: 124 avisos únicos.
+2. **Cruce con los ficheros de bloqueo y con las versiones que corren de verdad** en cada contenedor. Esto resuelve decenas de «quizá» sin gastar una hora de investigación: una librería ya estaba por encima de la versión corregida, el paquete comprometido con malware no aparecía en ningún lock, siete de diez bases ya corrían la versión parcheada.
+3. **Verificación adversarial** solo de lo que terminaría en trabajo real: trece comprobaciones independientes con la consigna de *refutar* el hallazgo. ¿Existe el aviso? ¿Afecta a mi versión exacta? ¿La exposición que doy por hecha es real? ¿Se cumplen las precondiciones?
+
+Ese tercer paso movió gravedades en las dos direcciones, que es la señal de que funciona. Un «crítico» resultó aplicar solo con una configuración que no uso. Y al revés: un aviso que parecía menor subió de golpe al mirar mi uso concreto —la librería que interpreta el cuerpo de las peticiones **sí** acepta contenido comprimido con Brotli, y corre **antes** de la autenticación. Eso convertía el fallo de Node en una ruta explotable sin credenciales, en todas las APIs a la vez.
+
+Y de ahí salió la mejor relación coste/beneficio de la semana. Reconstruir todas las imágenes lleva horas; cerrar la puerta en el borde llevó dos minutos: **el proxy rechaza con un `415` cualquier petición que llegue con el cuerpo comprimido**. Ni los navegadores ni los webhooks legítimos comprimen el cuerpo de la petición, así que nadie lo nota. Probado desde fuera: `br`, `gzip` y `deflate` → 415; tráfico normal → 200. Una regla de una línea cerró una ruta de ejecución remota en siete productos mientras se reconstruía lo de verdad.
+
+Después vino lo lento y aburrido, que es donde se gana: todas las APIs sobre Node 22 con las librerías corregidas, los dos servicios que seguían en Node 20 migrados —fin de soporte significa que el siguiente fallo no se arregla—, el framework del panel de cliente actualizado por tres denegaciones de servicio y un XSS en el renderizado de servidor, el almacenamiento de archivos de un cliente actualizado por un fallo que permitía **subir y sobrescribir objetos sin autenticación**, las bases a la versión con parche con respaldo previo y pasando por el entorno de pruebas antes que por producción, el proxy, el panel del proxy por un fallo de ejecución remota, y el cliente del túnel al día.
+
+Esa última tiene coda: dos días después, el proveedor del túnel envió a todos sus operadores el aviso oficial pidiendo exactamente esa actualización. Ya estaba hecha y verificada desde fuera. **El método no sirve para ir rápido: sirve para no depender de que alguien te avise.**
+
+<Nota titulo="Lo que descarté también es trabajo">
+PHP2Shell (sin PHP en producción), la retirada de un runtime que ya no uso, el paquete con malware (versión distinta), dos librerías donde lo instalado quedaba fuera del rango afectado, el kernel del servidor (ya parcheado) y una campaña de inyección de flujos de trabajo en GitHub, descartada tras comprobar que no hay un solo cambio en esos ficheros desde la fecha del ataque, en nueve repositorios. Descartar con evidencia es lo que te deja tiempo para lo que sí aplica.
+</Nota>
+
+## Las tres veces que algo se negó a correr
+
+Todo salió a producción por *pull requests* y con scripts en **modo ensayo**: cada uno imprime qué ficheros cambiarían y qué contenedores se recrearían, y solo ejecuta cuando escribes la palabra `aplicar`. Esa costumbre pagó la semana entera.
+
+**Primera.** El ensayo de la copia al servidor mostró que iba a **borrar credenciales que no viven en el repositorio** —cuentas de servicio, tokens, llaves que se crearon allí—. Un `--delete` bienintencionado. Se reescribió para copiar solo las rutas que cambian, sin borrar nada.
+
+**Segunda.** Un cambio de propietario recursivo alcanzó el directorio de datos de una base en el entorno de pruebas y el servicio dejó de aceptar conexiones. Pasó **en pruebas, porque pruebas va primero**; se detectó en el mismo minuto leyendo el registro del servicio y se reparó restaurando el dueño correcto. El script quedó acotado a los tres ficheros que realmente copia.
+
+**Tercera, y es la que importa.** El despliegue a producción **abortó solo**: el respaldo previo a la migración no pudo subirse al almacenamiento externo, y mi regla —nacida de una caída de doce horas en septiembre— dice que sin respaldo verificado no hay migración. Al tirar del hilo apareció lo que el aborto estaba señalando de verdad: semanas antes se había retirado a propósito el segundo destino de copias, pero dos scripts seguían exigiéndolo **y lo intentaban primero**; al fallar ahí, nunca llegaban al destino bueno.
+
+Resultado: cuatro bases de producción llevaban **26 días sin copia externa**, con doce gigas de volcados acumulándose en el servidor y un correo de error nocturno que nadie había leído con atención. Ningún aviso de seguridad, ningún escáner y ninguna auditoría de dependencias habría encontrado eso. Lo encontró un despliegue que se plantó.
+
+Se reescribió la cadena entera —destino principal obligatorio y primero, el secundario opcional, los archivos de clientes a un remoto cifrado— y se probó con una corrida real antes de volver a desplegar: 0 errores, 42 de 42 tablas, 285 MB cifrados subidos y verificados en siete minutos. Después, el despliegue pasó.
+
+> Un despliegue que se niega a correr no es un fallo del despliegue. Es la única alarma que no se puede ignorar.
+
+Hubo una cuarta, menor y reveladora: dos entornos con repositorios, candados y ejecutores separados **seguían compartiendo el demonio de Docker**. Dos fusiones con dos minutos de diferencia los pusieron a construir imágenes a la vez y producción abortó con un error interno del almacén de capas. No se tocó nada —abortar antes de recrear es la regla—, se relanzó y entró en minuto y medio. El arreglo de fondo fue un candado común: el segundo espera al primero en lugar de romperse. **El aislamiento entre entornos tiene un suelo, y lo que se comparte necesita su propio candado.**
+
+Al final de todo, la actualización del sistema: 46 paquetes, Docker y containerd incluidos, con reinicio inevitable del demonio. Los 63 contenedores volvieron solos en cinco segundos y las siete URL públicas respondieron desde fuera inmediatamente después. Eso no fue suerte: fue una política de reinicio decidida en frío meses antes, que ese día se cobró.
+
+## Lo que me llevo, y lo que te puede servir
+
+- **La IA es la parte visible; se entra por la fontanería.** Puertos, proxies, dependencias, tokens, imágenes de contenedor. Nadie compromete tu producto hablando con el modelo.
+- **Un aviso crítico no es un problema hasta cruzarlo con tu versión exacta y tu exposición real.** Lo contrario es gastar la semana en lo que no aplica y dejar abierto lo que sí.
+- **Las mitigaciones en el borde compran tiempo sin tocar código.** Un `415` bien puesto cerró una ruta de ejecución remota en todos los productos mientras se reconstruían las imágenes.
+- **Ensayar antes de aplicar no es burocracia.** Dos ensayos evitaron borrar credenciales y tumbar una base de datos.
+- **«Si falla, se intenta el siguiente destino» hay que probarlo, no suponerlo.** La cadena de respaldo fallaba en el primer eslabón y nunca llegaba al segundo. Veintiséis días.
+- **Lo que no se puede automatizar sin riesgo se deja explícitamente en manos humanas**, con el procedimiento escrito: migraciones en producción y rotación de secretos no se delegan a un script que corre de madrugada.
+
+Cierre en cifras, que es como me gusta medir una semana: **124 avisos revisados · 13 verificados de forma adversarial · 13 pull requests · 7 productos desplegados · 46 paquetes de sistema actualizados · 26 días sin copia externa descubiertos y cerrados · 1 incidente, en pruebas, resuelto en minutos · 0 intrusiones · 0 caídas en producción** más allá de los segundos que tarda un contenedor en recrearse.
+
+Quedan tareas programadas, como en cualquier sistema vivo: claves por rotar, cabeceras que endurecer en el borde, un framework que migrar antes de que termine su soporte. Están escritas, con fecha, y la revisión se repite cada mes. Esa es la diferencia entre una lista de pendientes y una deuda que te explota.
+
+La pregunta con la que cierro es la misma que le hago a cualquiera que me enseñe su infraestructura:
+
+> Si mañana sale un fallo crítico en algo que tú no escribiste y que está debajo de tu aplicación, **¿cuánto tardas en saber si te afecta, y quién lo aplica?**
