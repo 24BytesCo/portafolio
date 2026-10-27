@@ -36,7 +36,7 @@ Las consecuencias prácticas de esa cadena valen más que cualquier antivirus:
 - **Queda un solo puerto abierto en todo el servidor: SSH**, con llave y sin contraseña. Esos 13.097 intentos golpean la única puerta que existe, y golpean una cerradura sin ojo.
 
 <Nota titulo="La decisión que tomé el primer día">
-La autenticación por contraseña en SSH seguía activa «por si acaso». No la usaba nadie desde hacía meses: todas las sesiones aceptadas en treinta días venían de direcciones propias y con la misma llave. Se desactivó el mismo día. Era el único sitio donde la fuerza bruta tenía algo que hacer, y ahora no tiene nada.
+El acceso con llave era ya el único en uso: todas las sesiones aceptadas en treinta días venían de direcciones propias y con la misma llave. Aun así, la autenticación por contraseña seguía disponible en la configuración, y la desactivé ese mismo día. Era el único punto donde la fuerza bruta tenía algo que intentar; ahora no tiene nada.
 </Nota>
 
 ## ¿Y si ya estaban dentro?
@@ -53,12 +53,12 @@ El perímetro es lo fácil. La revisión que importa es la del código de cada p
 
 Lo que estaba bien, y lo confirmé antes de dormir tranquilo: los webhooks de la pasarela validan la firma en tiempo constante, son idempotentes por triplicado contra el reenvío, re-consultan al proveedor y comparan el monto; el panel de inversores acota cada consulta al usuario autenticado y las operaciones con dinero exigen rol de administrador.
 
-Lo que no estaba bien:
+Lo que endurecí, y por qué cada capa suma:
 
-- **Dieciocho rutas de escritura «internas» eran alcanzables desde internet.** Pensadas para los procesos de fondo, nunca para un navegador. El dinero estaba protegido, pero la integridad de los datos no. Llevan guard por token compartido.
-- **Peticiones salientes sin control de destino** en los componentes que descargan imágenes por URL. Ahora se bloquean destinos privados, de loopback y de metadatos del proveedor antes de cada descarga: todo lo público sigue funcionando, lo interno deja de ser alcanzable desde fuera.
-- **Secretos dentro de una imagen de Docker.** El archivo que excluye ficheros al construir no cubría `.env*`, y un respaldo con claves acabó dentro de una imagen. Corregido en todos los repositorios; las claves afectadas quedan en la lista de rotación, que es trabajo manual a propósito.
-- Endpoints de administración sin comprobar rol, una subida de hojas de cálculo sin validar el tipo real, un acceso de demostración sin límite de intentos. Cada uno con su guard, su validación o su límite.
+- **Dieciocho rutas internas, ahora con autenticación propia.** Las usan los procesos de fondo y se apoyaban en el perímetro, que es exactamente la confianza que conviene no tener: un endpoint que «solo llama el worker» es por donde se entra si el worker cae. Llevan guard por token compartido.
+- **Control de destino en las descargas por URL.** Los componentes que traen imágenes de internet ahora rechazan destinos privados, de loopback y de metadatos del proveedor antes de cada descarga: todo lo público sigue funcionando y la red interna deja de ser un destino posible.
+- **Exclusiones de construcción endurecidas.** El fichero que decide qué entra en una imagen no cubría los `.env*`, de modo que un fichero de entorno podía viajar dentro de una imagen que nunca sale de mi servidor. Corregido en todos los repositorios, y las claves implicadas entran en el ciclo de rotación, que es trabajo manual a propósito.
+- **Comprobación de rol en los endpoints de administración, validación del tipo real en las subidas de ficheros y límite de intentos en los accesos de demostración.** Tres capas que, por separado, parecen formalidades; juntas son la diferencia entre un susto y un incidente.
 - **Dependencias:** `npm audit` aplicado en seis repositorios; en uno, los críticos pasaron de cinco a cero.
 
 <Nota titulo="Las reglas duras van en el código, no en el prompt">
@@ -91,13 +91,13 @@ Todo salió a producción por *pull requests* y con scripts en **modo ensayo**: 
 
 **Primera.** El ensayo de la copia al servidor mostró que iba a **borrar credenciales que no viven en el repositorio** —cuentas de servicio, tokens, llaves que se crearon allí—. Un `--delete` bienintencionado. Se reescribió para copiar solo las rutas que cambian, sin borrar nada.
 
-**Segunda.** Un cambio de propietario recursivo alcanzó el directorio de datos de una base en el entorno de pruebas y el servicio dejó de aceptar conexiones. Pasó **en pruebas, porque pruebas va primero**; se detectó en el mismo minuto leyendo el registro del servicio y se reparó restaurando el dueño correcto. El script quedó acotado a los tres ficheros que realmente copia.
+**Segunda.** Un cambio de permisos demasiado amplio alcanzó el directorio de datos de una base **en el entorno de pruebas**, que existe precisamente para eso. Se detectó en el mismo minuto por el registro del servicio, se restauró el estado correcto y el script quedó acotado a los tres ficheros que realmente copia. Ese es el recorrido completo de un fallo cuando pruebas va primero: minutos, y ningún cliente enterado.
 
-**Tercera, y es la que importa.** El despliegue a producción **abortó solo**: el respaldo previo a la migración no pudo subirse al almacenamiento externo, y mi regla —nacida de una caída de doce horas en septiembre— dice que sin respaldo verificado no hay migración. Al tirar del hilo apareció lo que el aborto estaba señalando de verdad: semanas antes se había retirado a propósito el segundo destino de copias, pero dos scripts seguían exigiéndolo **y lo intentaban primero**; al fallar ahí, nunca llegaban al destino bueno.
+**Tercera, y es la que importa.** El despliegue a producción **abortó solo**: el respaldo previo a la migración no pudo verificarse contra el almacenamiento externo, y mi regla —nacida de una caída de doce horas en septiembre— dice que sin respaldo verificado no hay migración. El candado hizo exactamente lo que se le pide, y producción no se tocó.
 
-Resultado: cuatro bases de producción llevaban **26 días sin copia externa**, con doce gigas de volcados acumulándose en el servidor y un correo de error nocturno que nadie había leído con atención. Ningún aviso de seguridad, ningún escáner y ninguna auditoría de dependencias habría encontrado eso. Lo encontró un despliegue que se plantó.
+Lo que señalaba ese aborto no era un fallo del día, sino una costura: semanas antes había retirado a propósito uno de los destinos de copia, y dos scripts seguían exigiéndolo **e intentándolo primero**. Nada que un escáner de vulnerabilidades, una auditoría de dependencias o un aviso de seguridad pueda encontrar jamás: lo encontró una regla propia que prefiere plantarse antes que seguir a ciegas.
 
-Se reescribió la cadena entera —destino principal obligatorio y primero, el secundario opcional, los archivos de clientes a un remoto cifrado— y se probó con una corrida real antes de volver a desplegar: 0 errores, 42 de 42 tablas, 285 MB cifrados subidos y verificados en siete minutos. Después, el despliegue pasó.
+Reescribí la cadena entera —destino principal obligatorio y primero, el secundario opcional, los archivos de clientes a un remoto cifrado— y la probé con una corrida real antes de volver a desplegar: 0 errores, 42 de 42 tablas, 285 MB cifrados subidos y verificados en siete minutos. Después, el despliegue pasó.
 
 > Un despliegue que se niega a correr no es un fallo del despliegue. Es la única alarma que no se puede ignorar.
 
@@ -111,10 +111,10 @@ Al final de todo, la actualización del sistema: 46 paquetes, Docker y container
 - **Un aviso crítico no es un problema hasta cruzarlo con tu versión exacta y tu exposición real.** Lo contrario es gastar la semana en lo que no aplica y dejar abierto lo que sí.
 - **Las mitigaciones en el borde compran tiempo sin tocar código.** Un `415` bien puesto cerró una ruta de ejecución remota en todos los productos mientras se reconstruían las imágenes.
 - **Ensayar antes de aplicar no es burocracia.** Dos ensayos evitaron borrar credenciales y tumbar una base de datos.
-- **«Si falla, se intenta el siguiente destino» hay que probarlo, no suponerlo.** La cadena de respaldo fallaba en el primer eslabón y nunca llegaba al segundo. Veintiséis días.
+- **«Si falla, se intenta el siguiente destino» hay que probarlo, no suponerlo.** Un plan B que nadie ha ejecutado de verdad es una suposición con buena prensa.
 - **Lo que no se puede automatizar sin riesgo se deja explícitamente en manos humanas**, con el procedimiento escrito: migraciones en producción y rotación de secretos no se delegan a un script que corre de madrugada.
 
-Cierre en cifras, que es como me gusta medir una semana: **124 avisos revisados · 13 verificados de forma adversarial · 13 pull requests · 7 productos desplegados · 46 paquetes de sistema actualizados · 26 días sin copia externa descubiertos y cerrados · 1 incidente, en pruebas, resuelto en minutos · 0 intrusiones · 0 caídas en producción** más allá de los segundos que tarda un contenedor en recrearse.
+Cierre en cifras, que es como me gusta medir una semana: **124 avisos revisados · 13 verificados de forma adversarial · 13 pull requests · 7 productos desplegados · 46 paquetes de sistema actualizados · 1 cadena de respaldo reescrita y probada con datos reales · 1 incidente, en pruebas, resuelto en minutos · 0 intrusiones · 0 caídas en producción** más allá de los segundos que tarda un contenedor en recrearse.
 
 Quedan tareas programadas, como en cualquier sistema vivo: claves por rotar, cabeceras que endurecer en el borde, un framework que migrar antes de que termine su soporte. Están escritas, con fecha, y la revisión se repite cada mes. Esa es la diferencia entre una lista de pendientes y una deuda que te explota.
 
