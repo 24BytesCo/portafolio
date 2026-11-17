@@ -1,0 +1,99 @@
+---
+title: "«Casi siempre obedece» no es una medida de seguridad: las reglas que mueven dinero van en el código"
+description: "Tengo un sistema donde un modelo decide y el dinero se compromete en menos de 60 segundos. Lo que impide un desastre no es el prompt: son seis candados escritos en código, y la lección de una regla que vivía en tres sitios a la vez."
+date: 2026-11-17
+author: Alexis Dorado Muñoz
+portada:
+  src: /images/blog/reglas-en-el-codigo-no-en-el-prompt/portada.jpg
+  alt: "Reparto de decisiones: el modelo propone, el código decide qué pasa el filtro"
+  ancho: 1600
+  alto: 790
+cta:
+  titulo: "¿Tu producto con IA tiene candados o solo instrucciones?"
+  texto: "Si la respuesta es «el modelo sabe que no debe hacer eso», conviene revisarlo antes de que lo demuestre. Montar y operar sistemas así es parte de lo que hago."
+  href: "/servicios"
+  etiqueta: "Ver qué puedo hacer por ti"
+---
+
+Opero un sistema donde un modelo de lenguaje evalúa decenas de candidatos cada tarde, decide cuáles merecen publicarse y, en los sesenta segundos siguientes, el dinero queda comprometido. No es un chatbot: es una cadena automática donde una salida del modelo se convierte en una operación real.
+
+La pregunta incómoda de un sistema así no es si el modelo acierta. Es **qué pasa cuando no acierta**, y cuánto tarda en notarse.
+
+La respuesta corta: eso no se arregla en el prompt. Un modelo «casi siempre» obedece la instrucción, y en seguridad «casi» no es una medida de nada. Lo que de verdad protege son reglas escritas en código: funciones que se pueden probar, interruptores que alguien tiene que accionar, validaciones que corren antes de que el dinero se mueva.
+
+## Qué decide el modelo y qué decide el código
+
+El reparto está escrito y es explícito. El modelo tiene una parcela grande, pero no toca ninguna palanca:
+
+- **El modelo decide**: qué candidatos tienen sentido, con qué nivel de confianza, y cómo se redacta lo que luego se publica. Es un juicio sobre información, no una orden sobre dinero.
+- **El código decide**: qué se publica de verdad, con cuánto, en qué rango y en qué mercados. También decide cuándo **no** se publica nada.
+
+Esa frontera no es filosofía. Es la diferencia entre «le pedí al modelo que no superara cierto límite» y «el límite se comprueba en una función que no puede saltarse», y se nota el día que el modelo devuelve algo inesperado: una categoría que no existe, un número fuera de rango, una respuesta a medias por un error del proveedor.
+
+<Nota titulo="El prompt también tiene su sitio">
+Esto no es «los prompts no sirven». En mis sistemas el prompt manda en el estilo: el tono de una narración, el formato de una respuesta, qué se cuenta primero. Son decisiones donde equivocarse cuesta una pieza fea, no una pérdida. La regla es sencilla: **si el error se mide en dinero, datos de otra persona o algo que no se puede deshacer, no va en el prompt**.
+</Nota>
+
+## El fallo que no fue del modelo
+
+El episodio que me enseñó esto no lo provocó ninguna alucinación. La regla era correcta. El problema es que estaba escrita **en tres sitios distintos**.
+
+Había un filtro que degradaba los candidatos fuera de cierto rango. Había una segunda comprobación —la única que se consultaba justo antes de comprometer dinero— que usaba un rango propio, más ancho por los dos lados. Y había una tercera vía, un rescate de casos límite, que directamente no volvía a mirar ese valor.
+
+Ninguna de las tres estaba mal por separado. Juntas se contradecían, y el sistema se contradecía **por escrito**: en la auditoría aparecían operaciones con una anotación interna que decía textualmente que ese candidato había sido degradado por el filtro… y que aun así habían seguido adelante. No fue un fallo de juicio de nadie: fue una regla duplicada que nadie había conciliado.
+
+> Una regla escrita en tres sitios no es una regla. Son tres reglas que todavía no se han peleado.
+
+El arreglo no fue añadir una advertencia al prompt ni un `if` más. Fue reducirlo a **una sola función pura** —sin base de datos, sin framework— que resuelve el rango una vez y a la que llaman tanto el filtro como la publicación. Lógica pura significa que se puede probar en milisegundos, sin levantar nada, y que la prueba dice literalmente lo que el negocio necesita:
+
+```ts
+it('la banda que publica dinero es la misma que la del gate', async () => {
+  expect(svc['isPublishable']('OVER_2_5', 1.7).ok).toBe(false);
+  expect(svc['isPublishable']('OVER_2_5', 1.75).ok).toBe(true);
+  // …y el filtro degrada exactamente en los mismos límites
+});
+```
+
+Ese test no comprueba un detalle de implementación: comprueba que **dos caminos distintos siguen de acuerdo**. Es la clase de prueba que no se escribe por cobertura, sino porque ya la pagaste una vez.
+
+## Los seis candados que hoy sostienen el sistema
+
+Ninguno es ingenioso. Todos son aburridos, que es exactamente lo que se quiere:
+
+1. **Una sola fuente de verdad para los límites**, con precedencia explícita: el valor por defecto vive en el código, el entorno puede ajustarlo y la base de datos manda sobre ambos. Un valor inválido no se aplica en silencio: se rechaza y queda registrado como error. Esa última parte la aprendí de una configuración que nunca llegó a aplicarse porque un `catch` vacío se la tragó durante semanas.
+2. **Dos interruptores separados**, desacoplados a propósito: uno decide si se publica contenido, otro decide si se compromete dinero. Parecen lo mismo hasta el día que necesitas apagar uno y dejar el otro vivo.
+3. **Modo «solo seguimiento».** Lo que no está en la lista de mercados autorizados no se descarta: se guarda igual, con importe cero. Sigue acumulando historial para decidir con datos más adelante, sin arriesgar un peso hoy.
+4. **Criterio numérico de entrada y salida**, para que no se decida a ojo: un mercado entra en la lista autorizada con un mínimo de casos resueltos y rentabilidad positiva, y sale cuando la rentabilidad se da la vuelta con muestra suficiente. La regla está escrita antes de necesitarla, que es la única forma de que sea imparcial.
+5. **Freno automático.** Si varios días seguidos cierran en negativo, el sistema deja de publicar solo y no vuelve hasta que alguien lo reactiva a mano.
+6. **Testigo de trabajo terminado.** Cada pieza publicada deja una marca en disco. Sin ella, un relanzamiento del mismo proceso volvería a publicar lo ya publicado — y eso pasó una vez, antes de que la marca existiera.
+
+A los que hay que sumar uno menos obvio: **cada proceso solo acepta las órdenes que le corresponden**. Las peticiones llevan un mapa de ruta a rol, y si una llega al proceso equivocado se rechaza. No basta con que el endpoint exista; importa quién lo recibe.
+
+## El precio de un candado, y por qué se paga
+
+El freno automático me bloqueó un día que acertó cuatro de cuatro. Si hubiera estado abierto, habría sido un buen día.
+
+No lo quité. Un candado que solo actúa cuando te conviene no es un candado: es una sugerencia. El coste de ese día es el precio del seguro, y lo elegí en frío sabiendo que algún día me iba a doler en caliente. Lo mismo vale para el despliegue que **se niega a correr** si no puede verificar el respaldo previo, del que [escribí hace unas semanas](/blog/cero-puertos-abiertos-asi-protejo-siete-productos): esa negativa descubrió un problema que ningún escáner había visto.
+
+La regla general que saco de ambos: **una protección que nunca te ha estorbado probablemente no está mirando nada**.
+
+## Cuatro preguntas para saber dónde va tu regla
+
+Si estás montando algo con IA dentro, estas cuatro preguntas separan lo que puede vivir en el prompt de lo que no:
+
+1. **¿Qué pasa si el modelo devuelve exactamente lo contrario de lo que le pediste?** Si la respuesta es «se arregla solo», va en el prompt. Si es «se mueve dinero», va en el código.
+2. **¿Puedo escribir un test que falle cuando la regla se incumpla?** Si no puedes, es que la regla no existe todavía: es una intención.
+3. **¿La misma regla está escrita en más de un sitio?** Dos copias no son redundancia, son una divergencia esperando su turno.
+4. **¿Quién puede apagarla, y queda registro?** Un límite que cualquier proceso puede saltarse en silencio ya está saltado.
+
+Hay una quinta, menos técnica y más incómoda: **¿cuánto tardarías en enterarte?** En mi caso, lo que destapó la divergencia de los tres rangos no fue un error en producción —todo «funcionaba»— sino una auditoría que comparó lo que el sistema decía con lo que el sistema hacía. Esa comparación conviene tenerla automatizada, porque a ojo no se ve: el sistema se contradecía en silencio y con total educación.
+
+## Lo que esto significa si estás contratando software con IA
+
+Casi todo el discurso sobre IA está en la capa visible: qué modelo, qué tan bueno es el prompt, cuánto contexto aguanta. Esa capa cambia cada tres meses y no es donde ocurren los accidentes.
+
+Los accidentes ocurren en la fontanería: un límite escrito en dos sitios, un endpoint interno que alguien supuso inalcanzable, un flujo sin interruptor, una configuración que falla en silencio. Por eso, cuando alguien me enseña su sistema, no empiezo preguntando por el modelo. Pregunto:
+
+> Cuando el modelo se equivoque —y se va a equivocar—, **¿qué línea de código impide que ese error llegue al dinero?**
+
+Si la respuesta es «le decimos en el prompt que no haga eso», ya tienes tu primer trabajo pendiente.
